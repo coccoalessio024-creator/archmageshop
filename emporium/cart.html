@@ -76,7 +76,7 @@
 
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
-      document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
+      document.getElementById('paypal-link').href = `https://paypal.me/heavencaten/${final.toFixed(2)}`;
       document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
     }
 
