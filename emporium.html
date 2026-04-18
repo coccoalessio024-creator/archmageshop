@@ -1,0 +1,140 @@
+      font-size: 0.875rem;
+      cursor: pointer;
+      appearance: none;
+      padding-right: 2rem;
+    }
+
+    /* ─── Grid dei Prodotti ─── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem 1rem;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 20px var(--glow);
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+      margin: 1rem 0 0.5rem;
+    }
+
+    .price {
+      font-family: 'IM Fell English SC', serif;
+      color: var(--parchment-mid);
+      font-size: 1.2rem;
+    }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: var(--gold-subtle);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-bright);
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-buy:hover {
+      background: var(--gold-dim);
+      color: var(--bg);
+    }
+
+    footer {
+      text-align: center;
+      padding: 4rem 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--parchment-dim);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="tavern-header">
+    <div class="header-row">
+      <div class="brand">
+        <span class="tavern-sign">The Crooked Cauldron</span>
+        <span class="tagline">Aldous Fumblwick's Emporium</span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="nav-link">Inventario</a>
+        <div class="nav-divider"></div>
+        <a href="#" class="nav-link">Carrello (0)</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-inner">
+      <p class="section-heading">Dal 1387, più o meno</p>
+      <h1 class="hero-title shimmer-text">Incantesimi Adeguati</h1>
+      <p class="hero-sub">Oggetti magici di dubbia provenienza. Non accettiamo reclami in caso di polimorfismo involontario.</p>
+      <div class="divider-rune">᚛ ᚫ ᚜</div>
+    </div>
+  </section>
+
+  <main class="products-grid">
+    <!-- Prodotto 1 -->
+    <article class="card">
+      <div class="section-heading">Pozione</div>
+      <h3>Infuso di "Forse Invisibilità"</h3>
+      <p class="hero-sub">Ti rende invisibile solo a chi non ti sta guardando direttamente.</p>
+      <p class="price">45 Monete d'Oro</p>
+      <button class="btn-buy">Aggiungi al Calderone</button>
+    </article>
+
+    <!-- Prodotto 2 -->
+    <article class="card">
+      <div class="section-heading">Accessorio</div>
+      <h3>Anello del Silenzio Assordante</h3>
+      <p class="hero-sub">Crea un silenzio così forte che i vicini busseranno per il troppo rumore.</p>
+      <p class="price">120 Monete d'Oro</p>
+      <button class="btn-buy">Aggiungi al Calderone</button>
+    </article>
+
+    <!-- Prodotto 3 -->
+    <article class="card">
+      <div class="section-heading">Pergamena</div>
+      <h3>Mappa del Tesoro (Aggiornata Ieri)</h3>
+      <p class="hero-sub">Il tesoro si sposta continuamente. Buona fortuna a rincorrerlo.</p>
+      <p class="price">15 Monete d'Oro</p>
+      <button class="btn-buy">Aggiungi al Calderone</button>
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 1387 The Crooked Cauldron. Nessun elfo domestico è stato maltrattato (troppo) per la creazione di questo sito.</p>
+  </footer>
+
+  <script>
+    // Logica goliardica per il carrello
+    document.querySelectorAll('.btn-buy').forEach(button => {
+      button.addEventListener('click', () => {
+        alert("Errore Arcano: Il carrello è attualmente posseduto da uno spirito. Riprova dopo il prossimo plenilunio.");
+      });
+    });
+  </script>
+</body>
+</html>
