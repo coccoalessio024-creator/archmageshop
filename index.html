@@ -7,115 +7,74 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.4);
-            --black: #0a0a1a;
+            --gold: #c9932a;
+            --gold-glow: rgba(201, 147, 42, 0.4);
+            --bg: #090603;
         }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
-            background: var(--deep-blue);
-            color: #e0e0e0;
+            background: var(--bg);
+            color: #e4d0a6;
             font-family: 'IM Fell English', serif;
-            overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* Effetto particelle magiche sullo sfondo */
         body::before {
             content: "";
             position: fixed; inset: 0;
-            background: radial-gradient(circle at center, #1a1a3e 0%, #050510 100%);
+            background: radial-gradient(circle at center, rgba(201, 147, 42, 0.1) 0%, transparent 70%);
             z-index: -1;
         }
 
-        .sanctum-container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            z-index: 1;
-        }
+        .sanctum-container { text-align: center; padding: 2rem; max-width: 800px; }
 
-        /* L'immagine dell'Arcimago */
         .archmage-frame {
-            position: relative;
-            width: 250px; height: 250px;
-            margin: 0 auto 2rem;
-            border-radius: 50%;
-            padding: 10px;
-            background: linear-gradient(135deg, var(--gold), #5c3c18);
+            position: relative; width: 250px; height: 250px;
+            margin: 0 auto 2rem; border-radius: 50%; padding: 10px;
+            background: linear-gradient(135deg, var(--gold), #3d2810);
             box-shadow: 0 0 50px var(--gold-glow);
         }
 
         .archmage-frame img {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--deep-blue);
+            width: 100%; height: 100%; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--bg);
         }
 
         h1 {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: var(--gold);
-            text-shadow: 0 0 20px var(--gold-glow);
-            margin: 0;
+            font-family: 'Cinzel Decorative', serif; font-size: 3rem;
+            color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin: 0;
         }
 
         .introduction {
-            font-size: 1.4rem;
-            font-style: italic;
-            line-height: 1.6;
-            color: #b0b0ff;
-            margin: 1.5rem 0 2.5rem;
+            font-size: 1.4rem; font-style: italic; color: #8c7450;
+            margin: 1.5rem 0 2.5rem; line-height: 1.6;
         }
 
-        /* Il Pulsante Magico per l'Emporio */
         .portal-button {
-            display: inline-block;
-            padding: 1.2rem 3rem;
-            background: transparent;
-            color: var(--gold);
-            text-decoration: none;
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.2rem;
-            border: 2px solid var(--gold);
-            position: relative;
-            transition: all 0.4s ease;
-            overflow: hidden;
+            display: inline-block; padding: 1.2rem 3rem;
+            background: transparent; color: var(--gold);
+            text-decoration: none; font-family: 'Cinzel Decorative', serif;
+            border: 2px solid var(--gold); transition: all 0.4s ease;
         }
 
         .portal-button:hover {
-            color: var(--deep-blue);
-            background: var(--gold);
-            box-shadow: 0 0 30px var(--gold);
-            transform: scale(1.05);
-        }
-
-        .scroll-decoration {
-            margin-top: 3rem;
-            color: var(--gold);
-            opacity: 0.5;
-            font-size: 2rem;
+            background: var(--gold); color: var(--bg);
+            box-shadow: 0 0 30px var(--gold); transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-
-    <div class="archmage-frame">
-    <img src="The%20archmage.jpg" alt="The Archmage">
-</div>
-
-        <h1> The Archmage </h1>
+    <div class="sanctum-container">
+        <div class="archmage-frame">
+            <!-- Usa esattamente il nome del file caricato su GitHub -->
+            <img src="The%20archmage.jpg" alt="The Archmage">
+        </div>
+        <h1>The Archmage</h1>
         <p class="introduction">
-            "Greetings, mortal. I am the Archmage of these digital realms. You look like someone in need of a mildly dangerous artifact or a potion that might — emphasis on might — work."
+            "Greetings, traveler. You have entered my private sanctum. If you seek artifacts of questionable safety, you are in the right place."
         </p>
-
-        <!-- IL LINK CHE PORTA AL NEGOZIO -->
-        <a href="emporium.html" class="portal-button">ENTER THE EMPORIUM</a>
-
-        <div class="scroll-decoration">᚛ ᚫ ᚜</div>
+        <a href="negozio.html" class="portal-button">ENTER THE EMPORIUM</a>
     </div>
-
 </body>
 </html>
