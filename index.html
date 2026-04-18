@@ -3,79 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Archmage Magic Shop - Mystical Potions & Spells</title>
+    <title>The Archmage's Sanctum</title>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --deep-blue: #0a0a1a;
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            background: var(--deep-blue);
             color: #e0e0e0;
-            min-height: 100vh;
+            font-family: 'IM Fell English', serif;
+            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        header {
-            background: linear-gradient(180deg, rgba(20, 20, 40, 0.95) 0%, rgba(40, 20, 60, 0.9) 100%);
-            border-bottom: 3px solid #d4af37;
-            padding: 20px;
+        /* Effetto particelle magiche sullo sfondo */
+        body::before {
+            content: "";
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at center, #1a1a3e 0%, #050510 100%);
+            z-index: -1;
+        }
+
+        .sanctum-container {
             text-align: center;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            padding: 2rem;
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        /* L'immagine dell'Arcimago */
+        .archmage-frame {
+            position: relative;
+            width: 250px; height: 250px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--gold), #5c3c18);
+            box-shadow: 0 0 50px var(--gold-glow);
+        }
+
+        .archmage-frame img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--deep-blue);
         }
 
         h1 {
-            font-size: 2.5em;
-            color: #d4af37;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            margin-bottom: 10px;
-            font-weight: bold;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            margin: 0;
         }
 
-        .tagline {
-            color: #b0b0ff;
+        .introduction {
+            font-size: 1.4rem;
             font-style: italic;
-            font-size: 1.1em;
+            line-height: 1.6;
+            color: #b0b0ff;
+            margin: 1.5rem 0 2.5rem;
         }
 
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px;
-            justify-content: center;
+        /* Il Pulsante Magico per l'Emporio */
+        .portal-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: transparent;
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.2rem;
+            border: 2px solid var(--gold);
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
         }
 
-        input, select {
-            padding: 12px 15px;
-            border: 2px solid #d4af37;
-            background: rgba(30, 30, 50, 0.8);
-            color: #e0e0e0;
-            border-radius: 5px;
-            font-family: 'Georgia', serif;
-            font-size: 1em;
+        .portal-button:hover {
+            color: var(--deep-blue);
+            background: var(--gold);
+            box-shadow: 0 0 30px var(--gold);
+            transform: scale(1.05);
         }
 
-        input::placeholder {
-            color: #888;
+        .scroll-decoration {
+            margin-top: 3rem;
+            color: var(--gold);
+            opacity: 0.5;
+            font-size: 2rem;
         }
+    </style>
+</head>
+<body>
 
-        input:focus, select:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
+    <div class="sanctum-container">
+        <div class="archmage-frame">
+            <!-- Immagine evocativa di un mago -->
+            <img src="https://unsplash.com" alt="Aldous Fumblwick">
+        </div>
 
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        <h1>Aldous Fumblwick</h1>
+        <p class="introduction">
+            "Greetings, mortal. I am the Archmage of these digital realms. You look like someone in need of a mildly dangerous artifact or a potion that might — emphasis on might — work."
+        </p>
 
-        .product-card {
-            background: linear-gradient(135deg, rgba(40, 30, 70, 0.9*
-
+        <!-- IL LINK CHE PORTA AL NEGOZIO -->
+        <a href="negozio.html" class="portal-button">ENTER THE EMPORIUM</a>
+
+        <div class="scroll-decoration">᚛ ᚫ ᚜</div>
+    </div>
+
+</body>
+</html>
