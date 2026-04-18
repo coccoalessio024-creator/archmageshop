@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Royal Depository - Cart</title>
+  <link href="https://googleapis.com" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #090603; --surface: #120a04; --border: #3d2810;
+      --gold: #c9932a; --gold-bright: #e8b84b; --parchment: #e4d0a6;
+    }
+    body { margin: 0; background: var(--bg); color: var(--parchment); font-family: 'IM Fell English', serif; }
+    .header { padding: 2rem; text-align: center; border-bottom: 1px solid var(--border); background: #050301; }
+    .title { font-family: 'Cinzel Decorative', serif; color: var(--gold); margin: 0; }
+    
+    .container { max-width: 500px; margin: 3rem auto; padding: 2rem; background: var(--surface); border: 1px solid var(--border); }
+    .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding: 1rem 0; }
+    
+    .remove-btn { background: none; border: 1px solid #7a1515; color: #a01e1e; cursor: pointer; padding: 2px 8px; font-size: 10px; font-family: 'Cinzel', serif; }
+    .remove-btn:hover { background: #7a1515; color: white; }
+
+    .summary { margin-top: 2rem; border-top: 2px solid var(--gold); padding-top: 1rem; }
+    .total { font-size: 1.8rem; color: var(--gold-bright); display: flex; justify-content: space-between; }
+    
+    .paypal-section { margin-top: 2rem; text-align: center; }
+    .pay-button { display: block; padding: 1.2rem; background: var(--gold); color: #000; text-decoration: none; font-family: 'Cinzel Decorative', serif; font-weight: bold; }
+    .pay-button:hover { background: var(--gold-bright); box-shadow: 0 0 20px var(--gold); }
+    .back { display: block; margin-top: 1.5rem; color: var(--gold-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div class="header"><h1 class="title">The Royal Depository</h1></div>
+
+  <div class="container">
+    <div id="cart-content"></div>
+    
+    <div class="summary">
+      <div style="display:flex; justify-content:space-between; color: #8c7450; margin-bottom: 0.5rem;">
+        <span>Arcane Tax (5%)</span>
+        <span id="tax-val">0.00 Gold</span>
+      </div>
+      <div class="total">
+        <span>TOTAL:</span>
+        <span id="total-val">0.00 Gold</span>
+      </div>
+    </div>
+
+    <div class="paypal-section">
+      <a href="#" id="paypal-link" class="pay-button">PAY VIA PAYPAL</a>
+      <p style="font-size:0.8rem; font-style:italic; margin-top:1rem; color:#8c7450;">Monitored by the Archmage.</p>
+      <a href="index.html" class="back">← Return to Emporium</a>
+    </div>
+  </div>
+
+  <script>
+    function render() {
+      const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
+      const container = document.getElementById('cart-content');
+      let subtotal = 0;
+      
+      container.innerHTML = cart.length === 0 ? '<p style="text-align:center">The cauldron is empty.</p>' : '';
+
+      cart.forEach(item => {
+        subtotal += item.price;
+        container.innerHTML += `
+          <div class="item-row">
+            <div><strong>${item.name}</strong><br><small>${item.price} Gold</small></div>
+            <button class="remove-btn" onclick="removeItem(${item.id})">REMOVE</button>
+          </div>`;
+      });
+
+      const tax = subtotal * 0.05;
+      const final = subtotal + tax;
+
+      document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
+      document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
+      document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
+      document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
+    }
+
+    function removeItem(id) {
+      let cart = JSON.parse(localStorage.getItem('magicCart')) || [];
+      cart = cart.filter(item => item.id !== id);
+      localStorage.setItem('magicCart', JSON.stringify(cart));
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
