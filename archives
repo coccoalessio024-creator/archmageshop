@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arcane Archive &mdash; Bulletins</title>
+  <link href="https://googleapis.com" rel="stylesheet" />
+  <style>
+    :root { --gold: #c9932a; --bg: #090603; --surface: #120a04; --border: #3d2810; }
+    body { margin: 0; background: var(--bg); color: #e4d0a6; font-family: 'IM Fell English', serif; }
+    .header { padding: 3rem; text-align: center; border-bottom: 1px solid var(--border); }
+    h1 { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 2.5rem; margin: 0; }
+    
+    .archive-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem; padding: 3rem; max-width: 1000px; margin: 0 auto;
+    }
+
+    .preview-card {
+      background: var(--surface); border: 1px solid var(--border); padding: 10px;
+      transition: 0.3s; text-align: center; cursor: pointer;
+    }
+    .preview-card:hover { border-color: var(--gold); transform: scale(1.02); }
+
+    /* Simulazione anteprima file */
+    .file-preview {
+      width: 100%; height: 200px; background: #1c1208; margin-bottom: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .file-preview img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    
+    .file-info h2 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); margin: 0.5rem 0; }
+    .btn-open { 
+      display: inline-block; margin-top: 10px; padding: 5px 15px; 
+      border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>The Arcane Archive</h1>
+    <p>Official dispatches from the Archmage's Tower</p>
+  </div>
+
+  <div class="archive-grid">
+    <div class="preview-card" onclick="window.open('bulletin1.html', '_blank')">
+      <div class="file-preview">
+        <span style="font-size: 3rem; opacity: 0.2;">📜</span>
+      </div>
+      <div class="file-info">
+        <h2>Bulletin I</h2>
+        <p style="font-size: 0.8rem; font-style: italic;">The Blue Frog Incident</p>
+        <span class="btn-open">VIEW FULL RECORD</span>
+      </div>
+    </div>
+
+    <div class="preview-card" onclick="window.open('bulletin2.html', '_blank')">
+      <div class="file-preview">
+        <span style="font-size: 3rem; opacity: 0.2;">📜</span>
+      </div>
+      <div class="file-info">
+        <h2>Bulletin II</h2>
+        <p style="font-size: 0.8rem; font-style: italic;">Taxes & Levitation</p>
+        <span class="btn-open">VIEW FULL RECORD</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; padding-bottom: 5rem;">
+    <a href="index.html" style="color: var(--gold); text-decoration: none;">← BACK TO SANCTUM</a>
+  </div>
+</body>
+</html>
