@@ -1,77 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Royal Depository - Cart</title>
-  <link href="https://googleapis.com" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
-  <style>
-    /* Reset per centratura e visibilità */
-    body { justify-content: flex-start !important; padding: 2rem 0; }
-
-    /* Forza lo stile della Pergamena Chiara per il Checkout */
-    .parchment-box {
-        background: linear-gradient(135deg, #fdf5e6 0%, #f3e5ab 100%) !important;
-        color: #3d2b1f !important;
-        border: 2px solid #8b4513 !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 40px rgba(139, 69, 19, 0.1) !important;
-        padding: 3rem;
-        border-radius: 15px;
-    }
-
-    .item-row { 
-        display: flex; justify-content: space-between; align-items: center; 
-        border-bottom: 1px dashed rgba(139, 69, 19, 0.3); padding: 1rem 0; 
-        color: #3d2b1f;
-    }
-
-    .remove-btn { 
-        background: #7a1515; border: 1px solid #3d2810; color: #fdf5e6; 
-        cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
-        font-size: 0.7rem; border-radius: 5px; 
-    }
-
-    .total { 
-        font-size: 2.2rem; color: #7a1515; display: flex; 
-        justify-content: space-between; font-weight: bold; margin-top: 1rem; 
-    }
-
-    .summary b, .summary span { color: #5d2e0a; }
-
-    .back { 
-        display: block; text-align: center; margin-top: 2rem; 
-        color: #8b4513; text-decoration: underline; font-weight: bold; 
-    }
-  </style>
-</head>
-<body>
-
-  <h1 class="arch-title">The Royal Depository</h1>
-
-  <div class="parchment-box">
-    <div id="cart-content"></div>
-    
-    <div class="summary">
-      <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem; font-weight: bold;">
-        <span>Arcane Tax (5%)</span>
-        <span id="tax-val">0.00 Gold</span>
-      </div>
-      <div class="total">
-        <span>TOTAL:</span>
-        <span id="total-val">0.00 Gold</span>
-      </div>
-    </div>
-
-    <div class="paypal-section">
-      <!-- Bottone PayPal Dinamico con link a @heavencaten -->
-      <a href="#" id="paypal-link" target="_blank" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
-      <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem; color: #8b4513;">Monitored by the Archmage.</p>
-      <a href="index.html" class="back">← Return to Emporium</a>
-    </div>
-  </div>
-
-  <script>
+<script>
     function render() {
       const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
       const container = document.getElementById('cart-content');
@@ -94,16 +21,12 @@
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = finalValue + " Gold";
       
-      // COLLEGAMENTO DIRETTO PAYPAL @HEAVENCATEN
-     const user = "heavencaten"; // Sostituisci con il tuo nome PayPal.me
-     const btn = document.getElementById('paypal-link');
+      const user = "heavencaten";
+      const btn = document.getElementById('paypal-link');
 
-if (parseFloat(finalValue) > 0) {
-  // Risultato finale: https://paypal.me
-  btn.href = "https://paypal.me" + user + "/" + finalValue;
-  btn.style.display = 'block';
-}
-
+      if (parseFloat(finalValue) > 0) {
+        btn.href = "https://paypal.me" + user + "/" + finalValue;
+        btn.style.display = 'block';
       } else {
         btn.style.display = 'none';
       }
@@ -116,6 +39,4 @@ if (parseFloat(finalValue) > 0) {
     }
 
     render();
-  </script>
-</body>
-</html>
+</script>
