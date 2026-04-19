@@ -4,12 +4,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Royal Depository - Cart</title>
+  <!-- Google Fonts -->
   <link href="https://googleapis.com" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- Link al CSS Esterno (esce dalla cartella con ../) -->
+  <link rel="stylesheet" href="../style.css">
+  
+  <style>
+    /* Stile specifico per la Pergamena del Carrello */
+    .container {
+        position: relative; z-index: 5;
+        max-width: 600px; width: 90%;
+        background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
+        padding: 2.5rem;
+        box-shadow: 0 0 50px #000, 20px 20px 0 rgba(0,0,0,0.2);
+        clip-path: polygon(1% 2%, 99% 0%, 100% 98%, 2% 100%, 0% 50%);
+        border: 1px solid #b89060;
+        margin: 2rem auto;
+        color: #3d2810; /* Testo scuro sulla carta chiara */
+    }
+
+    .item-row { 
+        display: flex; justify-content: space-between; align-items: center; 
+        border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
+    }
+
+    .remove-btn { 
+        background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; 
+        cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
+    }
+
+    .total { font-size: 2.2rem; color: #7a1515; display: flex; justify-content: space-between; font-weight: bold; margin-top: 1rem; }
+    
+    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2810; text-decoration: underline; }
+  </style>
 </head>
 <body>
 
-  <h1 class="title">The Royal Depository</h1>
+  <!-- Classe metallica universale -->
+  <h1 class="arch-title">The Royal Depository</h1>
 
   <div class="container">
     <div id="cart-content"></div>
@@ -26,7 +58,8 @@
     </div>
 
     <div class="paypal-section">
-      <a href="#" id="paypal-link" class="pay-button">TRIBUTE TO THE BRAVES</a>
+      <!-- Classe bottone universale -->
+      <a href="#" id="paypal-link" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
       <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem;">Monitored by the Archmage.</p>
       <a href="index.html" class="back">← Return to Emporium</a>
     </div>
@@ -54,6 +87,7 @@
 
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
+      // Corretto il link PayPal
       document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
       document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
     }
