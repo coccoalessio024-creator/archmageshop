@@ -169,25 +169,59 @@
         <img src="archives/logo_archmage.png" alt="Logo" style="width: 100%;">
     </a>
 
-    <script>
-        window.onload = function() {
-            const runes = ['✧', '✦', '⚛', '⌬', '⚿', '⛤', '♅', '𐕣', '✨'];
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const p = document.createElement('div');
-                    p.innerHTML = runes[Math.floor(Math.random() * runes.length)];
-                    p.className = 'magic-rune';
-                    p.style.left = (Math.random() * 95) + 'vw';
-                    p.style.fontSize = (Math.random() * 15 + 15) + 'px';
-                    p.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                    document.body.appendChild(p);
-                    setTimeout(() => p.remove(), 7000);
-                }, i * 400);
-            }
+ <script>
+    // --- 1. CONFIGURAZIONE SIGILLO TEMPORALE ---
+    const unlockDate = new Date(2026, 4, 4); // 4 Maggio 2026
+    const today = new Date();
+
+    function applyCelestialLock() {
+        if (today < unlockDate) {
+            // Blocca Trial e Secret Logo nell'index
+            const locks = document.querySelectorAll('a[href="trial.html"], a[href="secret.html"]');
+            const diffTime = unlockDate - today;
+            const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const msg = "Gli astri non sono allineati. Cerca il terzo indizio nell'Emporio per capire come procedere il 4 Maggio.";
+
+            locks.forEach(link => {
+                link.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
+                link.setAttribute('title', "Il rito è precluso... ma l'indizio è celato nell'Emporio.");
+                
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    alert(msg);
+                };
+            });
+        }
+    }
+
+    // --- 2. LOGICA ORIGINALE DELL'INDEX (Rune e Pergamene) ---
+    window.onload = function() {
+        applyCelestialLock(); // Attiva il sigillo subito
+
+        // Pioggia di Rune
+        const runes = ['✧', '✦', '⚛', '⌬', '⚿', '⛤', '♅', '𐕣', '✨'];
+        for (let i = 0; i < 15; i++) {
             setTimeout(() => {
-                document.querySelectorAll('.welcome-scroll').forEach(s => s.classList.add('rolled'));
-            }, 15000);
-        };
-    </script>
+                const p = document.createElement('div');
+                p.innerHTML = runes[Math.floor(Math.random() * runes.length)];
+                p.className = 'magic-rune';
+                p.style.left = (Math.random() * 95) + 'vw';
+                p.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                p.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 7000);
+            }, i * 400);
+        }
+
+        // Chiusura Pergamene automatica
+        setTimeout(() => {
+            const left = document.getElementById('s-left');
+            const right = document.getElementById('s-right');
+            if(left) left.classList.add('rolled');
+            if(right) right.classList.add('rolled');
+        }, 15000);
+    };
+</script>
+
 </body>
 </html>
