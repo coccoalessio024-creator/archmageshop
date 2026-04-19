@@ -27,7 +27,7 @@
       padding: 1rem 2rem; box-sizing: border-box;
     }
 
-    /* LAYOUT DINAMICO SIDEBAR */
+    /* LAYOUT DINAMICO */
     .main-wrapper {
       display: flex;
       width: 100vw;
@@ -41,52 +41,22 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
       gap: 3rem; 
       padding: 3rem;
-      transition: all 0.5s ease;
     }
 
-       /* SEZIONE GARANZIA CON ILLUMINAZIONE */
-    .warranty-section {
-        grid-column: 1 / -1;
-        text-align: center;
-        margin-bottom: 2rem;
-        padding: 20px;
-        position: relative;
-    }
-
-    .warranty-section img {
-        width: 250px; /* Leggermente più grande */
-        /* Bagliore dorato esterno e ombra profonda per staccarlo dallo sfondo */
-        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7)) drop-shadow(0 0 40px rgba(212, 175, 55, 0.3));
-        transition: 0.5s ease-in-out;
-        animation: certificateGlow 4s infinite ease-in-out;
-    }
-
-    /* Animazione che fa pulsare la luce dietro il certificato */
-    @keyframes certificateGlow {
-        0%, 100% { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)); transform: scale(1); }
-        50% { filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.9)); transform: scale(1.02); }
-    }
-
-    /* CARD STYLE (SOLO FIAMME) */
+    /* CARD STYLE - EFFETTO FIAMME */
     .card { 
-      background: transparent; 
-      border: none; 
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center;
+      background: transparent; border: none; 
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
 
     .item-img { 
         width: 180px; height: 180px; object-fit: contain; 
         filter: drop-shadow(0 0 15px #ff4500); 
-        transition: 0.4s;
-        cursor: pointer;
+        transition: 0.4s; cursor: pointer;
     }
-    .card:hover .item-img { 
-        filter: drop-shadow(0 0 25px #ff8c00) brightness(1.2); 
-        transform: scale(1.1);
-    }
+    .card:hover .item-img { filter: drop-shadow(0 0 25px #ff8c00) brightness(1.2); transform: scale(1.1); }
 
-    /* LOGICA MONETA ROTANTE (TOKEN) */
+    /* MONETA ROTANTE 3D */
     .coin-wrapper { width: 180px; height: 180px; perspective: 1000px; cursor: pointer; }
     .coin-inner {
         width: 100%; height: 100%; position: relative;
@@ -100,7 +70,7 @@
     @keyframes rotateCoin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     .coin-inner img { width: 90%; filter: drop-shadow(0 0 15px #ff4500); }
 
-    /* SIDEBAR RECAP */
+    /* SIDEBAR */
     #checkout-sidebar {
       width: 0; height: calc(100vh - 72px); position: sticky; top: 72px;
       background: linear-gradient(180deg, #2a1a0a 0%, #1a120b 100%);
@@ -109,12 +79,30 @@
     }
     #checkout-sidebar.visible { width: 350px; border-left: 3px solid #d4af37; padding: 2rem 1.5rem; }
 
-    .recap-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #d4af37; font-size: 0.9rem; }
-    .remove-tiny { background: #7a1515; color: white; border: 1px solid #d4af37; padding: 2px 6px; cursor: pointer; }
-    .sidebar-btn { background: #7a1515; color: white; padding: 15px; text-align: center; text-decoration: none; border: 2px solid #d4af37; margin-top: auto; font-weight: bold; }
-    
+    /* CERTIFICATO SEGRETO (EFFETTO POKEBALL) */
+    .secret-warranty-card {
+        grid-column: 1 / -1; display: flex; flex-direction: column;
+        align-items: center; margin-top: 4rem; padding-bottom: 3rem;
+    }
+    .warranty-trigger {
+        width: 200px; cursor: pointer !important;
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+        transition: all 0.4s ease;
+    }
+    .warranty-trigger:hover { 
+        animation: pokeballShake 0.5s ease-in-out infinite; 
+        filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6)); 
+    }
+    @keyframes pokeballShake {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-8deg); }
+        75% { transform: rotate(8deg); }
+    }
+
     .price-tag { color: #ffcc00; font-size: 1.2rem; margin: 10px 0; }
-    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: 'MedievalSharp'; }
+    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    .recap-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #d4af37; }
+    .sidebar-btn { background: #7a1515; color: white; padding: 15px; text-align: center; text-decoration: none; border: 2px solid #d4af37; margin-top: auto; }
   </style>
 </head>
 <body>
@@ -130,28 +118,14 @@
   <div class="main-wrapper">
     <main class="products-grid">
       
-      <!-- Garanzia -->
-      <div class="warranty-section">
-          <img src="../archives/productscertifcate.png.png" alt="Warranty">
-      </div>
-
-      <!-- Invisibility Brew -->
+      <!-- Manufatti Classici -->
       <article class="card">
         <img src="../archives/invisibilitybrew.png.png" class="item-img" onclick="addToCart('Invisibility Brew', 45)">
         <h3>Invisibility Brew</h3>
         <span class="price-tag">45 Gold</span>
         <button class="small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cart</button>
       </article>
-      
-      <!-- Treasure Map -->
-      <article class="card">
-        <img src="../archives/treasuremap.png.png" class="item-img" onclick="addToCart('Treasure Map', 15)">
-        <h3>Treasure Map</h3>
-        <span class="price-tag">15 Gold</span>
-        <button class="small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cart</button>
-      </article>
 
-      <!-- Silence Ring -->
       <article class="card">
         <img src="../archives/silentring.png.png" class="item-img" onclick="addToCart('Silence Ring', 120)">
         <h3>Ring of Silence</h3>
@@ -159,7 +133,6 @@
         <button class="small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cart</button>
       </article>
 
-      <!-- Magic Mirror -->
       <article class="card">
         <img src="../archives/magicmirror.png.png" class="item-img" onclick="addToCart('Magic Mirror', 55)">
         <h3>Magic Mirror</h3>
@@ -167,7 +140,14 @@
         <button class="small-buy-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cart</button>
       </article>
 
-      <!-- Blessing -->
+      <article class="card">
+        <img src="../archives/treasuremap.png.png" class="item-img" onclick="addToCart('Treasure Map', 15)">
+        <h3>Treasure Map</h3>
+        <span class="price-tag">15 Gold</span>
+        <button class="small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cart</button>
+      </article>
+
+      <!-- Servizi dell'Arcimago -->
       <article class="card">
         <img src="../archives/blessing.png" class="item-img" onclick="addToCart('Archmage Blessing', 10)">
         <h3>Archmage's Blessing</h3>
@@ -175,7 +155,6 @@
         <button class="small-buy-btn" onclick="addToCart('Archmage Blessing', 10)">Add to Cart</button>
       </article>
 
-      <!-- Buff -->
       <article class="card">
         <img src="../archives/buff.png" class="item-img" onclick="addToCart('Archmage Buff', 5)">
         <h3>Archmage's Buff</h3>
@@ -183,7 +162,7 @@
         <button class="small-buy-btn" onclick="addToCart('Archmage Buff', 5)">Add to Cart</button>
       </article>
 
-      <!-- TOKEN ROTANTE (Toilet Token) -->
+      <!-- Token Rotante -->
       <article class="card">
         <div class="coin-wrapper" onclick="addToCart('Toilet Token', 2)">
             <div class="coin-inner">
@@ -196,7 +175,6 @@
         <button class="small-buy-btn" onclick="addToCart('Toilet Token', 2)">Add to Cart</button>
       </article>
 
-      <!-- Archmage Hug -->
       <article class="card">
         <img src="../archives/hugtoken.png" class="item-img" onclick="addToCart('Archmage Hug', 0.5)">
         <h3>Archmage's Hug</h3>
@@ -204,13 +182,20 @@
         <button class="small-buy-btn" onclick="addToCart('Archmage Hug', 0.5)">Add to Cart</button>
       </article>
 
+      <!-- CERTIFICATO SEGRETO IN FONDO -->
+      <article class="secret-warranty-card">
+          <a href="finaltrial.html">
+              <img src="../archives/productscertifcate.png.png" class="warranty-trigger" alt="Secret Certificate">
+          </a>
+          <p style="font-size: 0.7rem; color: rgba(212, 175, 55, 0.4); margin-top: 10px;">"A true seeker looks beyond the surface."</p>
+      </article>
+
     </main>
 
-    <!-- SIDEBAR RECAP -->
     <aside id="checkout-sidebar">
       <h2 style="color:#d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Order Manifest</h2>
       <div id="recap-list" style="flex: 1; overflow-y: auto;"></div>
-      <div id="total-price" style="font-size: 1.5rem; color: #ffcc00; padding: 15px 0; border-top: 1px solid #d4af37;">Total: 0 Gold</div>
+      <div id="total-price" style="font-size: 1.5rem; color: #ffcc00; padding: 15px 0;">Total: 0.00 Gold</div>
       <a href="cart.html" class="sidebar-btn">PROCEED TO CHECKOUT →</a>
     </aside>
   </div>
@@ -240,24 +225,14 @@
       countEl.innerText = cart.length;
       recapList.innerHTML = '';
       let total = 0;
-
       cart.forEach(item => {
         total += item.price;
-        recapList.innerHTML += `
-          <div class="recap-item">
-            <span>${item.name}</span>
-            <div>
-              <span style="color:#ffcc00; margin-right:10px;">${item.price}g</span>
-              <button class="remove-tiny" onclick="removeItem(${item.id})">X</button>
-            </div>
-          </div>`;
+        recapList.innerHTML += `<div class="recap-item"><span>${item.name}</span><div><span style="color:#ffcc00; margin-right:10px;">${item.price}g</span><button class="remove-tiny" onclick="removeItem(${item.id})">X</button></div></div>`;
       });
-
       totalPrice.innerText = "Total: " + total.toFixed(2) + " Gold";
       if(cart.length > 0) sidebar.classList.add('visible');
       else sidebar.classList.remove('visible');
     }
-
     updateUI();
   </script>
 </body>
