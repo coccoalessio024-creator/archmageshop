@@ -4,67 +4,80 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Archmage's Emporium</title>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <link href="https://googleapis.com" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* RESET PER L'EMPORIO: Forza l'allineamento pulito */
-    body { justify-content: flex-start !important; padding-top: 0; }
+    body { justify-content: flex-start !important; padding-top: 0; background: #140f0a; color: #f3e5ab; font-family: 'MedievalSharp', serif; margin: 0; display: flex; flex-direction: column; }
 
+    /* HEADER */
     .tavern-header {
       position: sticky; top: 0; z-index: 100; width: 100%;
       background: rgba(20, 15, 10, 0.95);
-      border-bottom: 2px solid var(--gold);
+      border-bottom: 2px solid #d4af37;
       display: flex; justify-content: space-between; align-items: center;
       padding: 1rem 2rem; box-sizing: border-box;
     }
 
-    /* GRID COMPATTA */
+    .nav-link { color: #d4af37 !important; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
+
+    /* LAYOUT PRINCIPALE CON SIDEBAR */
+    .main-container { display: flex; width: 100%; min-height: 100vh; }
+
     .products-grid {
+      flex: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem; width: 90%; max-width: 1000px;
-      margin: 2rem auto; padding: 0;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+      gap: 2rem; padding: 2rem;
     }
 
-    /* CARD SEMPLIFICATA */
-    .card {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 15px; padding: 1.5rem;
-      display: flex; flex-direction: column; align-items: center;
+    /* SIDEBAR A CADUTA (Destra) */
+    #checkout-sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #2a1a0a 0%, #140f0a 100%);
+      border-left: 3px solid #d4af37;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: sticky;
+      top: 70px; /* Sotto l'header */
+      height: calc(100vh - 70px);
+      transform: translateY(-100%); /* Nasconde sopra */
+      opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+      box-shadow: -10px 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Classe attivata via JS */
+    #checkout-sidebar.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .checkout-title { color: #d4af37; font-size: 1.2rem; text-align: center; margin-bottom: 2rem; border-bottom: 1px solid #d4af37; padding-bottom: 10px; width: 100%; }
+
+    .sidebar-btn {
+      background: #7a1515;
+      color: #fdf5e6;
+      padding: 15px;
+      border: 2px solid #d4af37;
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(122, 21, 21, 0.4);
       transition: 0.3s;
     }
+    .sidebar-btn:hover { background: #a11d1d; transform: scale(1.05); }
 
-    /* L'IMMAGINE DIVENTA IL BOTTONE */
-    .item-btn {
-      background: none; border: none; padding: 0;
-      cursor: pointer; transition: transform 0.3s;
-      width: 150px; height: 150px; /* DIMENSIONE BLOCCATA */
-      display: flex; align-items: center; justify-content: center;
-    }
-    
-    .item-btn:hover { transform: scale(1.1) rotate(2deg); }
-    .item-btn:active { transform: scale(0.9); }
-
-    .item-img {
-      width: 100%; height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
-    }
-
-    h3 { margin: 1rem 0 0.5rem; font-size: 1.2rem; color: var(--gold); }
-    .price-tag { color: var(--amber); font-weight: bold; margin-bottom: 1rem; }
-
-    /* BOTTONE SOTTO PICCOLO */
-    .small-buy-btn {
-      font-size: 0.8rem; padding: 0.5rem 1rem;
-      border-radius: 10px;
-    }
-
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .fire-border .item-img { filter: drop-shadow(0 0 15px var(--fire)); animation: float 3s ease-in-out infinite; }
-    .spectral-border .item-img { filter: drop-shadow(0 0 15px var(--mana)); animation: float 4s ease-in-out infinite; }
+    /* CARD E IMMAGINI */
+    .card { background: rgba(40, 30, 20, 0.4); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 15px; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+    .item-btn { background: none; border: none; width: 175px; height: 175px; cursor: pointer; transition: 0.3s; }
+    .item-btn:hover { transform: scale(1.1); }
+    .item-img { width: 100%; height: 100%; object-fit: contain; }
+    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-family: 'MedievalSharp'; }
   </style>
 </head>
 <body>
@@ -73,73 +86,65 @@
     <span class="tavern-sign">The Emporium</span>
     <nav>
       <a href="../index.html" class="nav-link">Sanctum</a>
-      <a href="bulletins.html" class="nav-link">Bulletins</a>
       <a href="cart.html" class="nav-link">Cart (<span id="cart-count">0</span>)</a>
     </nav>
   </header>
 
-  <section class="hero">
-    <h1 class="arch-title">Magical Trinkets</h1>
-    <p style="color: var(--gold); font-style: italic; margin-top: -1.5rem;">"Click an artifact to claim its power."</p>
-  </section>
+  <div class="main-container">
+    <main class="products-grid">
+      <!-- Invisibility Brew -->
+      <article class="card">
+        <button class="item-btn" onclick="addToCart('Invisibility Brew', 45)">
+          <img src="../archives/invisibilitybrew.png.png" class="item-img">
+        </button>
+        <h3>Invisibility Brew</h3>
+        <button class="small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
+      </article>
 
-  <main class="products-grid">
-    <!-- Invisibility Brew -->
-    <article class="card fire-border">
-      <button class="item-btn" onclick="addToCart('Invisibility Brew', 45)">
-        <img src="../archives/invisibilitybrew.png.png" class="item-img" alt="Brew">
-      </button>
-      <h3>Invisibility Brew</h3>
-      <span class="price-tag">45 Gold</span>
-      <button class="arch-btn small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
-    </article>
+      <!-- Silence Ring -->
+      <article class="card">
+        <button class="item-btn" onclick="addToCart('Silence Ring', 120)">
+          <img src="../archives/silentring.png.png" class="item-img">
+        </button>
+        <h3>Ring of Silence</h3>
+        <button class="small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
+      </article>
 
-    <!-- Ring of Silence -->
-    <article class="card">
-      <button class="item-btn" onclick="addToCart('Silence Ring', 120)">
-        <img src="../archives/silentring.png.png" class="item-img" alt="Ring">
-      </button>
-      <h3>Ring of Silence</h3>
-      <span class="price-tag">120 Gold</span>
-      <button class="arch-btn small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
-    </article>
-    
-    <!-- Magic Mirror -->
-    <article class="card spectral-border">
-      <button class="item-btn" onclick="addToCart('Magic Mirror', 55)">
-        <img src="../archives/magicmirror.png.png" class="item-img" alt="Mirror">
-      </button>
-      <h3>Magic Mirror</h3>
-      <span class="price-tag">55 Gold</span>
-      <button class="arch-btn small-buy-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cauldron</button>
-    </article>
-    
-    <!-- Treasure Map -->
-    <article class="card">
-      <button class="item-btn" onclick="addToCart('Treasure Map', 15)">
-        <img src="../archives/treasuremap.png.png" class="item-img" alt="Map">
-      </button>
-      <h3>Treasure Map</h3>
-      <span class="price-tag">15 Gold</span>
-      <button class="arch-btn small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cauldron</button>
-    </article>
-  </main>
+      <!-- Altri prodotti... -->
+    </main>
+
+    <!-- COLONNA LATERALE A CADUTA -->
+    <aside id="checkout-sidebar">
+      <h2 class="checkout-title">Your Loot</h2>
+      <p style="text-align: center; font-style: italic; margin-bottom: 2rem;">The Archmage awaits your tribute.</p>
+      <a href="cart.html" class="sidebar-btn">PROCEED TO CHECKOUT →</a>
+    </aside>
+  </div>
 
   <script>
     function addToCart(name, price) {
       let cart = JSON.parse(localStorage.getItem('magicCart')) || [];
       cart.push({ id: Date.now(), name: name, price: price });
       localStorage.setItem('magicCart', JSON.stringify(cart));
-      updateCount();
-      console.log(name + " added");
+      updateUI();
     }
 
-    function updateCount() {
+    function updateUI() {
       const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
-      const el = document.getElementById('cart-count');
-      if(el) el.innerText = cart.length;
+      const countEl = document.getElementById('cart-count');
+      const sidebar = document.getElementById('checkout-sidebar');
+
+      if(countEl) countEl.innerText = cart.length;
+
+      // EFFETTO A CADUTA: Se c'è almeno un oggetto, aggiunge la classe .visible
+      if(cart.length > 0) {
+        sidebar.classList.add('visible');
+      } else {
+        sidebar.classList.remove('visible');
+      }
     }
-    updateCount();
+
+    updateUI();
   </script>
 </body>
 </html>
