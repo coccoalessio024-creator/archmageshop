@@ -6,48 +6,36 @@
   <title>The Royal Depository - Cart</title>
   <!-- Google Fonts -->
   <link href="https://googleapis.com" rel="stylesheet">
-  <!-- Link al CSS Esterno (esce dalla cartella con ../) -->
+  <!-- Link al CSS Esterno -->
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* Stile specifico per la Pergamena del Carrello */
-    .container {
-        position: relative; z-index: 5;
-        max-width: 600px; width: 90%;
-        background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
-        padding: 2.5rem;
-        box-shadow: 0 0 50px #000, 20px 20px 0 rgba(0,0,0,0.2);
-        clip-path: polygon(1% 2%, 99% 0%, 100% 98%, 2% 100%, 0% 50%);
-        border: 1px solid #b89060;
-        margin: 2rem auto;
-        color: #3d2810; /* Testo scuro sulla carta chiara */
-    }
-
+    /* Stili interni minimi per la gestione del testo sulla pergamena */
     .item-row { 
         display: flex; justify-content: space-between; align-items: center; 
         border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
     }
-
     .remove-btn { 
         background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; 
         cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
+        transition: 0.3s;
     }
-
+    .remove-btn:hover { background: #a01e1e; transform: scale(1.1); }
     .total { font-size: 2.2rem; color: #7a1515; display: flex; justify-content: space-between; font-weight: bold; margin-top: 1rem; }
-    
-    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2810; text-decoration: underline; }
+    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2810; text-decoration: underline; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <!-- Classe metallica universale -->
+  <!-- Titolo metallico unificato -->
   <h1 class="arch-title">The Royal Depository</h1>
 
-  <div class="container">
+  <!-- Usiamo la classe parchment-box definita nello style.css -->
+  <div class="parchment-box">
     <div id="cart-content"></div>
     
     <div class="summary">
-      <div style="display:flex; justify-content:space-between; color: #5c4008; margin-bottom: 0.5rem;">
+      <div style="display:flex; justify-content:space-between; color: #5c4008; margin-bottom: 0.5rem; font-weight: bold;">
         <span>Arcane Tax (5%)</span>
         <span id="tax-val">0.00 Gold</span>
       </div>
@@ -58,12 +46,18 @@
     </div>
 
     <div class="paypal-section">
-      <!-- Classe bottone universale -->
+      <!-- Bottone universale arch-btn -->
       <a href="#" id="paypal-link" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
       <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem;">Monitored by the Archmage.</p>
       <a href="index.html" class="back">← Return to Emporium</a>
     </div>
   </div>
+
+  <!-- Angoli decorativi -->
+  <div class="corner top-left"></div>
+  <div class="corner top-right"></div>
+  <div class="corner bottom-left"></div>
+  <div class="corner bottom-right"></div>
 
   <script>
     function render() {
@@ -71,7 +65,7 @@
       const container = document.getElementById('cart-content');
       let subtotal = 0;
       
-      container.innerHTML = cart.length === 0 ? '<p style="text-align:center">The cauldron is empty.</p>' : '';
+      container.innerHTML = cart.length === 0 ? '<p style="text-align:center; font-weight:bold;">The cauldron is empty.</p>' : '';
 
       cart.forEach(item => {
         subtotal += item.price;
@@ -87,7 +81,8 @@
 
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
-      // Corretto il link PayPal
+      
+      // Correzione definitiva link PayPal
       document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
       document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
     }
