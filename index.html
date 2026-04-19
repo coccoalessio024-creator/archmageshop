@@ -21,20 +21,51 @@
             overflow-x: hidden;
         }
 
+        /* NEBBIA DEL VUOTO (VIGNETTE ANIMATA) */
         body::before {
             content: "";
             position: fixed; inset: 0;
-            background: radial-gradient(circle at center, rgba(201, 147, 42, 0.1) 0%, transparent 70%);
-            z-index: -1;
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
+            z-index: 2;
+            pointer-events: none;
+            animation: pulse-fog 8s ease-in-out infinite alternate;
         }
 
-        .sanctum-container { text-align: center; padding: 2rem; max-width: 800px; z-index: 1; }
+        @keyframes pulse-fog {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
 
+        /* TRAMA PERGAMENA SULLO SFONDO */
+        body::after {
+            content: "";
+            position: fixed; inset: 0;
+            background-image: url('https://transparenttextures.com');
+            opacity: 0.2; z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ANGOLI ORNAMENTALI */
+        .corner {
+            position: fixed; width: 60px; height: 60px;
+            border: 2px solid var(--gold);
+            z-index: 10; pointer-events: none;
+            opacity: 0.4;
+        }
+        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+        .sanctum-container { text-align: center; padding: 2rem; max-width: 800px; z-index: 5; }
+
+        /* CORNICE RIFINITA */
         .archmage-frame {
             position: relative; width: 250px; height: 250px;
-            margin: 0 auto 2rem; border-radius: 50%; padding: 10px;
-            background: linear-gradient(135deg, var(--gold), #3d2810);
-            box-shadow: 0 0 50px var(--gold-glow);
+            margin: 0 auto 2.5rem; border-radius: 50%; padding: 12px;
+            background: linear-gradient(135deg, var(--gold), #1a1005);
+            box-shadow: 0 0 60px var(--gold-glow), inset 0 0 20px #000;
+            border: 1px solid var(--gold);
         }
 
         .archmage-frame img {
@@ -42,34 +73,52 @@
             object-fit: cover; border: 2px solid var(--bg);
         }
 
+        /* TITOLO METALLICO DORATO */
         h1 {
-            font-family: 'MedievalSharp', serif; font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin: 0;
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            background: linear-gradient(to bottom, #fff 10%, var(--gold) 50%, #5c4008 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--gold-glow));
+            margin: 0;
+            letter-spacing: 4px;
         }
 
         .introduction {
-            font-size: 1.4rem; font-style: italic; color: #8c7450;
-            margin: 1.5rem 0 2.5rem; line-height: 1.6;
+            font-size: 1.3rem; font-style: italic; color: #8c7450;
+            margin: 1.5rem 0 3rem; line-height: 1.6;
+            text-shadow: 1px 1px 2px #000;
         }
 
+        /* BOTTONE TARGA MEDIEVALE */
         .portal-button {
-            display: inline-block; padding: 1.2rem 3rem;
-            background: transparent; color: var(--gold);
+            display: inline-block; padding: 1.4rem 3.5rem;
+            background: #1a120b; color: var(--gold);
             text-decoration: none; font-family: 'MedievalSharp', serif;
-            border: 2px solid var(--gold); transition: all 0.4s ease;
-            letter-spacing: 2px;
+            border: 2px solid var(--gold); 
+            transition: all 0.4s ease;
+            letter-spacing: 3px;
+            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
         }
 
         .portal-button:hover {
             background: var(--gold); color: var(--bg);
-            box-shadow: 0 0 30px var(--gold); transform: scale(1.05);
+            box-shadow: 0 0 40px var(--gold);
+            transform: scale(1.05);
+            letter-spacing: 5px;
         }
 
-        .rune-deco { margin-top: 3rem; color: var(--gold); opacity: 0.4; font-size: 1.5rem; }
+        .rune-deco { margin-top: 4rem; color: var(--gold); opacity: 0.3; font-size: 2rem; }
     </style>
 </head>
 <body>
-          <div class="sanctum-container">
+    <!-- Elementi decorativi fissi -->
+    <div class="corner top-left"></div>
+    <div class="corner top-right"></div>
+    <div class="corner bottom-left"></div>
+    <div class="corner bottom-right"></div>
+
+    <div class="sanctum-container">
         <div class="archmage-frame">
             <img src="archives/Archmage.png.png" alt="The Archmage">
         </div>
@@ -83,5 +132,28 @@
         <div class="rune-deco">᚛ ᚫ ᚜</div>
     </div>
 
+    <script>
+        function createSpark() {
+            const spark = document.createElement('div');
+            spark.style.position = 'fixed';
+            spark.style.width = '2px';
+            spark.style.height = '2px';
+            spark.style.background = 'var(--gold)';
+            spark.style.left = Math.random() * 100 + 'vw';
+            spark.style.top = '110vh';
+            spark.style.opacity = Math.random();
+            spark.style.transition = 'transform ' + (Math.random() * 5 + 5) + 's linear, opacity 2s';
+            spark.style.zIndex = '1'; /* Sopra lo sfondo, sotto la nebbia */
+            document.body.appendChild(spark);
+
+            setTimeout(() => {
+                spark.style.transform = 'translateY(-120vh) translateX(' + (Math.random() * 100 - 50) + 'px)';
+                spark.style.opacity = '0';
+            }, 100);
+
+            setTimeout(() => spark.remove(), 10000);
+        }
+        setInterval(createSpark, 400);
+    </script>
 </body>
 </html>
