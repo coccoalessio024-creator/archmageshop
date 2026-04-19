@@ -4,40 +4,86 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Royal Depository - Cart</title>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <link href="https://googleapis.com" rel="stylesheet">
   <style>
     :root {
-      --bg: #090603; --surface: #120a04; --border: #3d2810;
-      --gold: #c9932a; --gold-bright: #e8b84b; --parchment: #e4d0a6;
+      --bg: #090603; --gold: #c9932a; --gold-bright: #e8b84b;
+      --gold-glow: rgba(201, 147, 42, 0.4);
     }
-    body { margin: 0; background: var(--bg); color: var(--parchment); font-family: 'MedievalSharp', serif; }
-    .header { padding: 2rem; text-align: center; border-bottom: 1px solid var(--border); background: #050301; }
-    .title { font-family: 'MedievalSharp', serif; color: var(--gold); margin: 0; }
-    
-    .container { max-width: 500px; margin: 3rem auto; padding: 2rem; background: var(--surface); border: 1px solid var(--border); }
-    .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding: 1rem 0; }
-    
-    .remove-btn { background: none; border: 1px solid #7a1515; color: #a01e1e; cursor: pointer; padding: 2px 8px; font-size: 10px; font-family: 'MedievalSharp', serif; }
-    .remove-btn:hover { background: #7a1515; color: white; }
 
-    .summary { margin-top: 2rem; border-top: 2px solid var(--gold); padding-top: 1rem; }
-    .total { font-size: 1.8rem; color: var(--gold-bright); display: flex; justify-content: space-between; }
+    body { 
+      margin: 0; background: var(--bg); color: #3d2810; 
+      font-family: 'MedievalSharp', serif; 
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* NEBBIA DEL VUOTO (Coerenza con Sanctum) */
+    body::before {
+        content: ""; position: fixed; inset: 0;
+        background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
+        z-index: 2; pointer-events: none;
+        animation: pulse-fog 8s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-fog { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+
+    /* TITOLO METALLICO */
+    .title {
+        font-family: 'Cinzel Decorative', serif; font-size: 3rem; text-align: center;
+        background: linear-gradient(to bottom, #fff 10%, var(--gold) 50%, #5c4008 90%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px var(--gold-glow));
+        margin: 2rem 0; z-index: 5;
+    }
+
+    /* LA PERGAMENA */
+    .container {
+        position: relative; z-index: 5;
+        max-width: 600px; width: 90%;
+        background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
+        padding: 3rem;
+        box-shadow: 0 0 50px #000, 20px 20px 0 rgba(0,0,0,0.2);
+        clip-path: polygon(1% 2%, 99% 0%, 100% 98%, 2% 100%, 0% 50%); /* Bordi "strappati" */
+        border: 1px solid #b89060;
+    }
+
+    .item-row { 
+        display: flex; justify-content: space-between; align-items: center; 
+        border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
+    }
+
+    .remove-btn { 
+        background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; 
+        cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
+        transition: 0.3s;
+    }
+    .remove-btn:hover { background: #a01e1e; transform: scale(1.1); }
+
+    .summary { margin-top: 2rem; border-top: 2px solid #3d2810; padding-top: 1rem; }
+    .total { font-size: 2.2rem; color: #7a1515; display: flex; justify-content: space-between; font-weight: bold; }
     
-    .paypal-section { margin-top: 2rem; text-align: center; }
-    .pay-button { display: block; padding: 1.2rem; background: var(--gold); color: #000; text-decoration: none; font-family: 'MedievalSharp', serif; font-weight: bold; }
-    .pay-button:hover { background: var(--gold-bright); box-shadow: 0 0 20px var(--gold); }
-    .back { display: block; margin-top: 1.5rem; color: var(--gold-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; }
+    /* BOTTONE PAYPAL "TARGA" */
+    .pay-button {
+        display: block; text-align: center; margin-top: 2rem;
+        padding: 1.2rem; background: #3d2810; color: var(--gold-bright);
+        text-decoration: none; font-weight: bold;
+        clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+        transition: 0.4s; border: 1px solid var(--gold);
+    }
+    .pay-button:hover { background: var(--gold); color: var(--bg); box-shadow: 0 0 20px var(--gold); }
+
+    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2810; text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <div class="header"><h1 class="title">The Royal Depository</h1></div>
+  <h1 class="title">The Royal Depository</h1>
 
   <div class="container">
     <div id="cart-content"></div>
     
     <div class="summary">
-      <div style="display:flex; justify-content:space-between; color: #8c7450; margin-bottom: 0.5rem;">
+      <div style="display:flex; justify-content:space-between; color: #5c4008; margin-bottom: 0.5rem;">
         <span>Arcane Tax (5%)</span>
         <span id="tax-val">0.00 Gold</span>
       </div>
@@ -49,7 +95,7 @@
 
     <div class="paypal-section">
       <a href="#" id="paypal-link" class="pay-button">TRIBUTE TO THE BRAVES</a>
-      <p style="font-size:0.8rem; font-style:italic; margin-top:1rem; color:#8c7450;">Monitored by the Archmage.</p>
+      <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem;">Monitored by the Archmage.</p>
       <a href="index.html" class="back">← Return to Emporium</a>
     </div>
   </div>
@@ -76,7 +122,7 @@
 
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
-      document.getElementById('paypal-link').href = `https://paypal.me/heavencaten/${final.toFixed(2)}`;
+      document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
       document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
     }
 
