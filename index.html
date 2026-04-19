@@ -4,12 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Sanctum</title>
-    <!-- Font Medievale -->
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Logo Brand in basso a destra con bagliore */
+        .brand-logo-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 180px;
+            z-index: 100;
+            filter: drop-shadow(0 0 8px #d4af37); /* Bagliore che esalta il nero */
+            transition: 0.5s;
+            cursor: help;
+        }
+        .brand-logo-container:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
+        .brand-logo-container img { width: 100%; height: auto; display: block; }
+
+        /* Bulletin Button & Scroll Preview */
+        .bulletin-wrapper { position: relative; display: inline-block; margin-top: 1rem; }
+        
+        .scroll-preview {
+            position: absolute;
+            bottom: 120%; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            width: 250px;
+            background: #fdf5e6;
+            background-image: url('https://transparenttextures.com');
+            color: #3d2b1f;
+            padding: 1rem;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s;
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .bulletin-wrapper:hover .scroll-preview {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .scroll-preview h4 { margin: 0 0 10px 0; border-bottom: 1px solid #8b4513; color: #7a1515; }
+        .scroll-preview ul { list-style: "✧ "; padding-left: 1.2rem; margin: 0; text-align: left; }
+
+        .introduction .highlight { color: #d4af37; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
+
+    <!-- Loading Overlay (Velocizzato del 10%) -->
     <div id="loading-overlay">
         <h2 class="arch-title" style="font-size: 2rem;">Summoning Spirits...</h2>
         <div class="loading-container">
@@ -18,13 +67,11 @@
         <p id="loading-text">0%</p>
     </div>
 
-    <!-- Cornici decorative -->
     <div class="corner top-left"></div>
     <div class="corner top-right"></div>
     <div class="corner bottom-left"></div>
     <div class="corner bottom-right"></div>
 
-    <!-- Container Principale -->
     <div class="sanctum-container">
         <div class="archmage-frame">
             <img src="archives/Archmage.png.png" alt="The Archmage">
@@ -33,32 +80,54 @@
         <h1 class="arch-title">The Archmage</h1>
         
         <p class="introduction">
-            "Greetings, traveler. You have found the gateway to my digital domain. Beyond this point lie artifacts of moderate power and questionable safety."
+            "Greetings, traveler. You have found the gateway to my digital domain. Beyond this point lie artifacts of moderate power and questionable safety."<br><br>
+            <span class="highlight">Rejoice in the light of guidance of The Archmage.</span>
         </p>
         
-        <a href="emporium/" class="arch-btn">ENTER THE EMPORIUM</a>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <a href="emporium/" class="arch-btn">ENTER THE EMPORIUM</a>
+            
+            <!-- Bulletin Button with Scroll Preview -->
+            <div class="bulletin-wrapper">
+                <a href="emporium/bulletins.html" class="arch-btn" style="font-size: 0.9rem; background: #2a1a0a;">READ THE BULLETINS</a>
+                <div class="scroll-preview">
+                    <h4>Latest Visions</h4>
+                    <ul>
+                        <li>The Mirror of Truth is cracked</li>
+                        <li>Tax increase on Mana Potions</li>
+                        <li>New relics found in the Abyss</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         
-        <div class="rune-deco">᚛ ᚫ ᚜</div>
+        <div class="rune-deco" style="margin-top: 2rem;">᚛ ᚫ ᚜</div>
     </div>
 
-    <!-- Script Unificato (Caricamento + Scintille) -->
+    <!-- BRAND LOGO (Segreto) -->
+    <a href="#secret-chamber" class="brand-logo-container" title="Reveal the Truth">
+        <img src="archives/logo_archmage.png" alt="Archmage Logo">
+    </a>
+
     <script>
-        // Gestione Loading
+        // Gestione Loading (Intervallo ridotto da 150 a 135 per -10% tempo)
         let w = 0;
         const interval = setInterval(() => {
-            w += Math.random() * 20;
+            w += Math.random() * 22; // Incremento leggermente più alto
             if (w >= 100) {
                 w = 100;
                 clearInterval(interval);
                 setTimeout(() => {
                     const loader = document.getElementById('loading-overlay');
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
+                    if(loader) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => loader.remove(), 500);
+                    }
                 }, 400);
             }
             document.getElementById('loading-bar').style.width = w + '%';
             document.getElementById('loading-text').innerText = Math.floor(w) + '%';
-        }, 150);
+        }, 135); 
 
         // Scintille Magiche
         function createSpark() {
@@ -78,3 +147,4 @@
     </script>
 </body>
 </html>
+
