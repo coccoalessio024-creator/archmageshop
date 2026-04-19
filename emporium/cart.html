@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* Stili interni minimi per la gestione del testo sulla pergamena */
+    /* Stili interni per la gestione del testo sulla pergamena */
     .item-row { 
         display: flex; justify-content: space-between; align-items: center; 
         border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
@@ -27,10 +27,9 @@
 </head>
 <body>
 
-  <!-- Titolo metallico unificato -->
   <h1 class="arch-title">The Royal Depository</h1>
 
-  <!-- Usiamo la classe parchment-box definita nello style.css -->
+  <!-- Contenitore Pergamena -->
   <div class="parchment-box">
     <div id="cart-content"></div>
     
@@ -46,14 +45,14 @@
     </div>
 
     <div class="paypal-section">
-      <!-- Bottone universale arch-btn -->
+      <!-- Bottone PayPal Dinamico -->
       <a href="#" id="paypal-link" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
       <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem;">Monitored by the Archmage.</p>
       <a href="index.html" class="back">← Return to Emporium</a>
     </div>
   </div>
 
-  <!-- Angoli decorativi -->
+  <!-- Decorazioni -->
   <div class="corner top-left"></div>
   <div class="corner top-right"></div>
   <div class="corner bottom-left"></div>
@@ -65,7 +64,8 @@
       const container = document.getElementById('cart-content');
       let subtotal = 0;
       
-      container.innerHTML = cart.length === 0 ? '<p style="text-align:center; font-weight:bold;">The cauldron is empty.</p>' : '';
+      // Messaggio se il carrello è vuoto
+      container.innerHTML = cart.length === 0 ? '<p style="text-align:center; font-weight:bold;">The cauldron is empty, traveler.</p>' : '';
 
       cart.forEach(item => {
         subtotal += item.price;
@@ -77,14 +77,19 @@
       });
 
       const tax = subtotal * 0.05;
-      const final = subtotal + tax;
+      const final = (subtotal + tax).toFixed(2);
 
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
-      document.getElementById('total-val').innerText = final.toFixed(2) + " Gold";
+      document.getElementById('total-val').innerText = final + " Gold";
       
-      // Correzione definitiva link PayPal
-      document.getElementById('paypal-link').href = `https://paypal.me{final.toFixed(2)}`;
-      document.getElementById('paypal-link').style.display = final > 0 ? 'block' : 'none';
+      // LINK PAYPAL INTEGRATO PER @HEAVENCATEN
+      const paypalBtn = document.getElementById('paypal-link');
+      if (parseFloat(final) > 0) {
+        paypalBtn.href = `https://paypal.com{final}`;
+        paypalBtn.style.display = 'block';
+      } else {
+        paypalBtn.style.display = 'none';
+      }
     }
 
     function removeItem(id) {
@@ -94,6 +99,7 @@
       render();
     }
 
+    // Avvio del carrello
     render();
   </script>
 </body>
