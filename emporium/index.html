@@ -4,37 +4,40 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Archmage's Emporium</title>
-   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #090603; --surface: #120a04; --border: #3d2810;
       --gold: #c9932a; --gold-bright: #e8b84b; --parchment: #e4d0a6;
       --gold-glow: rgba(201, 147, 42, 0.4);
-      --ghostly: #4fffe0; /* Colore spettrale */
+      --ghostly: #4fffe0;
     }
 
     body {
       margin: 0; background: var(--bg); color: var(--parchment);
       font-family: 'MedievalSharp', serif;
+      overflow-x: hidden;
     }
 
-    /* Animazioni Magiche */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
+    /* NEBBIA DEL VUOTO */
+    body::before {
+        content: ""; position: fixed; inset: 0;
+        background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
+        z-index: 2; pointer-events: none;
+        animation: pulse-fog 8s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-fog { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+
+    /* TITOLO METALLICO */
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        background: linear-gradient(to bottom, #fff 10%, var(--gold) 50%, #5c4008 90%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px var(--gold-glow));
+        margin: 0;
     }
 
-    @keyframes fire-glow {
-      0% { box-shadow: 0 0 10px #ff4d00; border-color: #ff4d00; }
-      100% { box-shadow: 0 0 30px #ff9500; border-color: #ff9500; }
-    }
-
-    @keyframes spectral-glow {
-      0% { box-shadow: 0 0 10px var(--ghostly); border-color: var(--ghostly); }
-      100% { box-shadow: 0 0 30px #2a93c9; border-color: #2a93c9; }
-    }
-
-    /* Header */
+    /* HEADER */
     .tavern-header {
       position: sticky; top: 0; z-index: 50; padding: 1rem 1.5rem;
       background: linear-gradient(180deg, #050301 0%, #120a04 100%);
@@ -43,28 +46,41 @@
     .tavern-sign { color: var(--gold); font-size: 1.5rem; text-shadow: 0 0 10px var(--gold-glow); }
     .nav-link { font-size: 14px; color: var(--gold-bright); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; }
     
-    /* Grid e Card */
-    .hero { padding: 3rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+    /* GRID E CARD STILE INVENTARIO */
+    .hero { padding: 3rem 1rem; text-align: center; border-bottom: 1px solid var(--border); position: relative; z-index: 5; }
     .products-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 2.5rem; padding: 3rem 1.5rem; max-width: 80rem; margin: 0 auto;
+      position: relative; z-index: 5;
     }
 
     .card {
-      background: var(--surface); border: 1px solid var(--border); padding: 1.5rem;
-      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
-      display: flex; flex-direction: column; align-items: center;
+        background: #1a120b;
+        border: 2px solid #3d2810;
+        box-shadow: inset 0 0 15px #000;
+        clip-path: polygon(5% 0, 95% 0, 100% 10%, 100% 90%, 95% 100%, 5% 100%, 0 90%, 0 10%);
+        transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        padding: 20px;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center;
     }
-    .card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .card:hover {
+        border-color: var(--gold);
+        transform: scale(1.03);
+        box-shadow: 0 0 25px var(--gold-glow), inset 0 0 10px #000;
+    }
 
-    .item-img { width: 100%; max-width: 200px; height: 200px; object-fit: contain; margin-bottom: 1rem; }
+    .item-img { width: 100%; max-width: 180px; height: 180px; object-fit: contain; margin-bottom: 1rem; }
 
-    /* Classi Effetti Speciali */
-    .fire-border { animation: fire-glow 1.5s infinite alternate; }
+    /* ANIMAZIONI E BAGLIORI */
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes fire-glow { 0% { box-shadow: 0 0 10px #ff4d00; } 100% { box-shadow: 0 0 30px #ff9500; } }
+    @keyframes spectral-glow { 0% { box-shadow: 0 0 10px var(--ghostly); } 100% { box-shadow: 0 0 30px #2a93c9; } }
+
+    .fire-border { animation: fire-glow 1.5s infinite alternate; border-color: #ff4d00 !important; }
     .fire-border .item-img { animation: float 3s ease-in-out infinite; }
-    
-    .spectral-border { animation: spectral-glow 2s infinite alternate; }
-    .spectral-border .item-img { filter: hue-rotate(180deg) brightness(1.2); animation: float 4s ease-in-out infinite; }
+    .spectral-border { animation: spectral-glow 2s infinite alternate; border-color: var(--ghostly) !important; }
+    .spectral-border .item-img { animation: float 4s ease-in-out infinite; }
 
     .price { color: var(--gold-bright); font-size: 1.4rem; margin: 1rem 0; }
     .btn-buy {
@@ -86,7 +102,7 @@
   </header>
 
   <section class="hero">
-    <h1 style="color: var(--gold); font-size: 3rem; margin: 0;">Magical Trinkets</h1>
+    <h1 class="hero-title">Magical Trinkets</h1>
     <p>Artifacts of moderate power and questionable stability.</p>
   </section>
 
@@ -126,7 +142,6 @@
       cart.push({ id: Date.now(), name: name, price: price });
       localStorage.setItem('magicCart', JSON.stringify(cart));
       updateCount();
-      // Notifica più discreta dell'alert
       console.log(name + " added to cauldron");
     }
 
