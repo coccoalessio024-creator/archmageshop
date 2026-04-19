@@ -1,51 +1,67 @@
-📜 THE ARCHMAGE'S SANCTUM - TECHNICAL MANIFEST
 1. ARCHITETTURA FILE (Gerarchia)
-text
+
 [root]
 │
-├── index.html              <-- Main Hub (Porta d'ingresso)
-├── secret.html             <-- Trial of Shadows (Indovinello)
-├── trial.html              <-- Trial of Ancients (Mini-game Drag & Drop)
-├── style.css               <-- Estetica globale e animazioni
+├── index.html              <-- Main Hub (Portale d'ingresso)
+├── secret.html             <-- Chamber of Guardians (Indovinello & Guardiani)
+├── trial.html              <-- Trial of Ancients (Mini-game PC/Mobile)
+├── finaltrial.html         <-- Final Awakening (Rito del Rombo di Luce)
+├── style.css               <-- Root Styles (Variabili, Font, Effetti Base)
 │
-├── archives/               <-- Il "Caveau" degli Asset
-│   ├── Archmage.png.png    <-- Ritratto principale
-│   ├── logo_archmage.png   <-- Sigillo Brand (Secret link)
-│   ├── potionmini.png      <-- Cursore globale (32x32px)
-│   └── [asset_gioco].png   <-- (axe, crown, knight, etc.)
+├── archives/               <-- Il "Caveau" (Asset compressi 8-bit/PNG)
+│   ├── Archmage.png.png    <-- Ritratto Main (Centerpiece)
+│   ├── actualmage.png      <-- Icona Bottoni & Hero Final Trial
+│   ├── logo_archmage.png   <-- Sigillo Segreto (Indizio/Link)
+│   ├── potionmini.png      <-- Decorazione Bottoni
+│   └── [game_assets].png   <-- (axe, crown, coinslot, coingem, etc.)
 │
-└── emporium/               <-- Cartella Negozio
-    ├── index.html          <-- Emporio (Griglia prodotti)
-    ├── bulletins.html      <-- Bollettini (Oracolo)
-    └── cart.html           <-- Checkout (Parchment & PayPal link)
-   
+└── emporium/               <-- Sottocartella Negozio
+    ├── index.html          <-- Emporio (Prodotti & Certificato Segreto)
+    ├── bulletins.html      <-- Oracolo (News Visive)
+    └── cart.html           <-- Checkout (PayPal Engine)
+    
 
-3. LOGICA DELLE PAGINE (Core Features)
-A. INDEX (The Gateway)
-Intro a tempo: Le pergamene laterali (.welcome-scroll) si chiudono dopo 15s (translateY(-92%)). Sono cliccabili per riaprirle.
-Navigazione: 3 Bottoni paralleli + Logo segreto fisso in basso a DX.
-FX: Pioggia di emoji fantasy (window.onload) leggera e senza librerie.
-Cursore: Inserito tramite CSS * { cursor: url(...) }.
-B. TRIAL.HTML (The Mini-Game)
-Meccanica: HTML5 Drag & Drop API.
-Condizioni di Vittoria: 4 slot da riempire (Axe, Crown, Scroll, CoinGem).
-Mana Bar: div blu spettrale che aumenta del 25% a ogni drop corretto.
-Output: Sblocco del codice finale al raggiungimento di solved === 4.
-C. EMPORIUM & CART
-Carrello: Gestito tramite localStorage (persiste al refresh).
-Checkout: Trasforma il valore del carrello in un link PayPal.me dinamico.
-Layout: Griglia flessibile (CSS Grid) che si stringe per far spazio alla Sidebar del carrello.
+2. LOGICA DELLE PAGINE (Core Features)
+   
+A. INDEX & GLOBAL LOGIC
+
+Sigillo Temporale: Script applyCelestialLock blocca l'accesso a Trial e Secret fino al 4 Maggio 2026. I link appaiono "spenti" e mostrano un countdown nell'hover.
+Welcome Scrolls: Pergamene laterali larghe che si arrotolano al 92% dopo 15s. Funzionano come toggle cliccabile.
+FX Rune: Pioggia di rune dorate/glifi (magic-rune) leggeri, senza librerie esterne.
+Stone Buttons: Bottoni neri effetto pietra con decorazione actualmage integrata.
+B. TRIAL SYSTEM (Drag & Drop 2.0)
+
+Pixel-Perfect Touch: Gestione manuale delle coordinate (position: fixed) per evitare lo sfasamento tra dito e oggetto su iPad/iPhone.
+No Ghost Image: Anteprima nativa del browser disabilitata per mantenere la scala 1:1 durante il trascinamento.
+Trial Ancients: Disposizione a scorrimento verticale su mobile per raggiungere tutti gli oggetti.
+Final Trial: Sistema SVG dinamico che traccia un rombo di luce tra gli slot. Logica sequenziale: il cuore si sblocca solo dopo i primi 3 incastri.
+FX Sismico: Animazione @keyframes earthquake che scuote lo schermo al completamento del rito finale.
+C. EMPORIUM & EASTER EGGS
+
+Sidebar Adattiva: Su PC è laterale, su Mobile scivola dal basso (50vh) per facilitare l'uso del pollice.
+3D Coin Flip: Il Toilet Token ruota sull'asse Y mostrando testa/croce in loop.
+Secret Certificate: Posizionato in fondo allo store, vibra come una Pokéball al tocco e funge da portale per finaltrial.html.
+
 4. GUIDA AL DEBUG (Risoluzione Problemi)
 Problema	Causa Probabile	Soluzione
-Sito Bianco / 404	Percorso file errato o Case Sensitivity	Controlla che i nomi file siano tutti minuscoli e i link corrispondano.
-Cursore non appare	Immagine troppo grande	Ridimensiona potionmini.png a 32x32px esatti.
-Il carrello non somma	Errore nel parseFloat	Controlla che i prezzi negli articoli siano numeri puri (senza "Gold").
-Deploy GitHub fallito	Troppe build in sequenza	Aspetta 60 secondi tra un Commit e l'altro.
+Gemma Sfalsata	Calcolo centro errato	Verificare p.clientX - 42 (metà larghezza asset) nel file finaltrial.html.
+
+No Scroll Mobile	touch-action: none globale	Assicurarsi che lo scroll sia disabilitato solo sull'elemento activeItem durante il drag.
+
+Font Standard	@import mancante	Controllare la presenza dell'URL Google Fonts in cima a style.css.
+
+404 Final Trial	Link relativo errato	Dall'emporio usare ../finaltrial.html per risalire la cartella.
+
+
 5. NOTE PER IL COLLABORATORE
-Font: Il font MedievalSharp è forzato su ogni elemento tramite il selettore universale * nell'head.
+
+JS Mesi: Ricorda che new Date(2026, 4, 4) è Maggio (Gennaio=0).
+Mobile First: Ogni modifica alla griglia prodotti deve essere testata con flex-direction: column.
 Color Palette:
-#140f0a (Sfondo Scuro)
-#d4af37 (Oro primario)
-#7a1515 (Rosso Sangue/Bottoni)
-#00bfff (Blu Mana/Spettrale)
-Scalabilità: Per aggiungere un nuovo prodotto, basta inserire un nuovo oggetto nell'array dello script dell'Emporio.
+#050505 (Nero Profondo - Trial)
+#00fbff (Azzurro Celestiale - Awakening)
+#ff4500 (Arancio Fiamma - Emporio/Gemme)
+
+
+
+
