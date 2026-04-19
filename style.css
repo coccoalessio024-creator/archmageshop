@@ -1,100 +1,94 @@
 /* =========================================
-   STYLE-RETRO-BLOOD.CSS (VERSIONE BLINDATA)
+   STYLE: GEMMA DEL SOLE (High Fantasy)
    ========================================= */
 
 :root {
-    --blood: #9e1a1a;
-    --iron: #2d2d2d;
-    --gold: #c9932a;
-    --pixel-shadow: 6px 6px 0px #000;
-    --bg-dark: #0a0a0a;
+    --gold: #d4af37;
+    --amber: #ffbf00;
+    --sky-magic: #e0f7fa;
+    --parchment-light: #fdf5e6;
+    --border-rich: #8b4513;
+    --bg-sunny: #2c1e12;
 }
 
-/* 1. ARCHITETTURA UNIVERSALE E CURSORE */
+/* 1. BASE E CENTRATURA TOTALE */
 body, html {
     margin: 0; padding: 0; min-height: 100vh;
-    background: var(--bg-dark); color: #e4d0a6;
+    background: var(--bg-sunny);
+    background-image: radial-gradient(circle at center, #4a3520 0%, #2c1e12 100%);
+    color: var(--parchment-light);
     font-family: 'MedievalSharp', serif;
-    /* CENTRATURA TOTALE */
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center;
     overflow-x: hidden;
-    cursor: url('https://cursors-4u.net'), crosshair;
-    /* EFFETTO SCANLINES CRT */
-    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 2px, 3px 100%;
 }
 
-/* NEBBIA DI SANGUE */
+/* Nebbia Dorata (invece che sangue) */
 body::before {
     content: ""; position: fixed; inset: 0;
-    background: radial-gradient(circle, transparent 20%, #000 100%);
-    box-shadow: inset 0 0 100px var(--blood);
-    z-index: 2; pointer-events: none; opacity: 0.8;
+    background: radial-gradient(circle, transparent 40%, rgba(212, 175, 55, 0.1) 100%);
+    z-index: 2; pointer-events: none;
 }
 
-/* 2. TITOLO "FINAL BOSS" */
+/* 2. TITOLO SOLARE METALLICO */
 .arch-title {
-    font-size: clamp(2.5rem, 8vw, 4rem);
-    color: #fff; text-shadow: 4px 4px 0px var(--blood), 8px 8px 0px #000;
-    text-transform: uppercase; letter-spacing: 5px;
-    z-index: 5; margin: 1rem 0; text-align: center;
-    animation: title-flicker 0.15s infinite alternate;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    background: linear-gradient(to bottom, #fff 0%, var(--amber) 50%, var(--gold) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255, 191, 0, 0.5));
+    text-align: center; margin: 2rem 0; z-index: 5;
 }
-@keyframes title-flicker { 0% { transform: skewX(-1deg); } 100% { transform: skewX(1deg); opacity: 0.9; } }
 
-/* 3. IL MEDAGLIONE (OTTAGONALE) */
+/* 3. IL MEDAGLIONE (Morbido e bordato d'oro) */
 .archmage-frame {
     position: relative; width: 250px; height: 250px;
-    margin: 1.5rem auto; padding: 10px;
-    background: var(--iron); border: 4px solid var(--blood);
-    box-shadow: var(--pixel-shadow); z-index: 5;
-    clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 10%);
+    margin: 1rem auto; padding: 8px;
+    background: var(--gold);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 30px var(--amber);
+    z-index: 5;
 }
-.archmage-frame img { width: 100%; height: 100%; object-fit: cover; clip-path: inherit; }
+.archmage-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+    border-radius: inherit; border: 2px solid var(--bg-sunny);
+}
 
-/* 4. BOTTONE "SELECT START" */
+/* 4. BOTTONI "LEGENDARY" (Arrotondati e caldi) */
 .arch-btn {
-    display: inline-block; padding: 1.2rem 3rem;
-    background: var(--blood); color: #fff; text-decoration: none;
-    border: 4px double #fff; outline: 4px solid #000;
-    box-shadow: var(--pixel-shadow); transition: 0.1s;
-    cursor: url('https://cursors-4u.net'), pointer;
-    font-size: 1.1rem; text-transform: uppercase;
-    z-index: 5; position: relative; margin: 15px; text-align: center;
+    display: inline-block; padding: 1.2rem 3.5rem;
+    background: linear-gradient(135deg, #8b4513 0%, #5d2e0a 100%);
+    color: var(--amber); text-decoration: none;
+    border: 2px solid var(--gold); border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: 0.3s; cursor: pointer;
+    font-size: 1.2rem; text-transform: uppercase; z-index: 5;
 }
-.arch-btn:hover { background: #fff; color: var(--blood); transform: translate(-2px, -2px); }
-.arch-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
-
-/* 5. CONTAINER SANCTUM */
-.sanctum-container {
-    display: flex; flex-direction: column; align-items: center; 
-    justify-content: center; text-align: center; z-index: 5;
+.arch-btn:hover {
+    background: var(--gold); color: #2c1e12;
+    box-shadow: 0 0 20px var(--amber); transform: scale(1.05);
 }
 
-/* 6. PERGAMENA / UI BOX (CARRELLO E BOLLETTINI) */
-.parchment-box {
-    background: #c5b358; color: #000;
-    border: 4px double #000; outline: 4px solid #c5b358;
-    box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
-    padding: 2rem; max-width: 600px; width: 90%;
-    z-index: 5; margin: 2rem auto; position: relative;
-}
-
-/* 7. CARD INVENTARIO (EMPORIO) */
+/* 5. GRID EMPORIO (Correzione immagini giganti) */
 .products-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem; width: 100%; max-width: 1100px; z-index: 5; padding: 2rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem; width: 100%; max-width: 1100px; padding: 2rem; z-index: 5;
 }
 .card {
-    background: #1a1a1a; border: 4px double var(--iron);
-    box-shadow: var(--pixel-shadow); padding: 20px;
-    display: flex; flex-direction: column; align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--gold); border-radius: 20px;
+    padding: 20px; display: flex; flex-direction: column; align-items: center;
+    transition: 0.3s;
+}
+.card:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--amber); }
+
+.item-img {
+    width: 100%; max-width: 180px; height: 180px; /* BLOCCA LA GRANDEZZA */
+    object-fit: contain; margin-bottom: 1rem;
 }
 
-/* 8. DECORAZIONI */
-.corner { position: fixed; width: 40px; height: 40px; border: 3px solid var(--blood); z-index: 10; opacity: 0.5; pointer-events: none; }
-.top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-.top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
-.bottom-left { bottom: 15px; left: 15px; border-right: none; border-top: none; }
-.bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+/* 6. PERGAMENA CHIARA (Carrello) */
+.parchment-box {
+    background: var(--parchment-light); color: #3d2b1f;
+    border-radius: 15px; padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-width: 600px; width: 90%; margin: 2rem auto; z-index: 5;
+}
