@@ -1,94 +1,75 @@
-/* =========================================
-   STYLE: GEMMA DEL SOLE (High Fantasy)
-   ========================================= */
-
 :root {
     --gold: #d4af37;
     --amber: #ffbf00;
-    --sky-magic: #e0f7fa;
-    --parchment-light: #fdf5e6;
-    --border-rich: #8b4513;
+    --parchment: #fdf5e6;
     --bg-sunny: #2c1e12;
+    --fire: #ff4d00;
+    --mana: #4fffe0;
 }
 
-/* 1. BASE E CENTRATURA TOTALE */
+/* 1. LAYOUT CENTRATO */
 body, html {
     margin: 0; padding: 0; min-height: 100vh;
-    background: var(--bg-sunny);
-    background-image: radial-gradient(circle at center, #4a3520 0%, #2c1e12 100%);
-    color: var(--parchment-light);
+    background: radial-gradient(circle at center, #4a3520 0%, #2c1e12 100%);
+    color: var(--parchment);
     font-family: 'MedievalSharp', serif;
-    display: flex; flex-direction: column; align-items: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     overflow-x: hidden;
 }
 
-/* Nebbia Dorata (invece che sangue) */
-body::before {
-    content: ""; position: fixed; inset: 0;
-    background: radial-gradient(circle, transparent 40%, rgba(212, 175, 55, 0.1) 100%);
-    z-index: 2; pointer-events: none;
+.sanctum-container {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; max-width: 800px; padding: 2rem; z-index: 5;
 }
 
-/* 2. TITOLO SOLARE METALLICO */
+/* 2. TITOLO E EFFETTI */
 .arch-title {
     font-size: clamp(2.5rem, 8vw, 4.5rem);
-    background: linear-gradient(to bottom, #fff 0%, var(--amber) 50%, var(--gold) 100%);
+    background: linear-gradient(to bottom, #fff, var(--amber), var(--gold));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 10px rgba(255, 191, 0, 0.5));
-    text-align: center; margin: 2rem 0; z-index: 5;
+    filter: drop-shadow(0 0 10px var(--gold));
+    margin: 1rem 0;
 }
 
-/* 3. IL MEDAGLIONE (Morbido e bordato d'oro) */
+/* 3. MEDAGLIONE E IMMAGINI */
 .archmage-frame {
-    position: relative; width: 250px; height: 250px;
-    margin: 1rem auto; padding: 8px;
-    background: var(--gold);
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    box-shadow: 0 0 30px var(--amber);
-    z-index: 5;
+    width: 250px; height: 250px; border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+    border: 3px solid var(--gold); padding: 8px; margin-bottom: 2rem;
+    box-shadow: 0 0 30px var(--gold); background: var(--gold);
 }
 .archmage-frame img {
-    width: 100%; height: 100%; object-fit: cover;
-    border-radius: inherit; border: 2px solid var(--bg-sunny);
+    width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
 }
 
-/* 4. BOTTONI "LEGENDARY" (Arrotondati e caldi) */
+/* 4. BOTTONE UNIVERSALE */
 .arch-btn {
     display: inline-block; padding: 1.2rem 3.5rem;
-    background: linear-gradient(135deg, #8b4513 0%, #5d2e0a 100%);
+    background: linear-gradient(135deg, #8b4513, #5d2e0a);
     color: var(--amber); text-decoration: none;
     border: 2px solid var(--gold); border-radius: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: 0.3s; cursor: pointer;
-    font-size: 1.2rem; text-transform: uppercase; z-index: 5;
+    transition: 0.3s; cursor: pointer; text-transform: uppercase;
 }
 .arch-btn:hover {
-    background: var(--gold); color: #2c1e12;
-    box-shadow: 0 0 20px var(--amber); transform: scale(1.05);
+    background: var(--gold); color: #2c1e12; box-shadow: 0 0 20px var(--amber);
 }
 
-/* 5. GRID EMPORIO (Correzione immagini giganti) */
-.products-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem; width: 100%; max-width: 1100px; padding: 2rem; z-index: 5;
-}
-.card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--gold); border-radius: 20px;
-    padding: 20px; display: flex; flex-direction: column; align-items: center;
-    transition: 0.3s;
-}
-.card:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--amber); }
+/* 5. EFFETTI SPECIALI PAGINE (da applicare alle card nell'emporio) */
+.fire-border { box-shadow: 0 0 15px var(--fire) !important; border: 2px solid var(--fire) !important; animation: pulse-f 1.5s infinite; }
+@keyframes pulse-f { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
 
-.item-img {
-    width: 100%; max-width: 180px; height: 180px; /* BLOCCA LA GRANDEZZA */
-    object-fit: contain; margin-bottom: 1rem;
-}
+.spectral-border { box-shadow: 0 0 15px var(--mana) !important; border: 2px solid var(--mana) !important; animation: pulse-s 2s infinite; }
+@keyframes pulse-s { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-/* 6. PERGAMENA CHIARA (Carrello) */
-.parchment-box {
-    background: var(--parchment-light); color: #3d2b1f;
-    border-radius: 15px; padding: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    max-width: 600px; width: 90%; margin: 2rem auto; z-index: 5;
-}
+/* 6. LOADING BAR STYLE */
+#loading-overlay { position: fixed; inset: 0; background: #2c1e12; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
+.loading-container { width: 280px; height: 20px; border: 2px solid var(--gold); background: #1a120b; padding: 2px; }
+#loading-bar { height: 100%; background: var(--gold); transition: width 0.2s; }
+#loading-text { margin-top: 10px; color: var(--gold); }
+
+/* 7. SCINTILLE E CORNICI */
+.spark { position: fixed; width: 3px; height: 3px; background: var(--gold); border-radius: 50%; z-index: 1; transition: transform 6s linear, opacity 2s; }
+.corner { position: fixed; width: 50px; height: 50px; border: 2px solid var(--gold); opacity: 0.3; z-index: 10; pointer-events: none; }
+.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+.bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
