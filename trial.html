@@ -6,11 +6,18 @@
     <title>The Trial of the Ancients</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
-        body { background: #0a0a0a; color: #f3e5ab; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
+        * { font-family: 'MedievalSharp', serif !important; -webkit-user-drag: none; box-sizing: border-box; }
+        
+        body { 
+            background: #0a0a0a; color: #f3e5ab; margin: 0; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; overflow-x: hidden;
+            /* Permettiamo lo scroll verticale se necessario */
+            overflow-y: auto; 
+        }
 
-        /* SISTEMA DI AIUTO (HELP) - Stile Index */
-        .help-wrapper { position: fixed; top: 20px; left: 20px; z-index: 2500; }
+        /* HELP SYSTEM STABILE */
+        .help-wrapper { position: fixed; top: 15px; left: 15px; z-index: 5000; }
         .help-btn {
             width: 45px; height: 45px; background: #d4af37; color: #140f0a;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -18,71 +25,101 @@
             box-shadow: 0 0 10px #d4af37;
         }
         .help-scroll {
-            position: absolute; top: 55px; left: 0; width: 260px;
+            position: absolute; top: 55px; left: 0; width: 250px;
             background: #fdf5e6 url('https://transparenttextures.com');
             border: 2px solid #8b4513; padding: 15px; color: #3d2b1f;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 5px;
-            opacity: 0; visibility: hidden; transition: 0.4s; font-size: 0.85rem; line-height: 1.4;
+            display: none; font-size: 0.85rem; line-height: 1.4;
         }
-        .help-wrapper:hover .help-scroll { opacity: 1; visibility: visible; transform: translateY(5px); }
+        .help-wrapper:hover .help-scroll, .help-wrapper:active .help-scroll { display: block; }
 
         /* MANA BAR */
         .mana-container { 
             width: 80%; max-width: 600px; height: 30px; border: 2px solid #d4af37; 
             margin: 20px 0; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); z-index: 10;
+            flex-shrink: 0;
         }
-        #mana-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); box-shadow: 0 0 20px #00bfff; transition: width 0.6s; }
+        #mana-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); transition: width 0.4s; }
 
-        /* LAYOUT GIOCO */
-        .game-world { display: flex; width: 100%; flex: 1; justify-content: space-around; align-items: center; padding: 10px; flex-wrap: wrap; }
-        .altar { display: flex; flex-direction: column; gap: 20px; }
-        .fire-frame { width: 90px; height: 90px; border: 2px solid #ff4500; background: rgba(255, 69, 0, 0.1); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px #ff4500; overflow: hidden; }
-        .draggable { width: 100%; height: 100%; object-fit: cover; transform: scale(1.3); cursor: grab; }
+        /* LAYOUT GIOCO REATTIVO */
+        .game-world { 
+            display: flex; width: 100%; flex: 1; 
+            justify-content: space-around; align-items: center; 
+            padding: 20px; flex-wrap: wrap; gap: 20px;
+        }
+
+        .altar { display: flex; flex-direction: column; gap: 25px; }
+        
+        .fire-frame { 
+            width: 90px; height: 90px; border: 2px solid #ff4500; 
+            background: rgba(255, 69, 0, 0.1); display: flex; align-items: center; 
+            justify-content: center; box-shadow: 0 0 15px #ff4500; overflow: hidden;
+        }
+
+        .draggable { 
+            width: 70px; height: 70px; object-fit: contain; 
+            cursor: grab; touch-action: none; /* Impedisce il drag nativo */
+            user-select: none;
+        }
 
         .main-stage { display: flex; flex-direction: column; align-items: center; gap: 25px; }
         .trio-row { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .target { width: 120px; text-align: center; filter: grayscale(1) brightness(0.3); transition: 0.4s; }
-        .target img { width: 100%; height: auto; transform: scale(1.2); }
+        
+        .target { 
+            width: 120px; text-align: center; filter: grayscale(1) brightness(0.3); 
+            transition: 0.4s; padding-bottom: 10px;
+        }
+        .target img { width: 100%; height: auto; pointer-events: none; }
         .target.active { filter: grayscale(0) brightness(1.2); drop-shadow: 0 0 20px #00bfff; }
         
-        .slot-target { width: 100px; border: 1px dashed #d4af37; }
+        .slot-target { width: 100px; border: 1px dashed #d4af37; border-radius: 10px; }
 
-        @media (max-width: 600px) {
-            .game-world { flex-direction: column; }
-            .altar { flex-direction: row; order: 2; margin-top: 20px; }
+        /* FIX PER MOBILE */
+        @media (max-width: 800px) {
+            .game-world { flex-direction: column; justify-content: flex-start; }
+            .altar { flex-direction: row; order: 2; margin-bottom: 50px; }
             .main-stage { order: 1; }
+            .target { width: 100px; }
         }
 
-        #final-secret { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 2rem; border: 4px solid #00bfff; text-align: center; z-index: 3000; box-shadow: 0 0 50px #00bfff; }
+        #final-secret { 
+            display: none; position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); background: #000; padding: 3rem; 
+            border: 4px solid #fff; text-align: center; z-index: 10000;
+            box-shadow: 0 0 100px #00bfff;
+        }
     </style>
 </head>
 <body>
 
-    <!-- HELP SYSTEM -->
     <div class="help-wrapper">
         <div class="help-btn">?</div>
         <div class="help-scroll">
-            <b style="color:#7a1515">TRIAL GUIDE / GUIDA PROVA</b><br><br>
-            [EN] Drag the artifacts to their matching masters. Fill the mana bar to reveal the secret.<br><br>
-            [IT] Trascina gli artefatti sui rispettivi maestri. Riempi la barra mana per svelare il segreto.
+            <b style="color:#7a1515">TRIAL GUIDE / GUIDA</b><br><br>
+            [EN] Drag artifacts to their masters. On mobile, touch and slide.<br><br>
+            [IT] Trascina gli oggetti sui maestri. Su mobile, tocca e trascina.
         </div>
     </div>
 
     <div class="mana-container"><div id="mana-fill"></div></div>
 
     <div class="game-world">
+        <!-- Lato Sinistro -->
         <div class="altar">
             <div class="fire-frame"><img src="archives/axe.png" id="axe" class="draggable"></div>
             <div class="fire-frame"><img src="archives/crown.png" id="crown" class="draggable"></div>
         </div>
+
         <div class="main-stage">
             <div class="trio-row">
-                <div class="target" id="t-axeman"><img src="archives/axeman.png"><span>Axeman</span></div>
-                <div class="target" id="t-knight"><img src="archives/knight.png"><span>Knight</span></div>
-                <div class="target" id="t-mage"><img src="archives/actualmage.png"><span>Mage</span></div>
+                <div class="target" id="t-axeman"><img src="archives/axeman.png"><br><span>Axeman</span></div>
+                <div class="target" id="t-knight"><img src="archives/knight.png"><br><span>Knight</span></div>
+                <div class="target" id="t-mage"><img src="archives/actualmage.png"><br><span>Mage</span></div>
             </div>
-            <div class="target slot-target" id="t-coinslot"><img src="archives/coinslot.png"><span>Slot</span></div>
+            <div class="target slot-target" id="t-coinslot"><img src="archives/coinslot.png"><br><span>Slot</span></div>
         </div>
+
+        <!-- Lato Destro -->
         <div class="altar">
             <div class="fire-frame"><img src="archives/scroll.png" id="scroll" class="draggable"></div>
             <div class="fire-frame"><img src="archives/coingem.png" id="coingem" class="draggable"></div>
@@ -96,32 +133,75 @@
 
     <script>
         let solved = 0;
-        const targets = { 'axe':'axeman', 'crown':'knight', 'scroll':'mage', 'coingem':'coinslot' };
+        const targetsMap = { 'axe':'axeman', 'crown':'knight', 'scroll':'mage', 'coingem':'coinslot' };
         let activeItem = null;
+        let startX, startY;
 
         function checkMatch(itemId, targetId) {
-            const expectedTarget = 't-' + targets[itemId];
+            const expectedTarget = 't-' + targetsMap[itemId];
             if (targetId === expectedTarget) {
                 const el = document.getElementById(targetId);
                 if (!el.classList.contains('active')) {
                     el.classList.add('active');
-                    document.getElementById(itemId).style.visibility = 'hidden';
+                    document.getElementById(itemId).style.display = 'none';
                     solved++;
                     document.getElementById('mana-fill').style.width = (solved * 25) + '%';
                     if (solved === 4) document.getElementById('final-secret').style.display = 'block';
+                    return true;
                 }
+            }
+            return false;
+        }
+
+        // GESTORE MOVIMENTO UNIFICATO
+        function onStart(e) {
+            if (e.target.classList.contains('draggable')) {
+                activeItem = e.target;
+                const point = e.touches ? e.touches[0] : e;
+                startX = point.clientX;
+                startY = point.clientY;
+                activeItem.style.zIndex = "1000";
+                activeItem.style.pointerEvents = 'none'; // Importante per elementFromPoint
             }
         }
 
-        const move = (x, y) => { if (activeItem) { activeItem.style.position = 'fixed'; activeItem.style.left = (x-40)+'px'; activeItem.style.top = (y-40)+'px'; } };
-        const end = (x, y) => { if (activeItem) { activeItem.style.pointerEvents = 'none'; const d = document.elementFromPoint(x, y); const z = d ? d.closest('.target') : null; if (z) checkMatch(activeItem.id, z.id); activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0'; activeItem.style.pointerEvents = 'auto'; activeItem = null; } };
+        function onMove(e) {
+            if (!activeItem) return;
+            // Blocca lo scroll solo durante il trascinamento
+            if (e.cancelable) e.preventDefault();
+            
+            const point = e.touches ? e.touches[0] : e;
+            activeItem.style.position = 'fixed';
+            activeItem.style.left = (point.clientX - 35) + 'px';
+            activeItem.style.top = (point.clientY - 35) + 'px';
+        }
 
-        document.addEventListener('mousedown', e => { if(e.target.classList.contains('draggable')) activeItem = e.target; });
-        document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-        document.addEventListener('mouseup', e => end(e.clientX, e.clientY));
-        document.addEventListener('touchstart', e => { if(e.target.classList.contains('draggable')) activeItem = e.target; });
-        document.addEventListener('touchmove', e => move(e.touches[0].clientX, e.touches[0].clientY));
-        document.addEventListener('touchend', e => end(e.changedTouches[0].clientX, e.changedTouches[0].clientY));
+        function onEnd(e) {
+            if (!activeItem) return;
+            const point = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(point.clientX, point.clientY);
+            const zone = dropEl ? dropEl.closest('.target') : null;
+            
+            let matched = false;
+            if (zone) matched = checkMatch(activeItem.id, zone.id);
+            
+            if (!matched) {
+                activeItem.style.position = 'relative';
+                activeItem.style.left = '0';
+                activeItem.style.top = '0';
+            }
+            activeItem.style.pointerEvents = 'auto';
+            activeItem = null;
+        }
+
+        // Listeners
+        document.addEventListener('mousedown', onStart);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+
+        document.addEventListener('touchstart', onStart, {passive: false});
+        document.addEventListener('touchmove', onMove, {passive: false});
+        document.addEventListener('touchend', onEnd, {passive: false});
     </script>
 </body>
 </html>
