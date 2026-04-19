@@ -4,82 +4,116 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Archmage's Emporium</title>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #090603; --surface: #120a04; --border: #3d2810;
       --gold: #c9932a; --gold-bright: #e8b84b; --parchment: #e4d0a6;
+      --gold-glow: rgba(201, 147, 42, 0.4);
+      --ghostly: #4fffe0; /* Colore spettrale */
     }
+
     body {
       margin: 0; background: var(--bg); color: var(--parchment);
       font-family: 'MedievalSharp', serif;
     }
+
+    /* Animazioni Magiche */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes fire-glow {
+      0% { box-shadow: 0 0 10px #ff4d00; border-color: #ff4d00; }
+      100% { box-shadow: 0 0 30px #ff9500; border-color: #ff9500; }
+    }
+
+    @keyframes spectral-glow {
+      0% { box-shadow: 0 0 10px var(--ghostly); border-color: var(--ghostly); }
+      100% { box-shadow: 0 0 30px #2a93c9; border-color: #2a93c9; }
+    }
+
+    /* Header */
     .tavern-header {
       position: sticky; top: 0; z-index: 50; padding: 1rem 1.5rem;
       background: linear-gradient(180deg, #050301 0%, #120a04 100%);
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
     }
-    .tavern-sign { font-family: 'MedievalSharp', serif; color: var(--gold); font-size: 1.2rem; }
-    .nav-link { font-family: 'MedievalSharp', serif; font-size: 11px; color: var(--gold-bright); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; }
+    .tavern-sign { color: var(--gold); font-size: 1.5rem; text-shadow: 0 0 10px var(--gold-glow); }
+    .nav-link { font-size: 14px; color: var(--gold-bright); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; }
     
+    /* Grid e Card */
     .hero { padding: 3rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
-    .hero-title { font-family: 'MedievalSharp', serif; font-size: 3rem; color: var(--gold); margin: 0; }
-
     .products-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem; padding: 3rem 1.5rem; max-width: 80rem; margin: 0 auto;
+      gap: 2.5rem; padding: 3rem 1.5rem; max-width: 80rem; margin: 0 auto;
     }
+
     .card {
       background: var(--surface); border: 1px solid var(--border); padding: 1.5rem;
-      transition: 0.3s; text-align: center;
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
+      display: flex; flex-direction: column; align-items: center;
     }
-    .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-    .price { color: var(--gold-bright); font-size: 1.2rem; margin: 1rem 0; }
+    .card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+
+    .item-img { width: 100%; max-width: 200px; height: 200px; object-fit: contain; margin-bottom: 1rem; }
+
+    /* Classi Effetti Speciali */
+    .fire-border { animation: fire-glow 1.5s infinite alternate; }
+    .fire-border .item-img { animation: float 3s ease-in-out infinite; }
     
+    .spectral-border { animation: spectral-glow 2s infinite alternate; }
+    .spectral-border .item-img { filter: hue-rotate(180deg) brightness(1.2); animation: float 4s ease-in-out infinite; }
+
+    .price { color: var(--gold-bright); font-size: 1.4rem; margin: 1rem 0; }
     .btn-buy {
       width: 100%; padding: 0.8rem; background: #3d2c0e; border: 1px solid var(--gold);
-      color: var(--gold-bright); font-family: 'MedievalSharp', serif; cursor: pointer;
+      color: var(--gold-bright); font-family: 'MedievalSharp', serif; cursor: pointer; transition: 0.3s;
     }
-    .btn-buy:hover { background: var(--gold); color: var(--bg); }
+    .btn-buy:hover { background: var(--gold); color: var(--bg); font-weight: bold; }
   </style>
 </head>
 <body>
 
   <header class="tavern-header">
     <span class="tavern-sign">The Emporium</span>
-    <nav class="nav">
-    <a href="../index.html" class="nav-link">Sanctum</a>
-    <a href="bulletins.html" class="nav-link">Bulletins</a>
-    <a href="cart.html" class="nav-link">Cart (<span id="cart-count">0</span>)</a>
-</nav>
-
+    <nav>
+      <a href="../index.html" class="nav-link">Sanctum</a>
+      <a href="bulletins.html" class="nav-link">Bulletins</a>
+      <a href="cart.html" class="nav-link">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
   </header>
 
   <section class="hero">
-    <h1 class="hero-title">The Archmage's Blessings and Trinkets</h1>
-    <p>Blessings and hand-picked artifacts of questionable stability.</p>
+    <h1 style="color: var(--gold); font-size: 3rem; margin: 0;">Magical Trinkets</h1>
+    <p>Artifacts of moderate power and questionable stability.</p>
   </section>
 
   <main class="products-grid">
-    <article class="card">
-      <h3>"Maybe" Invisibility Brew</h3>
+    <article class="card fire-border">
+      <img src="../archives/invisibilitybrew.png.png" class="item-img" alt="Brew">
+      <h3>Invisibility Brew</h3>
       <p class="price">45 Gold</p>
       <button class="btn-buy" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
     </article>
 
     <article class="card">
-      <h3>Ring of Deafening Silence</h3>
+      <img src="../archives/silentring.png.png" class="item-img" alt="Ring">
+      <h3>Ring of Silence</h3>
       <p class="price">120 Gold</p>
       <button class="btn-buy" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
     </article>
     
-    <article class="card">
+    <article class="card spectral-border">
+      <img src="../archives/magicmirror.png.png" class="item-img" alt="Mirror">
       <h3>Magic Mirror</h3>
       <p class="price">55 Gold</p>
       <button class="btn-buy" onclick="addToCart('Magic Mirror', 55)">Add to Cauldron</button>
     </article>
     
     <article class="card">
+      <img src="../archives/treasuremap.png.png" class="item-img" alt="Map">
       <h3>Treasure Map</h3>
       <p class="price">15 Gold</p>
       <button class="btn-buy" onclick="addToCart('Treasure Map', 15)">Add to Cauldron</button>
@@ -92,12 +126,14 @@
       cart.push({ id: Date.now(), name: name, price: price });
       localStorage.setItem('magicCart', JSON.stringify(cart));
       updateCount();
-      alert("Spell added to cart!");
+      // Notifica più discreta dell'alert
+      console.log(name + " added to cauldron");
     }
 
     function updateCount() {
       const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
-      document.getElementById('cart-count').innerText = cart.length;
+      const el = document.getElementById('cart-count');
+      if(el) el.innerText = cart.length;
     }
     updateCount();
   </script>
