@@ -5,75 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Royal Depository - Cart</title>
   <link href="https://googleapis.com" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #090603; --gold: #c9932a; --gold-bright: #e8b84b;
-      --gold-glow: rgba(201, 147, 42, 0.4);
-    }
-
-    body { 
-      margin: 0; background: var(--bg); color: #3d2810; 
-      font-family: 'MedievalSharp', serif; 
-      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-      overflow-x: hidden;
-    }
-
-    /* NEBBIA DEL VUOTO (Coerenza con Sanctum) */
-    body::before {
-        content: ""; position: fixed; inset: 0;
-        background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
-        z-index: 2; pointer-events: none;
-        animation: pulse-fog 8s ease-in-out infinite alternate;
-    }
-    @keyframes pulse-fog { 0% { opacity: 0.7; } 100% { opacity: 1; } }
-
-    /* TITOLO METALLICO */
-    .title {
-        font-family: 'Cinzel Decorative', serif; font-size: 3rem; text-align: center;
-        background: linear-gradient(to bottom, #fff 10%, var(--gold) 50%, #5c4008 90%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 15px var(--gold-glow));
-        margin: 2rem 0; z-index: 5;
-    }
-
-    /* LA PERGAMENA */
-    .container {
-        position: relative; z-index: 5;
-        max-width: 600px; width: 90%;
-        background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
-        padding: 3rem;
-        box-shadow: 0 0 50px #000, 20px 20px 0 rgba(0,0,0,0.2);
-        clip-path: polygon(1% 2%, 99% 0%, 100% 98%, 2% 100%, 0% 50%); /* Bordi "strappati" */
-        border: 1px solid #b89060;
-    }
-
-    .item-row { 
-        display: flex; justify-content: space-between; align-items: center; 
-        border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
-    }
-
-    .remove-btn { 
-        background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; 
-        cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
-        transition: 0.3s;
-    }
-    .remove-btn:hover { background: #a01e1e; transform: scale(1.1); }
-
-    .summary { margin-top: 2rem; border-top: 2px solid #3d2810; padding-top: 1rem; }
-    .total { font-size: 2.2rem; color: #7a1515; display: flex; justify-content: space-between; font-weight: bold; }
-    
-    /* BOTTONE PAYPAL "TARGA" */
-    .pay-button {
-        display: block; text-align: center; margin-top: 2rem;
-        padding: 1.2rem; background: #3d2810; color: var(--gold-bright);
-        text-decoration: none; font-weight: bold;
-        clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-        transition: 0.4s; border: 1px solid var(--gold);
-    }
-    .pay-button:hover { background: var(--gold); color: var(--bg); box-shadow: 0 0 20px var(--gold); }
-
-    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2810; text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
