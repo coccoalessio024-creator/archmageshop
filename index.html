@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Sanctum</title>
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- Riferimento al tuo style.css esterno -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Correzioni layout parallelo e logo */
+        /* Rimuoviamo il loading overlay per sicurezza */
+        #loading-overlay { display: none !important; }
+
         .actions-row {
             display: flex;
             justify-content: center;
@@ -56,12 +57,6 @@
 </head>
 <body>
 
-    <div id="loading-overlay">
-        <h2 class="arch-title">Summoning Spirits...</h2>
-        <div class="loading-container"><div id="loading-bar"></div></div>
-        <p id="loading-text">0%</p>
-    </div>
-
     <div class="sanctum-container">
         <div class="archmage-frame">
             <img src="archives/Archmage.png.png" alt="The Archmage">
@@ -94,26 +89,5 @@
             </a>
         </div>
     </div>
-
-    <script>
-        // Loading Script Semplificato e Sicuro
-        let w = 0;
-        const interval = setInterval(() => {
-            w += Math.random() * 20;
-            if (w >= 100) {
-                w = 100;
-                clearInterval(interval);
-                const loader = document.getElementById('loading-overlay');
-                if(loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.style.display = 'none', 500);
-                }
-            }
-            const bar = document.getElementById('loading-bar');
-            const text = document.getElementById('loading-text');
-            if(bar) bar.style.width = w + '%';
-            if(text) text.innerText = Math.floor(w) + '%';
-        }, 120);
-    </script>
 </body>
 </html>
