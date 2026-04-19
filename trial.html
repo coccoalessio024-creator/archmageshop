@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Trial of the Ancients</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CURSORE E FONT */
+        * { cursor: url('archives/potionmini.png'), auto !important; font-family: 'MedievalSharp', serif !important; }
+        body { background: #0a0a0a; color: #f3e5ab; margin: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; height: 100vh; }
+
+        /* MANA BAR SPETTRALE */
+        .mana-container { width: 80%; max-width: 600px; height: 25px; border: 2px solid #d4af37; margin: 20px 0; background: #111; box-shadow: 0 0 15px rgba(0, 191, 255, 0.2); }
+        #mana-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); box-shadow: 0 0 20px #00bfff; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* LAYOUT DI GIOCO */
+        .game-world { display: flex; width: 100%; flex: 1; justify-content: space-between; align-items: center; padding: 0 40px; }
+        
+        /* ALTARI LATERALI (FIRE FRAMES) */
+        .altar { display: flex; flex-direction: column; gap: 20px; }
+        .fire-frame {
+            width: 80px; height: 80px; border: 2px solid #ff4500;
+            background: rgba(255, 69, 0, 0.05); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px #ff4500, inset 0 0 10px #ff4500;
+        }
+        .draggable { width: 60px; transition: transform 0.2s; }
+        .draggable:active { transform: scale(1.1); }
+
+        /* FIGURE CENTRALI */
+        .main-stage { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        .trio-row { display: flex; gap: 50px; }
+        .target { 
+            width: 140px; text-align: center; transition: 0.5s; 
+            filter: grayscale(1) brightness(0.6); 
+        }
+        .target img { width: 100%; height: auto; }
+        .target.active { filter: grayscale(0) brightness(1); drop-shadow: 0 0 20px #00bfff; }
+
+        /* SLOT MONETA IN BASSO */
+        .slot-area { margin-top: 20px; }
+        .slot-target { width: 100px; filter: grayscale(1); }
+        .slot-target.active { filter: none; filter: drop-shadow(0 0 15px #ffcc00); }
+
+        /* MESSAGGIO FINALE */
+        #final-secret { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95); padding: 3rem; border: 3px solid #00bfff;
+            text-align: center; z-index: 3000; animation: glowPulse 2s infinite;
+        }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 10px #00bfff; } 50% { box-shadow: 0 0 40px #00bfff; } 100% { box-shadow: 0 0 10px #00bfff; } }
+    </style>
+</head>
+<body>
+
+    <h2 style="color:#d4af37; margin-top:10px;">The Trial of the Ancients</h2>
+
+    <div class="mana-container">
+        <div id="mana-fill"></div>
+    </div>
+
+    <div class="game-world">
+        <!-- Altare Sinistro -->
+        <div class="altar">
+            <div class="fire-frame"><img src="archives/axe.png" id="axe" class="draggable" draggable="true" ondragstart="drag(event)"></div>
+            <div class="fire-frame"><img src="archives/crown.png" id="crown" class="draggable" draggable="true" ondragstart="drag(event)"></div>
+        </div>
+
+        <!-- Centro: Figure -->
+        <div class="main-stage">
+            <div class="trio-row">
+                <div class="target" id="t-axeman" ondrop="drop(event, 'axe')" ondragover="allowDrop(event)">
+                    <img src="archives/axeman.png"><br><span>The Axeman</span>
+                </div>
+                <div class="target" id="t-knight" ondrop="drop(event, 'crown')" ondragover="allowDrop(event)">
+                    <img src="archives/knight.png"><br><span>The Knight</span>
+                </div>
+                <div class="target" id="t-mage" ondrop="drop(event, 'actualmage')">
+                    <!-- Il mago riceve scroll - vedi logica sotto -->
+                    <div id="t-actualmage" ondrop="drop(event, 'scroll')" ondragover="allowDrop(event)">
+                        <img src="archives/actualmage.png"><br><span>The Mage</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slot-area">
+                <div class="target slot-target" id="t-coinslot" ondrop="drop(event, 'coingem')" ondragover="allowDrop(event)">
+                    <img src="archives/coinslot.png" style="width:100px;"><br><span>Coin Slot</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Altare Destro -->
+        <div class="altar">
+            <div class="fire-frame"><img src="archives/scroll.png" id="scroll" class="draggable" draggable="true" ondragstart="drag(event)"></div>
+            <div class="fire-frame"><img src="archives/coingem.png" id="coingem" class="draggable" draggable="true" ondragstart="drag(event)"></div>
+        </div>
+    </div>
+
+    <div id="final-secret">
+        <h1 style="color:#00bfff; margin:0;">HUNTER-MASTER 444</h1>
+        <p>"The path is revealed. You are a Master of the Hunt."</p>
+        <a href="index.html" class="arch-btn" style="display:inline-block; margin-top:20px; text-decoration:none;">Return to Sanctum</a>
+    </div>
+
+    <script>
+        let solved = 0;
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+
+        function drop(ev, expectedId) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            
+            if (data === expectedId) {
+                const targetElement = document.getElementById('t-' + (expectedId === 'coingem' ? 'coinslot' : expectedId === 'axe' ? 'axeman' : expectedId === 'crown' ? 'knight' : 'actualmage'));
+                
+                if (!targetElement.classList.contains('active')) {
+                    targetElement.classList.add('active');
+                    document.getElementById(data).style.visibility = 'hidden';
+                    solved++;
+                    updateMana();
+                }
+            }
+        }
+
+        function updateMana() {
+            const progress = solved * 25;
+            document.getElementById('mana-fill').style.width = progress + '%';
+            if (solved === 4) {
+                setTimeout(() => {
+                    document.getElementById('final-secret').style.display = 'block';
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>
