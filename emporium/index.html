@@ -8,16 +8,17 @@
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* Struttura Base: Niente scroll orizzontale */
+    /* RESET E CURSORE */
     body { 
         background: #140f0a; 
         color: #f3e5ab; 
         font-family: 'MedievalSharp', serif; 
         margin: 0; 
         overflow-x: hidden; 
+        cursor: url('../archives/potionmini.png'), auto !important;
     }
 
-    /* HEADER FISSO */
+    /* HEADER */
     .tavern-header {
       position: sticky; top: 0; z-index: 1000; width: 100%;
       background: rgba(20, 15, 10, 0.98);
@@ -26,91 +27,82 @@
       padding: 1rem 2rem; box-sizing: border-box;
     }
 
-    /* IL TRUCCO: Un contenitore flex che occupa tutto l'orizzonte */
+    /* LAYOUT DINAMICO SIDEBAR */
     .main-wrapper {
       display: flex;
       width: 100vw;
       min-height: calc(100vh - 72px);
-      align-items: flex-start;
+      transition: all 0.5s ease;
     }
 
-    /* Griglia prodotti: si espande (flex: 1) */
     .products-grid {
       flex: 1;
       display: grid;
-      /* Configurazione per 4 colonne che diventano 2 su schermi piccoli */
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-      gap: 2rem; 
+      gap: 3rem; 
       padding: 3rem;
-      transition: all 0.5s ease-in-out;
+      transition: all 0.5s ease;
     }
 
-    /* SIDEBAR A COMPARSA */
-    #checkout-sidebar {
-      width: 0; /* Chiusa di default */
-      height: calc(100vh - 72px);
-      position: sticky; 
-      top: 72px;
-      background: linear-gradient(180deg, #2a1a0a 0%, #1a120b 100%);
-      border-left: 0px solid #d4af37;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    /* GARANZIA */
+    .warranty-section {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .warranty-section img {
+        width: 220px;
+        filter: drop-shadow(0 0 15px #d4af37);
     }
 
-    /* Quando il carrello è pieno, la sidebar si apre a 350px */
-    #checkout-sidebar.visible {
-      width: 350px;
-      border-left: 3px solid #d4af37;
-      padding: 2rem 1.5rem;
-    }
-
-    /* RECAP ITEMS */
-    .recap-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 0; border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-
-    .remove-tiny {
-      background: #7a1515; color: #fff; border: 1px solid #d4af37;
-      padding: 4px 8px; cursor: pointer; border-radius: 4px; font-family: serif;
-    }
-
-    .sidebar-btn {
-      background: #7a1515; color: #fdf5e6; padding: 15px;
-      border: 2px solid #d4af37; border-radius: 8px;
-      text-decoration: none; text-align: center; font-weight: bold;
-      margin-top: auto; transition: 0.3s;
-    }
-    .sidebar-btn:hover { background: #a11d1d; box-shadow: 0 0 15px #d4af37; }
-
-    /* CARD DESIGN (Immagini grandi +15%) */
+    /* CARD STYLE (SOLO FIAMME) */
     .card { 
-      background: rgba(40, 30, 20, 0.5); 
-      border: 1px solid rgba(212, 175, 55, 0.2); 
-      border-radius: 15px; padding: 1.5rem; 
+      background: transparent; 
+      border: none; 
       display: flex; flex-direction: column; align-items: center;
-      transition: transform 0.3s;
+      text-align: center;
     }
-    .card:hover { border-color: #d4af37; background: rgba(60, 45, 30, 0.6); }
 
-    .item-btn { 
-      background: none; border: none; 
-      width: 185px; height: 185px; /* Dimensione aumentata */
-      cursor: pointer; transition: 0.3s; 
+    .item-img { 
+        width: 180px; height: 180px; object-fit: contain; 
+        filter: drop-shadow(0 0 15px #ff4500); 
+        transition: 0.4s;
+        cursor: pointer;
     }
-    .item-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
+    .card:hover .item-img { 
+        filter: drop-shadow(0 0 25px #ff8c00) brightness(1.2); 
+        transform: scale(1.1);
+    }
+
+    /* LOGICA MONETA ROTANTE (TOKEN) */
+    .coin-wrapper { width: 180px; height: 180px; perspective: 1000px; cursor: pointer; }
+    .coin-inner {
+        width: 100%; height: 100%; position: relative;
+        transform-style: preserve-3d; animation: rotateCoin 4s linear infinite;
+    }
+    .coin-front, .coin-back {
+        position: absolute; width: 100%; height: 100%;
+        backface-visibility: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .coin-back { transform: rotateY(180deg); }
+    @keyframes rotateCoin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+    .coin-inner img { width: 90%; filter: drop-shadow(0 0 15px #ff4500); }
+
+    /* SIDEBAR RECAP */
+    #checkout-sidebar {
+      width: 0; height: calc(100vh - 72px); position: sticky; top: 72px;
+      background: linear-gradient(180deg, #2a1a0a 0%, #1a120b 100%);
+      border-left: 0px solid #d4af37; overflow: hidden; display: flex; flex-direction: column;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #checkout-sidebar.visible { width: 350px; border-left: 3px solid #d4af37; padding: 2rem 1.5rem; }
+
+    .recap-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #d4af37; font-size: 0.9rem; }
+    .remove-tiny { background: #7a1515; color: white; border: 1px solid #d4af37; padding: 2px 6px; cursor: pointer; }
+    .sidebar-btn { background: #7a1515; color: white; padding: 15px; text-align: center; text-decoration: none; border: 2px solid #d4af37; margin-top: auto; font-weight: bold; }
     
     .price-tag { color: #ffcc00; font-size: 1.2rem; margin: 10px 0; }
-    .small-buy-btn { 
-        background: #8b4513; color: white; border: none; 
-        padding: 10px 25px; border-radius: 5px; cursor: pointer; 
-        font-family: 'MedievalSharp'; font-size: 1rem;
-    }
+    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: 'MedievalSharp'; }
   </style>
 </head>
 <body>
@@ -119,59 +111,86 @@
     <span style="color:#d4af37; font-size: 1.6rem;">The Royal Emporium</span>
     <nav>
         <a href="../index.html" style="color:#d4af37; text-decoration:none; margin-right: 20px;">Sanctum</a>
-        <span style="color:#ffcc00;">Items: <span id="cart-count">0</span></span>
+        <span style="color:#ffcc00;">Loot: <span id="cart-count">0</span></span>
     </nav>
   </header>
 
   <div class="main-wrapper">
-    <!-- Griglia Prodotti -->
     <main class="products-grid">
+      
+      <!-- Garanzia -->
+      <div class="warranty-section">
+          <img src="../archives/productscertifcate.png.png" alt="Warranty">
+      </div>
+
+      <!-- Invisibility Brew -->
       <article class="card">
-        <button class="item-btn" onclick="addToCart('Invisibility Brew', 45)">
-          <img src="../archives/invisibilitybrew.png.png" class="item-img">
-        </button>
+        <img src="../archives/invisibilitybrew.png.png" class="item-img" onclick="addToCart('Invisibility Brew', 45)">
         <h3>Invisibility Brew</h3>
         <span class="price-tag">45 Gold</span>
         <button class="small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cart</button>
       </article>
 
+      <!-- Silence Ring -->
       <article class="card">
-        <button class="item-btn" onclick="addToCart('Silence Ring', 120)">
-          <img src="../archives/silentring.png.png" class="item-img">
-        </button>
+        <img src="../archives/silentring.png.png" class="item-img" onclick="addToCart('Silence Ring', 120)">
         <h3>Ring of Silence</h3>
         <span class="price-tag">120 Gold</span>
         <button class="small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cart</button>
       </article>
 
+      <!-- Magic Mirror -->
       <article class="card">
-        <button class="item-btn" onclick="addToCart('Magic Mirror', 55)">
-          <img src="../archives/magicmirror.png.png" class="item-img">
-        </button>
+        <img src="../archives/magicmirror.png.png" class="item-img" onclick="addToCart('Magic Mirror', 55)">
         <h3>Magic Mirror</h3>
         <span class="price-tag">55 Gold</span>
         <button class="small-buy-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cart</button>
       </article>
 
+      <!-- Blessing -->
       <article class="card">
-        <button class="item-btn" onclick="addToCart('Treasure Map', 15)">
-          <img src="../archives/treasuremap.png.png" class="item-img">
-        </button>
-        <h3>Treasure Map</h3>
-        <span class="price-tag">15 Gold</span>
-        <button class="small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cart</button>
+        <img src="../archives/blessing.png" class="item-img" onclick="addToCart('Archmage Blessing', 10)">
+        <h3>Archmage's Blessing</h3>
+        <span class="price-tag">10 Gold</span>
+        <button class="small-buy-btn" onclick="addToCart('Archmage Blessing', 10)">Add to Cart</button>
       </article>
+
+      <!-- Buff -->
+      <article class="card">
+        <img src="../archives/buff.png" class="item-img" onclick="addToCart('Archmage Buff', 5)">
+        <h3>Archmage's Buff</h3>
+        <span class="price-tag">5 Gold</span>
+        <button class="small-buy-btn" onclick="addToCart('Archmage Buff', 5)">Add to Cart</button>
+      </article>
+
+      <!-- TOKEN ROTANTE (Toilet Token) -->
+      <article class="card">
+        <div class="coin-wrapper" onclick="addToCart('Toilet Token', 2)">
+            <div class="coin-inner">
+                <div class="coin-front"><img src="../archives/coincross.png"></div>
+                <div class="coin-back"><img src="../archives/coinhead.png"></div>
+            </div>
+        </div>
+        <h3>Skip Toilet Queue</h3>
+        <span class="price-tag">2 Gold</span>
+        <button class="small-buy-btn" onclick="addToCart('Toilet Token', 2)">Add to Cart</button>
+      </article>
+
+      <!-- Archmage Hug -->
+      <article class="card">
+        <img src="../archives/hugtoken.png" class="item-img" onclick="addToCart('Archmage Hug', 0.5)">
+        <h3>Archmage's Hug</h3>
+        <span class="price-tag">0.50 Gold</span>
+        <button class="small-buy-btn" onclick="addToCart('Archmage Hug', 0.5)">Add to Cart</button>
+      </article>
+
     </main>
 
-    <!-- Sidebar con effetto a comparsa orizzontale -->
+    <!-- SIDEBAR RECAP -->
     <aside id="checkout-sidebar">
       <h2 style="color:#d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Order Manifest</h2>
-      <div id="recap-list" style="flex: 1; overflow-y: auto;">
-        <!-- JS renderizza qui -->
-      </div>
-      <div id="total-price" style="font-size: 1.5rem; color: #ffcc00; padding: 15px 0; border-top: 1px solid #d4af37;">
-        Total: 0 Gold
-      </div>
+      <div id="recap-list" style="flex: 1; overflow-y: auto;"></div>
+      <div id="total-price" style="font-size: 1.5rem; color: #ffcc00; padding: 15px 0; border-top: 1px solid #d4af37;">Total: 0 Gold</div>
       <a href="cart.html" class="sidebar-btn">PROCEED TO CHECKOUT →</a>
     </aside>
   </div>
@@ -214,14 +233,9 @@
           </div>`;
       });
 
-      totalPrice.innerText = "Total: " + total + " Gold";
-
-      // LOGICA APERTURA: La sidebar scivola e la griglia si restringe
-      if(cart.length > 0) {
-        sidebar.classList.add('visible');
-      } else {
-        sidebar.classList.remove('visible');
-      }
+      totalPrice.innerText = "Total: " + total.toFixed(2) + " Gold";
+      if(cart.length > 0) sidebar.classList.add('visible');
+      else sidebar.classList.remove('visible');
     }
 
     updateUI();
