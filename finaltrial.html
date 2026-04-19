@@ -4,83 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Final Awakening</title>
-    <!-- FIX 1: Link Font Corretto -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; }
+        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
         body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
 
-        .vine-column {
-            position: fixed; top: 0; height: 100vh; display: flex; flex-direction: column;
-            justify-content: space-around; font-size: 2rem; z-index: 1; opacity: 0.6;
+        /* FASCIA ARCANO E VIGNE LUNGHE */
+        .arcane-border {
+            position: fixed; top: 0; bottom: 0; width: clamp(60px, 10vw, 100px);
+            background: linear-gradient(to bottom, rgba(0, 251, 255, 0) 0%, rgba(0, 251, 255, 0.1) 50%, rgba(0, 251, 255, 0) 100%);
+            box-shadow: 0 0 30px rgba(0, 251, 255, 0.1);
+            display: flex; flex-direction: column; justify-content: space-around;
+            align-items: center; font-size: 2.5rem; z-index: 1;
         }
-        .v-left { left: 20px; }
-        .v-right { right: 20px; }
+        .b-left { left: 0; } .b-right { right: 0; }
 
+        /* MANA BAR */
         .divine-container { 
-            width: 80%; max-width: 600px; height: 30px; border: 2px solid #00fbff; 
-            margin: 30px 0; background: #000; box-shadow: 0 0 20px rgba(0, 251, 255, 0.3); z-index: 10;
+            width: 80%; max-width: 800px; height: 35px; border: 2px solid #00fbff; 
+            margin: 20px 0; background: #000; box-shadow: 0 0 20px rgba(0, 251, 255, 0.3); z-index: 100;
         }
-        #divine-fill { 
-            width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff); 
-            box-shadow: 0 0 30px #fff; transition: width 0.8s; 
-        }
+        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.6s; }
 
-        .ritual-circle { position: relative; display: flex; justify-content: center; align-items: center; flex: 1; width: 100%; }
+        /* RITUAL AREA - MAGO MOLTO GRANDE */
+        .ritual-wrapper { 
+            position: relative; 
+            width: 100vw; 
+            height: 70vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
         
         #actual-mage {
-            width: 350px; transition: 1.5s; filter: brightness(0.2) grayscale(1);
-            z-index: 5; pointer-events: none;
+            height: 90%; /* Occupa quasi tutta l'altezza disponibile */
+            max-width: 90%;
+            object-fit: contain;
+            transition: 1.5s; 
+            filter: brightness(0.15) grayscale(1); 
+            z-index: 5;
         }
-        .awakened { 
-            filter: brightness(1.2) grayscale(0) !important; 
-            drop-shadow: 0 0 40px #00fbff, 0 0 80px #d4af37 !important; 
-            animation: pulseAwake 2s infinite alternate;
-        }
+        .awakened { filter: brightness(1.2) grayscale(0) !important; drop-shadow: 0 0 60px #d4af37 !important; }
 
-        @keyframes pulseAwake {
-            from { transform: scale(1); filter: brightness(1.1) drop-shadow(0 0 30px #00fbff); }
-            to { transform: scale(1.02); filter: brightness(1.4) drop-shadow(0 0 60px #d4af37); }
-        }
-
-        .gem-altar { position: absolute; bottom: 50px; display: flex; gap: 30px; z-index: 100; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 20px; }
-        .gem { width: 70px; cursor: grab; transition: 0.3s; filter: drop-shadow(0 0 10px #fff); }
-        
+        /* ZONE DI RILASCIO DISCRETE */
         .drop-zone {
-            position: absolute; width: 120px; height: 120px;
-            border: 2px dashed rgba(0, 251, 255, 0.3); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            position: absolute; width: 100px; height: 100px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 20;
+            transition: 0.3s;
         }
-        #zone-1 { top: 10%; left: 30%; }
-        #zone-2 { top: 10%; right: 30%; }
-        #zone-3 { bottom: 25%; left: 25%; }
-        #zone-4 { bottom: 25%; right: 25%; }
+        .drop-zone:hover { background: rgba(0, 251, 255, 0.1); border: 1px solid rgba(0, 251, 255, 0.5); }
 
-        .target-slot { width: 90px; opacity: 0.2; transition: 0.5s; }
-        .active-slot { opacity: 1; filter: drop-shadow(0 0 20px #00fbff); border: none !important; }
+        /* Oracoli latini */
+        .latin-oracle {
+            position: absolute; bottom: 110%; width: 160px;
+            background: #fdf5e6 url('https://transparenttextures.com');
+            color: #3d2b1f; padding: 10px; border: 1px solid #8b4513; 
+            font-size: 0.75rem; text-align: center; opacity: 0; visibility: hidden; 
+            transition: 0.3s; pointer-events: none; box-shadow: 0 5px 15px #000;
+        }
+        .drop-zone:hover .latin-oracle { opacity: 1; visibility: visible; }
 
-        .final-logo { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80px; filter: drop-shadow(0 0 10px #d4af37); opacity: 0.8; }
+        /* Coordinate precise sul corpo del mago (Percentuali rispetto al wrapper) */
+        #zone-head { top: 5%; left: 50%; transform: translateX(-50%); }
+        #zone-heart { top: 35%; left: 50%; transform: translateX(-50%); }
+        #zone-hand-l { top: 45%; left: 30%; }
+        #zone-hand-r { top: 45%; right: 30%; }
+
+        .target-slot { width: 70px; opacity: 0.05; transition: 0.5s; } /* Quasi invisibile inizialmente */
+        .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 20px #00fbff) brightness(1.5); }
+
+        /* GEMME */
+        .gem-altar { position: fixed; bottom: 30px; display: flex; gap: 25px; z-index: 1000; background: rgba(0,0,0,0.6); padding: 15px 30px; border-radius: 50px; border: 1px solid #00fbff; }
+        .gem { width: 70px; cursor: pointer; filter: drop-shadow(0 0 10px #fff); transition: transform 0.2s; }
 
         #ascension-msg {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #000; padding: 4rem; border: 5px solid #fff; text-align: center; z-index: 10000;
-            box-shadow: 0 0 200px #00fbff;
+            box-shadow: 0 0 150px #00fbff;
         }
     </style>
 </head>
 <body>
 
-    <div class="vine-column v-left">🌿<br>🌿<br>🌿<br>🌿<br>🌿<br>🌿</div>
-    <div class="vine-column v-right">🌿<br>🌿<br>🌿<br>🌿<br>🌿<br>🌿</div>
+    <div class="arcane-border b-left">🌿<br>🌿<br>🌿<br>🌿<br>🌿</div>
+    <div class="arcane-border b-right">🌿<br>🌿<br>🌿<br>🌿<br>🌿</div>
 
     <div class="divine-container"><div id="divine-fill"></div></div>
 
-    <div class="ritual-circle">
+    <div class="ritual-wrapper">
         <img src="archives/actualmage.png" id="actual-mage">
-        <div class="drop-zone" id="zone-1"><img src="archives/coinslot.png" class="target-slot"></div>
-        <div class="drop-zone" id="zone-2"><img src="archives/coinslot.png" class="target-slot"></div>
-        <div class="drop-zone" id="zone-3"><img src="archives/coinslot.png" class="target-slot"></div>
-        <div class="drop-zone" id="zone-4"><img src="archives/coinslot.png" class="target-slot"></div>
+        
+        <div class="drop-zone" id="zone-head">
+            <img src="archives/coinslot.png" class="target-slot">
+            <div class="latin-oracle">"Mens divina videt omnia"<br>(Mente divina)</div>
+        </div>
+        <div class="drop-zone" id="zone-heart">
+            <img src="archives/coinslot.png" class="target-slot">
+            <div class="latin-oracle">"Cor arcanum lucet"<br>(Cuore arcano)</div>
+        </div>
+        <div class="drop-zone" id="zone-hand-l">
+            <img src="archives/coinslot.png" class="target-slot">
+            <div class="latin-oracle">"Potentia in laeva"<br>(Potere sinistro)</div>
+        </div>
+        <div class="drop-zone" id="zone-hand-r">
+            <img src="archives/coinslot.png" class="target-slot">
+            <div class="latin-oracle">"Destra fati scriptrix"<br>(Mano del fato)</div>
+        </div>
     </div>
 
     <div class="gem-altar">
@@ -90,19 +119,17 @@
         <img src="archives/coingem.png" id="g4" class="gem">
     </div>
 
-    <img src="archives/logo_archmage.png" class="final-logo">
-
     <div id="ascension-msg">
-        <h1 style="color:#fff; font-size: 3rem;">VOID-ASCENSION-000</h1>
-        <p style="color:#00fbff;">You have unified the dual natures of the Archmage.</p>
-        <a href="index.html" style="color:#d4af37; font-size: 1.5rem; text-decoration: none;">[ TRANSCEND ]</a>
+        <h1 style="color:#fff; font-size: 3.5rem; margin:0;">VOID-ASCENSION-000</h1>
+        <p style="color:#00fbff;">Il risveglio è completo.</p>
+        <a href="index.html" style="color:#d4af37; font-size: 1.5rem; text-decoration: none;">[ RITORNA AL SANCTUM ]</a>
     </div>
 
     <script>
         let solved = 0;
         let activeItem = null;
 
-        function handleMatch(gemId, zoneId) {
+        function checkMatch(gemId, zoneId) {
             const zone = document.getElementById(zoneId);
             const slot = zone.querySelector('.target-slot');
             if (!slot.classList.contains('active-slot')) {
@@ -112,59 +139,45 @@
                 document.getElementById('divine-fill').style.width = (solved * 25) + '%';
                 
                 const mage = document.getElementById('actual-mage');
-                mage.style.filter = `brightness(${0.2 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
+                mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
 
                 if (solved === 4) {
                     mage.classList.add('awakened');
-                    setTimeout(() => document.getElementById('ascension-msg').style.display = 'block', 1000);
+                    setTimeout(() => document.getElementById('ascension-msg').style.display = 'block', 1200);
                 }
             }
         }
 
-        // FIX 2: Gestione Touch Corretta
-        document.addEventListener('touchstart', e => {
-            if (e.target.classList.contains('gem')) {
-                activeItem = e.target;
-                activeItem.style.pointerEvents = 'none';
-                activeItem.style.zIndex = "1000";
-            }
-        });
-
-        document.addEventListener('touchmove', e => {
+        // Logic Drag & Drop (PC & Touch)
+        const moveAction = (clientX, clientY) => {
             if (activeItem) {
-                const touch = e.touches[0];
                 activeItem.style.position = 'fixed';
-                activeItem.style.left = (touch.clientX - 35) + 'px';
-                activeItem.style.top = (touch.clientY - 35) + 'px';
+                activeItem.style.left = (clientX - 35) + 'px';
+                activeItem.style.top = (clientY - 35) + 'px';
             }
-        }, {passive: false});
+        };
 
-        document.addEventListener('touchend', e => {
+        const endMove = (clientX, clientY) => {
             if (activeItem) {
-                const touch = e.changedTouches[0];
-                const dropEl = document.elementFromPoint(touch.clientX, touch.clientY);
+                activeItem.style.pointerEvents = 'none';
+                const dropEl = document.elementFromPoint(clientX, clientY);
                 const zone = dropEl ? dropEl.closest('.drop-zone') : null;
-                
-                if (zone) handleMatch(activeItem.id, zone.id);
+                if (zone) checkMatch(activeItem.id, zone.id);
                 
                 activeItem.style.position = 'relative';
                 activeItem.style.left = '0'; activeItem.style.top = '0';
                 activeItem.style.pointerEvents = 'auto';
                 activeItem = null;
             }
-        });
+        };
 
-        // Mouse Engine (PC)
-        document.querySelectorAll('.gem').forEach(g => {
-            g.addEventListener('dragstart', e => e.dataTransfer.setData("text", e.target.id));
-        });
-        document.querySelectorAll('.drop-zone').forEach(z => {
-            z.addEventListener('dragover', e => e.preventDefault());
-            z.addEventListener('drop', e => {
-                const id = e.dataTransfer.getData("text");
-                handleMatch(id, e.currentTarget.id);
-            });
-        });
+        document.addEventListener('mousedown', e => { if(e.target.classList.contains('gem')) activeItem = e.target; });
+        document.addEventListener('mousemove', e => moveAction(e.clientX, e.clientY));
+        document.addEventListener('mouseup', e => endMove(e.clientX, e.clientY));
+
+        document.addEventListener('touchstart', e => { if(e.target.classList.contains('gem')) activeItem = e.target; });
+        document.addEventListener('touchmove', e => moveAction(e.touches[0].clientX, e.touches[0].clientY));
+        document.addEventListener('touchend', e => endMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY));
     </script>
 </body>
 </html>
