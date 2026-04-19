@@ -9,6 +9,18 @@
         * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
         body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
 
+        /* EFFETTO SCOSSA */
+        @keyframes earthquake {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-5px, -5px); }
+            20% { transform: translate(5px, 5px); }
+            30% { transform: translate(-5px, 5px); }
+            40% { transform: translate(5px, -5px); }
+            50% { transform: translate(-5px, 0); }
+            100% { transform: translate(0, 0); }
+        }
+        .shake-active { animation: earthquake 0.1s linear infinite; }
+
         /* FASCIA ARCANO E VIGNE */
         .arcane-border {
             position: fixed; top: 0; bottom: 0; width: 50px; background: rgba(0, 251, 255, 0.1);
@@ -19,12 +31,12 @@
         .b-right { right: 0; border-left: 1px solid #00fbff; }
         .vine-leaf { font-size: 1.2rem; filter: drop-shadow(0 0 5px #00ff00); }
 
-        /* MANA BAR */
+        /* DIVINE BAR */
         .divine-container { 
             width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; 
             margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); z-index: 150;
         }
-        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff); transition: width 0.8s; }
+        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.8s; }
 
         /* AREA RITUALE */
         .ritual-wrapper { position: relative; width: 100vw; height: 75vh; display: flex; justify-content: center; align-items: center; }
@@ -33,23 +45,17 @@
         .awakened { 
             filter: brightness(1.4) grayscale(0) !important; 
             drop-shadow: 0 0 80px #00fbff !important; 
-            animation: finalBlast 0.5s ease-out;
         }
-        @keyframes finalBlast { 0% { transform: scale(1); filter: brightness(5) white; } 100% { transform: scale(1.05); } }
 
-        /* LINEE DEL ROMBO (SVG) */
-        #ritual-svg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 10;
-        }
+        /* LINEE SVG */
+        #ritual-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         .ritual-line {
-            stroke: #00fbff; stroke-width: 3; stroke-dasharray: 1000; stroke-dashoffset: 1000;
-            filter: drop-shadow(0 0 8px #00fbff); transition: stroke-dashoffset 1.5s ease-in-out;
-            opacity: 0;
+            stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff);
+            transition: opacity 1s; opacity: 0;
         }
-        .line-active { stroke-dashoffset: 0; opacity: 1; }
+        .line-active { opacity: 1; }
 
-        /* SLOT E GEMME */
+        /* DROP ZONES */
         .drop-zone { position: absolute; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; z-index: 20; }
         #zone-head { top: 5%; left: 50%; transform: translateX(-50%); }
         #zone-heart { top: 35%; left: 50%; transform: translateX(-50%); }
@@ -59,8 +65,9 @@
         .target-slot { width: 100px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
         .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 30px #00fbff) brightness(2) !important; }
 
+        /* GEM STACK */
         .gem-stack { position: fixed; left: 70px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 1000; }
-        .gem { width: 85px; cursor: pointer; filter: drop-shadow(0 0 15px #fff); transition: 0.3s; }
+        .gem { width: 80px; cursor: grab; filter: drop-shadow(0 0 15px #fff); transition: 0.3s; user-select: none; }
 
         #ascension-msg {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -77,20 +84,19 @@
     <div class="divine-container"><div id="divine-fill"></div></div>
 
     <div class="ritual-wrapper" id="capture-area">
-        <!-- SVG per le linee del rombo -->
         <svg id="ritual-svg">
-            <line id="line1" class="ritual-line" x1="0" y1="0" x2="0" y2="0" />
-            <line id="line2" class="ritual-line" x1="0" y1="0" x2="0" y2="0" />
-            <line id="line3" class="ritual-line" x1="0" y1="0" x2="0" y2="0" />
-            <line id="line4" class="ritual-line" x1="0" y1="0" x2="0" y2="0" />
+            <line id="line1" class="ritual-line" />
+            <line id="line2" class="ritual-line" />
+            <line id="line3" class="ritual-line" />
+            <line id="line4" class="ritual-line" />
         </svg>
 
         <img src="archives/actualmage.png" id="actual-mage">
         
-        <div class="drop-zone" id="zone-head"><img src="archives/coinslot.png" class="target-slot" id="p-head"></div>
-        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot" id="p-heart"></div>
-        <div class="drop-zone" id="zone-hand"><img src="archives/coinslot.png" class="target-slot" id="p-hand"></div>
-        <div class="drop-zone" id="zone-base"><img src="archives/coinslot.png" class="target-slot" id="p-base"></div>
+        <div class="drop-zone" id="zone-head"><img src="archives/coinslot.png" class="target-slot"></div>
+        <div class="drop-zone" id="zone-hand"><img src="archives/coinslot.png" class="target-slot"></div>
+        <div class="drop-zone" id="zone-base"><img src="archives/coinslot.png" class="target-slot"></div>
+        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot"></div>
     </div>
 
     <div class="gem-stack">
@@ -102,70 +108,92 @@
 
     <div id="ascension-msg">
         <h1 style="color:#fff; font-size: 3rem;">VOID-ASCENSION-000</h1>
-        <a href="index.html" style="color:#d4af37; text-decoration: none;">[ TRANSCEND ]</a>
+        <a href="index.html" style="color:#d4af37; text-decoration: none; font-weight: bold;">[ TRANSCEND ]</a>
     </div>
 
     <script>
-        // Riempimento vigne
+        // Generazione Vigne
         const vL = document.getElementById('vines-l'); const vR = document.getElementById('vines-r');
         for(let i=0; i<20; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
 
         let solved = 0;
         let activeItem = null;
-        const order = ['zone-head', 'zone-hand', 'zone-base', 'zone-heart']; // Ordine logico del rombo
+        const zones = ['zone-head', 'zone-hand', 'zone-base', 'zone-heart'];
 
         function updateLines() {
-            // Ottieni coordinate centri
-            const points = order.map(id => {
-                const el = document.getElementById(id);
-                const rect = el.getBoundingClientRect();
-                const parent = document.getElementById('capture-area').getBoundingClientRect();
-                return { x: rect.left + rect.width/2 - parent.left, y: rect.top + rect.height/2 - parent.top };
+            const area = document.getElementById('capture-area').getBoundingClientRect();
+            const points = zones.map(id => {
+                const rect = document.getElementById(id).getBoundingClientRect();
+                return { x: rect.left + rect.width/2 - area.left, y: rect.top + rect.height/2 - area.top };
             });
 
-            // Collega le linee in base a quante gemme ci sono
             for(let i=0; i < solved; i++) {
                 let line = document.getElementById('line' + (i+1));
                 let nextIdx = (i + 1) % 4;
-                line.setAttribute('x1', points[i].x);
-                line.setAttribute('y1', points[i].y);
-                line.setAttribute('x2', points[nextIdx].x);
-                line.setAttribute('y2', points[nextIdx].y);
+                line.setAttribute('x1', points[i].x); line.setAttribute('y1', points[i].y);
+                line.setAttribute('x2', points[nextIdx].x); line.setAttribute('y2', points[nextIdx].y);
                 line.classList.add('line-active');
             }
         }
 
-        function checkMatch(gemId, zoneId) {
+        function handleDrop(gemId, zoneId) {
             const zone = document.getElementById(zoneId);
             const slot = zone.querySelector('.target-slot');
             if (!slot.classList.contains('active-slot')) {
                 slot.classList.add('active-slot');
-                document.getElementById(gemId).style.visibility = 'hidden';
+                document.getElementById(gemId).style.display = 'none';
                 solved++;
                 document.getElementById('divine-fill').style.width = (solved * 25) + '%';
+                updateLines();
                 
-                updateLines(); // Accendi la linea
-
                 const mage = document.getElementById('actual-mage');
-                mage.style.filter = `brightness(${0.15 + (solved * 0.2)}) grayscale(${1 - (solved * 0.25)})`;
-
+                mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
+                
                 if (solved === 4) {
+                    // ATTIVAZIONE SCOSSA E RISVEGLIO
+                    document.body.classList.add('shake-active');
                     mage.classList.add('awakened');
-                    setTimeout(() => document.getElementById('ascension-msg').style.display = 'block', 1500);
+                    setTimeout(() => {
+                        document.body.classList.remove('shake-active');
+                        document.getElementById('ascension-msg').style.display = 'block';
+                    }, 1200);
                 }
             }
         }
 
-        // Logic Drag (PC/Touch)
-        const move = (x, y) => { if (activeItem) { activeItem.style.position = 'fixed'; activeItem.style.left = (x-40)+'px'; activeItem.style.top = (y-40)+'px'; } };
-        const end = (x, y) => { if (activeItem) { activeItem.style.pointerEvents = 'none'; const d = document.elementFromPoint(x, y); const z = d ? d.closest('.drop-zone') : null; if (z) checkMatch(activeItem.id, z.id); activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0'; activeItem.style.pointerEvents = 'auto'; activeItem = null; } };
+        function onStart(e) {
+            const target = e.target.closest('.gem');
+            if (target) {
+                activeItem = target;
+                activeItem.style.zIndex = "2000";
+                activeItem.style.pointerEvents = 'none';
+            }
+        }
 
-        document.addEventListener('mousedown', e => { if(e.target.classList.contains('gem')) activeItem = e.target; });
-        document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-        document.addEventListener('mouseup', e => end(e.clientX, e.clientY));
-        document.addEventListener('touchstart', e => { if(e.target.classList.contains('gem')) activeItem = e.target; });
-        document.addEventListener('touchmove', e => move(e.touches[0].clientX, e.touches[0].clientY));
-        document.addEventListener('touchend', e => end(e.changedTouches[0].clientX, e.changedTouches[0].clientY));
+        function onMove(e) {
+            if (!activeItem) return;
+            const point = e.touches ? e.touches[0] : e;
+            activeItem.style.position = 'fixed';
+            activeItem.style.left = (point.clientX - 40) + 'px';
+            activeItem.style.top = (point.clientY - 40) + 'px';
+        }
+
+        function onEnd(e) {
+            if (!activeItem) return;
+            const point = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(point.clientX, point.clientY);
+            const zone = dropEl ? dropEl.closest('.drop-zone') : null;
+            if (zone) handleDrop(activeItem.id, zone.id);
+            activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0';
+            activeItem.style.pointerEvents = 'auto'; activeItem = null;
+        }
+
+        document.addEventListener('mousedown', onStart);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchstart', onStart, {passive:false});
+        document.addEventListener('touchmove', onMove, {passive:false});
+        document.addEventListener('touchend', onEnd, {passive:false});
     </script>
 </body>
 </html>
