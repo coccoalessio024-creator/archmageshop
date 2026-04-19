@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Sanctum</title>
     <link href="https://googleapis.com" rel="stylesheet">
+    <!-- Riferimento al tuo style.css esterno -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Allineamento Parallelo dei Bottoni e del Logo */
+        /* Correzioni layout parallelo e logo */
         .actions-row {
             display: flex;
             justify-content: center;
@@ -17,36 +18,30 @@
             flex-wrap: wrap;
         }
 
-        /* Logo Brand: Piccolo e in linea */
         .brand-logo-inline {
-            width: 85px; /* Ridotto per stare in linea */
+            width: 80px;
             filter: drop-shadow(0 0 8px #d4af37);
             transition: 0.5s;
-            cursor: help;
         }
-        .brand-logo-inline:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
         .brand-logo-inline img { width: 100%; height: auto; display: block; }
 
-        /* Bulletin & Scroll Preview */
         .bulletin-wrapper { position: relative; display: inline-block; }
         
         .scroll-preview {
             position: absolute;
             bottom: 130%; left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            width: 230px;
+            transform: translateX(-50%) translateY(10px);
+            width: 220px;
             background: #fdf5e6;
             background-image: url('https://transparenttextures.com');
             color: #3d2b1f;
             padding: 1rem;
             border: 2px solid #8b4513;
-            border-radius: 5px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             opacity: 0;
             visibility: hidden;
-            transition: 0.4s;
-            font-size: 0.85rem;
-            pointer-events: none;
+            transition: 0.3s;
+            font-size: 0.8rem;
             z-index: 100;
         }
 
@@ -56,27 +51,16 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .scroll-preview h4 { margin: 0 0 10px 0; border-bottom: 1px solid #8b4513; color: #7a1515; }
-        .scroll-preview ul { list-style: "✧ "; padding-left: 1.2rem; margin: 0; text-align: left; }
-
-        .introduction .highlight { color: #d4af37; font-weight: bold; }
+        .introduction .highlight { color: #d4af37; font-weight: bold; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Loading Overlay (Velocizzato del 10%) -->
     <div id="loading-overlay">
-        <h2 class="arch-title" style="font-size: 2rem;">Summoning Spirits...</h2>
-        <div class="loading-container">
-            <div id="loading-bar"></div>
-        </div>
+        <h2 class="arch-title">Summoning Spirits...</h2>
+        <div class="loading-container"><div id="loading-bar"></div></div>
         <p id="loading-text">0%</p>
     </div>
-
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
 
     <div class="sanctum-container">
         <div class="archmage-frame">
@@ -86,70 +70,50 @@
         <h1 class="arch-title">The Archmage</h1>
         
         <p class="introduction">
-            "Greetings, traveler. You have found the gateway to my digital domain. Beyond this point lie artifacts of moderate power and questionable safety."<br><br>
+            "Greetings, traveler. You have found the gateway to my digital domain."
             <span class="highlight">Rejoice in the light of guidance of The Archmage.</span>
         </p>
         
-        <!-- NUOVA RIGA AZIONI: Tutto parallelo -->
         <div class="actions-row">
             <a href="emporium/index.html" class="arch-btn">THE EMPORIUM</a>
             
             <div class="bulletin-wrapper">
-                <a href="emporium/bulletins.html" class="arch-btn" style="font-size: 0.9rem; background: #2a1a0a;">THE BULLETINS</a>
+                <a href="emporium/bulletins.html" class="arch-btn" style="background: #2a1a0a;">THE BULLETINS</a>
                 <div class="scroll-preview">
-                    <h4>Latest Visions</h4>
-                    <ul>
-                        <li>The Mirror of Truth is cracked</li>
-                        <li>Tax increase on Mana Potions</li>
-                        <li>New relics found in the Abyss</li>
+                    <h4 style="margin:0; color:#7a1515">Oracle's Visions</h4>
+                    <ul style="padding-left:20px; margin:10px 0 0 0; text-align:left;">
+                        <li>Mirror Cracked</li>
+                        <li>Mana Tax +5%</li>
+                        <li>Relics Found</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- BRAND LOGO (Integrato nella riga) -->
-            <a href="secret.html" class="brand-logo-inline" title="Solve the Riddle">
-                <img src="archives/logo_archmage.png" alt="Archmage Logo">
+            <a href="secret.html" class="brand-logo-inline">
+                <img src="archives/logo_archmage.png" alt="Logo">
             </a>
         </div>
-        
-        <div class="rune-deco" style="margin-top: 2rem;">᚛ ᚫ ᚜</div>
     </div>
 
     <script>
-        // Gestione Loading velocizzato
+        // Loading Script Semplificato e Sicuro
         let w = 0;
         const interval = setInterval(() => {
-            w += Math.random() * 22;
+            w += Math.random() * 20;
             if (w >= 100) {
                 w = 100;
                 clearInterval(interval);
-                setTimeout(() => {
-                    const loader = document.getElementById('loading-overlay');
-                    if(loader) {
-                        loader.style.opacity = '0';
-                        setTimeout(() => loader.remove(), 500);
-                    }
-                }, 400);
+                const loader = document.getElementById('loading-overlay');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }
             }
-            document.getElementById('loading-bar').style.width = w + '%';
-            document.getElementById('loading-text').innerText = Math.floor(w) + '%';
-        }, 135); 
-
-        // Scintille Magiche
-        function createSpark() {
-            const spark = document.createElement('div');
-            spark.className = 'spark';
-            spark.style.left = Math.random() * 100 + 'vw';
-            spark.style.top = '110vh';
-            spark.style.opacity = Math.random();
-            document.body.appendChild(spark);
-            setTimeout(() => {
-                spark.style.transform = 'translateY(-120vh) translateX(' + (Math.random() * 100 - 50) + 'px)';
-                spark.style.opacity = '0';
-            }, 100);
-            setTimeout(() => spark.remove(), 10000);
-        }
-        setInterval(createSpark, 400);
+            const bar = document.getElementById('loading-bar');
+            const text = document.getElementById('loading-text');
+            if(bar) bar.style.width = w + '%';
+            if(text) text.innerText = Math.floor(w) + '%';
+        }, 120);
     </script>
 </body>
-</html> 
+</html>
