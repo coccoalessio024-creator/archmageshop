@@ -4,39 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Sanctum</title>
-    <!-- Google Fonts -->
+    <!-- Font Corretto -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- Collegamento al Grimorio dello Stile (style.css) -->
+    <!-- Link al CSS Esterno -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Elementi decorativi fissi (Angoli dorati) -->
+    <!-- Elementi decorativi -->
     <div class="corner top-left"></div>
     <div class="corner top-right"></div>
     <div class="corner bottom-left"></div>
     <div class="corner bottom-right"></div>
 
     <div class="sanctum-container">
-        <!-- Cornice dell'Arcimago -->
         <div class="archmage-frame">
             <img src="archives/Archmage.png.png" alt="The Archmage">
         </div>
         
-        <!-- Titolo con effetto metallico dorato -->
         <h1 class="arch-title">The Archmage</h1>
         
         <p class="introduction">
             "Greetings, traveler. You have found the gateway to my digital domain. Beyond this point lie artifacts of moderate power and questionable safety."
         </p>
         
-        <!-- Bottone stile Targa Medievale -->
         <a href="emporium/" class="arch-btn">ENTER THE EMPORIUM</a>
         
-        <!-- Decorazione runica -->
         <div class="rune-deco">᚛ ᚫ ᚜</div>
     </div>
 
-    <!-- Script per le Scintille Magiche -->
     <script>
         function createSpark() {
             const spark = document.createElement('div');
@@ -50,12 +45,10 @@
             spark.style.transition = 'transform ' + (Math.random() * 5 + 5) + 's linear, opacity 2s';
             spark.style.zIndex = '1';
             document.body.appendChild(spark);
-
             setTimeout(() => {
                 spark.style.transform = 'translateY(-120vh) translateX(' + (Math.random() * 100 - 50) + 'px)';
                 spark.style.opacity = '0';
             }, 100);
-
             setTimeout(() => spark.remove(), 10000);
         }
         setInterval(createSpark, 400);
