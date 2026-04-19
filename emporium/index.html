@@ -4,33 +4,73 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Archmage's Emporium</title>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-  <!-- Link al CSS Esterno (Esce dalla cartella con ../) -->
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* Stili specifici per l'animazione degli oggetti */
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    
-    .fire-border .item-img { animation: float 3s ease-in-out infinite; }
-    .spectral-border .item-img { animation: float 4s ease-in-out infinite; }
+    /* RESET PER L'EMPORIO: Forza l'allineamento pulito */
+    body { justify-content: flex-start !important; padding-top: 0; }
 
-    /* Fix per la navigazione superiore */
     .tavern-header {
-      position: sticky; top: 0; z-index: 50; padding: 1rem 1.5rem;
-      background: linear-gradient(180deg, #050301 0%, #120a04 100%);
-      border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center;
-      width: 100%; box-sizing: border-box;
+      position: sticky; top: 0; z-index: 100; width: 100%;
+      background: rgba(20, 15, 10, 0.95);
+      border-bottom: 2px solid var(--gold);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem; box-sizing: border-box;
     }
-    .nav-link { color: var(--gold); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; font-size: 14px; }
-    .nav-link:hover { color: var(--amber); text-shadow: 0 0 5px var(--fire); }
+
+    /* GRID COMPATTA */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem; width: 90%; max-width: 1000px;
+      margin: 2rem auto; padding: 0;
+    }
+
+    /* CARD SEMPLIFICATA */
+    .card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 15px; padding: 1.5rem;
+      display: flex; flex-direction: column; align-items: center;
+      transition: 0.3s;
+    }
+
+    /* L'IMMAGINE DIVENTA IL BOTTONE */
+    .item-btn {
+      background: none; border: none; padding: 0;
+      cursor: pointer; transition: transform 0.3s;
+      width: 150px; height: 150px; /* DIMENSIONE BLOCCATA */
+      display: flex; align-items: center; justify-content: center;
+    }
+    
+    .item-btn:hover { transform: scale(1.1) rotate(2deg); }
+    .item-btn:active { transform: scale(0.9); }
+
+    .item-img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+    }
+
+    h3 { margin: 1rem 0 0.5rem; font-size: 1.2rem; color: var(--gold); }
+    .price-tag { color: var(--amber); font-weight: bold; margin-bottom: 1rem; }
+
+    /* BOTTONE SOTTO PICCOLO */
+    .small-buy-btn {
+      font-size: 0.8rem; padding: 0.5rem 1rem;
+      border-radius: 10px;
+    }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .fire-border .item-img { filter: drop-shadow(0 0 15px var(--fire)); animation: float 3s ease-in-out infinite; }
+    .spectral-border .item-img { filter: drop-shadow(0 0 15px var(--mana)); animation: float 4s ease-in-out infinite; }
   </style>
 </head>
 <body>
 
   <header class="tavern-header">
-    <span class="tavern-sign" style="color: var(--gold); font-size: 1.5rem; font-weight: bold;">The Emporium</span>
+    <span class="tavern-sign">The Emporium</span>
     <nav>
       <a href="../index.html" class="nav-link">Sanctum</a>
       <a href="bulletins.html" class="nav-link">Bulletins</a>
@@ -38,50 +78,52 @@
     </nav>
   </header>
 
-  <section class="hero" style="text-align: center; width: 100%;">
+  <section class="hero">
     <h1 class="arch-title">Magical Trinkets</h1>
-    <p style="color: var(--gold); font-style: italic; margin-top: -1rem;">"Artifacts of moderate power and questionable stability."</p>
+    <p style="color: var(--gold); font-style: italic; margin-top: -1.5rem;">"Click an artifact to claim its power."</p>
   </section>
 
   <main class="products-grid">
     <!-- Invisibility Brew -->
     <article class="card fire-border">
-      <img src="../archives/invisibilitybrew.png.png" class="item-img" alt="Brew">
+      <button class="item-btn" onclick="addToCart('Invisibility Brew', 45)">
+        <img src="../archives/invisibilitybrew.png.png" class="item-img" alt="Brew">
+      </button>
       <h3>Invisibility Brew</h3>
-      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">45 Gold</p>
-      <button class="arch-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
+      <span class="price-tag">45 Gold</span>
+      <button class="arch-btn small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
     </article>
 
     <!-- Ring of Silence -->
     <article class="card">
-      <img src="../archives/silentring.png.png" class="item-img" alt="Ring">
+      <button class="item-btn" onclick="addToCart('Silence Ring', 120)">
+        <img src="../archives/silentring.png.png" class="item-img" alt="Ring">
+      </button>
       <h3>Ring of Silence</h3>
-      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">120 Gold</p>
-      <button class="arch-btn" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
+      <span class="price-tag">120 Gold</span>
+      <button class="arch-btn small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
     </article>
     
     <!-- Magic Mirror -->
     <article class="card spectral-border">
-      <img src="../archives/magicmirror.png.png" class="item-img" alt="Mirror">
+      <button class="item-btn" onclick="addToCart('Magic Mirror', 55)">
+        <img src="../archives/magicmirror.png.png" class="item-img" alt="Mirror">
+      </button>
       <h3>Magic Mirror</h3>
-      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">55 Gold</p>
-      <button class="arch-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cauldron</button>
+      <span class="price-tag">55 Gold</span>
+      <button class="arch-btn small-buy-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cauldron</button>
     </article>
     
     <!-- Treasure Map -->
     <article class="card">
-      <img src="../archives/treasuremap.png.png" class="item-img" alt="Map">
+      <button class="item-btn" onclick="addToCart('Treasure Map', 15)">
+        <img src="../archives/treasuremap.png.png" class="item-img" alt="Map">
+      </button>
       <h3>Treasure Map</h3>
-      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">15 Gold</p>
-      <button class="arch-btn" onclick="addToCart('Treasure Map', 15)">Add to Cauldron</button>
+      <span class="price-tag">15 Gold</span>
+      <button class="arch-btn small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cauldron</button>
     </article>
   </main>
-
-  <!-- Angoli decorativi -->
-  <div class="corner top-left"></div>
-  <div class="corner top-right"></div>
-  <div class="corner bottom-left"></div>
-  <div class="corner bottom-right"></div>
 
   <script>
     function addToCart(name, price) {
@@ -89,7 +131,7 @@
       cart.push({ id: Date.now(), name: name, price: price });
       localStorage.setItem('magicCart', JSON.stringify(cart));
       updateCount();
-      console.log(name + " added to cauldron");
+      console.log(name + " added");
     }
 
     function updateCount() {
