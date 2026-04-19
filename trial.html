@@ -2,69 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Trial of the Ancients</title>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        * { cursor: url('archives/potionmini.png'), auto !important; font-family: 'MedievalSharp', serif !important; }
-        
-        body { 
-            background: #0a0a0a; color: #f3e5ab; margin: 0; 
-            display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; overflow-x: hidden;
-        }
-
-        .mana-container { 
-            width: 90%; max-width: 800px; height: 35px; 
-            border: 3px solid #d4af37; margin: 20px 0; 
-            background: #111; box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); 
-        }
-        #mana-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); box-shadow: 0 0 25px #00bfff; transition: width 0.6s ease; }
-
-        .game-world { 
-            display: flex; width: 100%; flex: 1; 
-            justify-content: space-around; align-items: center; 
-            padding: 20px; box-sizing: border-box; flex-wrap: wrap;
-        }
-        
-        .altar { display: flex; flex-direction: column; gap: 30px; justify-content: center; }
-        
-        /* ZOOM E CORNICI FUOCO */
-        .fire-frame {
-            width: 110px; height: 110px; border: 2px solid #ff4500;
-            background: rgba(255, 69, 0, 0.1); display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px #ff4500; overflow: hidden; /* Taglia i bordi inutili */
-        }
-        
-        .draggable { 
-            width: 100%; height: 100%; 
-            object-fit: cover; /* Riempie il frame */
-            transform: scale(1.3); /* ZOOM 90% centrale */
-            transition: transform 0.2s; 
-        }
-        .draggable:hover { transform: scale(1.4); }<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Trial of the Ancients</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        /* CURSORE E FONT */
-        * { cursor: url('archives/potionmini.png'), auto !important; font-family: 'MedievalSharp', serif !important; }
+        * { cursor: url('archives/potionmini.png'), auto !important; font-family: 'MedievalSharp', serif !important; -webkit-user-drag: none; }
         body { background: #0a0a0a; color: #f3e5ab; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
-
-        /* ISTRUZIONI AGGIORNATE */
-        .instructions-wrapper { position: fixed; top: 15px; left: 15px; z-index: 2500; }
-        .inst-seal { width: 45px; height: 45px; background: #8b4513; border: 2px solid #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #d4af37; font-weight: bold; }
-        .inst-scroll {
-            position: absolute; top: 55px; left: 0; width: 240px; 
-            background: #fdf5e6 url('https://transparenttextures.com');
-            border: 2px solid #8b4513; padding: 1rem; color: #3d2b1f;
-            opacity: 0; visibility: hidden; transition: 0.3s; font-size: 0.85rem;
-        }
-        .instructions-wrapper:hover .inst-scroll { opacity: 1; visibility: visible; }
 
         /* MANA BAR */
         .mana-container { width: 85%; max-width: 600px; height: 25px; border: 2px solid #d4af37; margin: 15px 0; background: #111; box-shadow: 0 0 15px rgba(0, 191, 255, 0.4); }
@@ -73,126 +16,72 @@
         /* GAME WORLD */
         .game-world { display: flex; width: 100%; flex: 1; justify-content: space-around; align-items: center; padding: 10px; flex-wrap: wrap; }
         .altar { display: flex; flex-direction: column; gap: 20px; }
-        .fire-frame { width: 85px; height: 85px; border: 2px solid #ff4500; background: rgba(255, 69, 0, 0.1); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px #ff4500; overflow: hidden; position: relative; }
-        .draggable { width: 100%; height: 100%; object-fit: cover; transform: scale(1.3); touch-action: none; position: relative; z-index: 10; }
+        
+        .fire-frame { 
+            width: 80px; height: 80px; border: 2px solid #ff4500; background: rgba(255, 69, 0, 0.1); 
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px #ff4500; 
+            overflow: visible; position: relative; 
+        }
 
+        .draggable { 
+            width: 70px; height: 70px; object-fit: contain; 
+            touch-action: none; position: relative; z-index: 10;
+            user-select: none; -webkit-user-select: none;
+        }
+
+        /* FIGURE BERSAGLIO */
         .main-stage { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .trio-row { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .target { width: 110px; text-align: center; filter: grayscale(1) brightness(0.3); transition: 0.4s; border: 1px solid rgba(212, 175, 55, 0.1); }
-        .target img { width: 100%; height: auto; transform: scale(1.2); }
+        .target { width: 100px; text-align: center; filter: grayscale(1) brightness(0.3); transition: 0.4s; border: 1px solid rgba(212, 175, 55, 0.1); padding: 5px; }
+        .target img { width: 100%; height: auto; pointer-events: none; }
         .target.active { filter: grayscale(0) brightness(1.3); border-color: #00bfff; box-shadow: 0 0 20px #00bfff; }
         
-        .slot-target { width: 100px; filter: grayscale(1); border: 1px dashed #d4af37; padding: 5px; }
+        .slot-target { width: 90px; filter: grayscale(1); border: 1px dashed #d4af37; }
 
-        /* MOBILE FIX */
         @media (max-width: 600px) {
             .game-world { flex-direction: column; }
             .altar { flex-direction: row; order: 2; margin-top: 20px; }
             .main-stage { order: 1; }
         }
 
-        #final-secret { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 2rem; border: 4px solid #00bfff; text-align: center; z-index: 3000; }
+        #final-secret { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 2rem; border: 4px solid #00bfff; text-align: center; z-index: 3000; box-shadow: 0 0 50px #00bfff; }
     </style>
 </head>
 <body>
-
-    <div class="instructions-wrapper">
-        <div class="inst-seal">?</div>
-        <div class="inst-scroll">
-            <h4 style="margin:0 0 10px 0; color:#7a1515;">Adeptus Guide</h4>
-            Trascina gli artefatti sui loro maestri.<br><br>
-            <b>Touch:</b> Trascina semplicemente l'icona verso il bersaglio.
-        </div>
-    </div>
 
     <div class="mana-container"><div id="mana-fill"></div></div>
 
     <div class="game-world">
         <div class="altar">
-            <div class="fire-frame"><img src="archives/axe.png" id="axe" class="draggable" draggable="true"></div>
-            <div class="fire-frame"><img src="archives/crown.png" id="crown" class="draggable" draggable="true"></div>
+            <div class="fire-frame"><img src="archives/axe.png" id="axe" class="draggable"></div>
+            <div class="fire-frame"><img src="archives/crown.png" id="crown" class="draggable"></div>
         </div>
         <div class="main-stage">
             <div class="trio-row">
-                <div class="target" id="t-axeman"><img src="archives/axeman.png"><span>Axeman</span></div>
-                <div class="target" id="t-knight"><img src="archives/knight.png"><span>Knight</span></div>
-                <div class="target" id="t-mage"><img src="archives/actualmage.png"><span>Mage</span></div>
+                <div class="target" id="t-axeman"><img src="archives/axeman.png"><br><small>Axeman</small></div>
+                <div class="target" id="t-knight"><img src="archives/knight.png"><br><small>Knight</small></div>
+                <div class="target" id="t-mage"><img src="archives/actualmage.png"><br><small>Mage</small></div>
             </div>
-            <div class="target slot-target" id="t-coinslot"><img src="archives/coinslot.png"><span>Slot</span></div>
+            <div class="target slot-target" id="t-coinslot"><img src="archives/coinslot.png"><br><small>Slot</small></div>
         </div>
         <div class="altar">
-            <div class="fire-frame"><img src="archives/scroll.png" id="scroll" class="draggable" draggable="true"></div>
-            <div class="fire-frame"><img src="archives/coingem.png" id="coingem" class="draggable" draggable="true"></div>
+            <div class="fire-frame"><img src="archives/scroll.png" id="scroll" class="draggable"></div>
+            <div class="fire-frame"><img src="archives/coingem.png" id="coingem" class="draggable"></div>
         </div>
     </div>
 
     <div id="final-secret">
         <h1 style="color:#00bfff;">HUNTER-MASTER 444</h1>
-        <a href="index.html" style="color:#d4af37; text-decoration:none;">RETURN</a>
+        <p>Return to the Sanctum</p>
+        <a href="index.html" style="color:#d4af37; text-decoration:none; font-weight:bold;">[ RETURN ]</a>
     </div>
 
     <script>
         let solved = 0;
-        const draggables = document.querySelectorAll('.draggable');
         const targets = { 'axe':'axeman', 'crown':'knight', 'scroll':'mage', 'coingem':'coinslot' };
-
-        // --- SUPPORTO DESKTOP (Drag & Drop Standard) ---
-        draggables.forEach(d => {
-            d.addEventListener('dragstart', e => e.dataTransfer.setData("text", e.target.id));
-        });
-
-        document.querySelectorAll('.target').forEach(t => {
-            t.addEventListener('dragover', e => e.preventDefault());
-            t.addEventListener('drop', e => {
-                e.preventDefault();
-                const id = e.dataTransfer.getData("text");
-                checkMatch(id, e.currentTarget.id);
-            });
-        });
-
-        // --- SUPPORTO TOUCH (Move fluido) ---
         let activeItem = null;
-        let initialX, initialY;
 
-        document.addEventListener('touchstart', e => {
-            if (e.target.classList.contains('draggable')) {
-                activeItem = e.target;
-                const touch = e.touches[0];
-                initialX = touch.clientX - activeItem.offsetLeft;
-                initialY = touch.clientY - activeItem.offsetTop;
-                activeItem.style.zIndex = "1000";
-            }
-        }, {passive: false});
-
-        document.addEventListener('touchmove', e => {
-            if (activeItem) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                activeItem.style.position = 'fixed';
-                activeItem.style.left = (touch.clientX - 40) + 'px';
-                activeItem.style.top = (touch.clientY - 40) + 'px';
-            }
-        }, {passive: false});
-
-        document.addEventListener('touchend', e => {
-            if (activeItem) {
-                const touch = e.changedTouches[0];
-                const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
-                const closestTarget = targetEl ? targetEl.closest('.target') : null;
-                
-                if (closestTarget) {
-                    checkMatch(activeItem.id, closestTarget.id);
-                }
-                
-                // Reset posizione se non incastrato
-                activeItem.style.position = 'relative';
-                activeItem.style.left = '0';
-                activeItem.style.top = '0';
-                activeItem.style.zIndex = "10";
-                activeItem = null;
-            }
-        });
-
+        // FUNZIONE UNIFICATA CONTROLLO VITTORIA
         function checkMatch(itemId, targetId) {
             const expectedTarget = 't-' + targets[itemId];
             if (targetId === expectedTarget) {
@@ -206,6 +95,78 @@
                 }
             }
         }
+
+        // --- GESTIONE TOUCH (DRAG MANUALE) ---
+        document.addEventListener('touchstart', e => {
+            if (e.target.classList.contains('draggable')) {
+                activeItem = e.target;
+                activeItem.style.zIndex = "1000";
+                activeItem.style.pointerEvents = 'none'; // Importante per elementFromPoint
+            }
+        }, {passive: false});
+
+        document.addEventListener('touchmove', e => {
+            if (activeItem) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                activeItem.style.position = 'fixed';
+                // Centra l'immagine sotto il dito (70px / 2 = 35)
+                activeItem.style.left = (touch.clientX - 35) + 'px';
+                activeItem.style.top = (touch.clientY - 35) + 'px';
+            }
+        }, {passive: false});
+
+        document.addEventListener('touchend', e => {
+            if (activeItem) {
+                const touch = e.changedTouches[0];
+                // Trova cosa c'è sotto il dito al rilascio
+                const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
+                const closestTarget = targetEl ? targetEl.closest('.target') : null;
+                
+                if (closestTarget) {
+                    checkMatch(activeItem.id, closestTarget.id);
+                }
+                
+                // Reset
+                activeItem.style.position = 'relative';
+                activeItem.style.left = '0';
+                activeItem.style.top = '0';
+                activeItem.style.pointerEvents = 'auto';
+                activeItem = null;
+            }
+        });
+
+        // --- SUPPORTO DESKTOP (Mouse) ---
+        // Disabilitiamo il drag nativo per usare la stessa logica del touch
+        document.addEventListener('mousedown', e => {
+            if (e.target.classList.contains('draggable')) {
+                activeItem = e.target;
+                activeItem.style.zIndex = "1000";
+                activeItem.style.pointerEvents = 'none';
+            }
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (activeItem) {
+                activeItem.style.position = 'fixed';
+                activeItem.style.left = (e.clientX - 35) + 'px';
+                activeItem.style.top = (e.clientY - 35) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', e => {
+            if (activeItem) {
+                const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+                const closestTarget = targetEl ? targetEl.closest('.target') : null;
+                if (closestTarget) checkMatch(activeItem.id, closestTarget.id);
+                
+                activeItem.style.position = 'relative';
+                activeItem.style.left = '0';
+                activeItem.style.top = '0';
+                activeItem.style.pointerEvents = 'auto';
+                activeItem = null;
+            }
+        });
     </script>
 </body>
 </html>
