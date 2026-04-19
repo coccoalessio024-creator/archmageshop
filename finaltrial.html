@@ -6,89 +6,50 @@
     <title>The Final Awakening</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * { font-family: 'MedievalSharp', serif !important; -webkit-user-drag: none; box-sizing: border-box; }
-        
-        body { 
-            background: #050505; color: #00fbff; margin: 0; 
-            display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; overflow-x: hidden;
-            overflow-y: auto; /* Permette lo scroll per raggiungere le gemme */
-        }
+        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
+        body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; overflow-y: auto; }
 
-        /* EFFETTO SCOSSA */
-        @keyframes earthquake {
-            0% { transform: translate(0, 0); }
-            10% { transform: translate(-5px, -5px); }
-            20% { transform: translate(5px, 5px); }
-            100% { transform: translate(0, 0); }
-        }
+        @keyframes earthquake { 0% { transform: translate(0, 0); } 10% { transform: translate(-5px, -5px); } 20% { transform: translate(5px, 5px); } 100% { transform: translate(0, 0); } }
         .shake-active { animation: earthquake 0.1s linear infinite; }
 
-        /* VIGNE E FASCIA ARCANO */
-        .arcane-border {
-            position: fixed; top: 0; bottom: 0; width: 50px; background: rgba(0, 251, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 251, 255, 0.3); display: flex; flex-direction: column; 
-            justify-content: space-between; align-items: center; padding: 10px 0; z-index: 100;
-        }
-        .b-left { left: 0; border-right: 1px solid #00fbff; }
-        .b-right { right: 0; border-left: 1px solid #00fbff; }
+        .arcane-border { position: fixed; top: 0; bottom: 0; width: 50px; background: rgba(0, 251, 255, 0.1); box-shadow: 0 0 30px rgba(0, 251, 255, 0.3); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; z-index: 100; }
+        .b-left { left: 0; border-right: 1px solid #00fbff; } .b-right { right: 0; border-left: 1px solid #00fbff; }
         .vine-leaf { font-size: 1.2rem; filter: drop-shadow(0 0 5px #00ff00); }
 
-        /* DIVINE BAR STICKY */
-        .divine-container { 
-            width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; 
-            margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); 
-            z-index: 150; position: sticky; top: 10px; flex-shrink: 0;
-        }
+        .divine-container { width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); z-index: 150; position: sticky; top: 10px; }
         #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.8s; }
 
-        /* AREA RITUALE */
-        .ritual-wrapper { 
-            position: relative; width: 100vw; height: 75vh; 
-            display: flex; justify-content: center; align-items: center; 
-            flex-shrink: 0;
-        }
+        .ritual-wrapper { position: relative; width: 100vw; height: 75vh; display: flex; justify-content: center; align-items: center; }
         #actual-mage { height: 90%; max-width: 90%; object-fit: contain; transition: 2s; filter: brightness(0.15) grayscale(1); z-index: 5; }
         .awakened { filter: brightness(1.4) grayscale(0) !important; drop-shadow: 0 0 80px #00fbff !important; }
 
-        /* LINEE SVG */
         #ritual-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); opacity: 0; }
+        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); opacity: 0; transition: opacity 1s; }
         .line-active { opacity: 1; }
 
-        /* DROP ZONES */
         .drop-zone { position: absolute; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; z-index: 20; }
         #zone-head { top: 5%; left: 50%; transform: translateX(-50%); }
-        #zone-heart { top: 35%; left: 50%; transform: translateX(-50%); }
         #zone-hand { top: 45%; left: 25%; }
         #zone-base { bottom: 10%; left: 50%; transform: translateX(-50%); }
+        /* Cuore spostato a destra e bloccato */
+        #zone-heart { top: 35%; left: 55%; transform: translateX(-50%); }
 
         .target-slot { width: 90px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
         .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 30px #00fbff) brightness(2) !important; }
+        .locked-slot { opacity: 0 !important; pointer-events: none; }
 
-        /* GEM STACK IN BASSO (Scorri per prenderle) */
-        .gem-stack { 
-            display: flex; justify-content: center; gap: 20px; 
-            padding: 40px 0 80px 0; z-index: 1000; width: 100%;
-        }
-        .gem { 
-            width: 85px; height: 85px; cursor: grab; 
-            filter: drop-shadow(0 0 15px #fff); transition: 0.3s; 
-            touch-action: none;
-        }
+        .gem-stack { display: flex; justify-content: center; gap: 20px; padding: 40px 0 80px 0; z-index: 1000; width: 100%; }
+        /* Gemme con stile Emporio: No bordi, solo bagliore */
+        .gem { width: 85px; height: 85px; cursor: grab; filter: drop-shadow(0 0 15px #ff4500); transition: 0.3s; touch-action: none; border: none !important; outline: none !important; }
+        .gem:hover { filter: drop-shadow(0 0 25px #ff8c00) brightness(1.2); }
 
-        #ascension-msg {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #000; padding: 4rem; border: 5px solid #fff; text-align: center; z-index: 10000;
-            box-shadow: 0 0 200px #00fbff;
-        }
+        #ascension-msg { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 4rem; border: 5px solid #fff; text-align: center; z-index: 10000; box-shadow: 0 0 200px #00fbff; }
     </style>
 </head>
 <body>
 
     <div class="arcane-border b-left" id="vines-l"></div>
     <div class="arcane-border b-right" id="vines-r"></div>
-
     <div class="divine-container"><div id="divine-fill"></div></div>
 
     <div class="ritual-wrapper" id="capture-area">
@@ -100,7 +61,8 @@
         <div class="drop-zone" id="zone-head"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-hand"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-base"><img src="archives/coinslot.png" class="target-slot"></div>
-        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot"></div>
+        <!-- Slot cuore inizialmente nascosto -->
+        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot locked-slot"></div>
     </div>
 
     <div class="gem-stack">
@@ -126,7 +88,8 @@
         function updateLines() {
             const area = document.getElementById('capture-area').getBoundingClientRect();
             const points = zonesOrder.map(id => {
-                const rect = document.getElementById(id).getBoundingClientRect();
+                const el = document.getElementById(id);
+                const rect = el.getBoundingClientRect();
                 return { x: rect.left + rect.width/2 - area.left, y: rect.top + rect.height/2 - area.top };
             });
             for(let i=0; i < solved; i++) {
@@ -139,31 +102,38 @@
         }
 
         function handleDrop(gemId, zoneId) {
+            if (solved < 3 && zoneId === 'zone-heart') return; // Blocca cuore se non hai fatto gli altri 3
+
             const zone = document.getElementById(zoneId);
             const slot = zone.querySelector('.target-slot');
             if (!slot.classList.contains('active-slot')) {
+                slot.classList.remove('locked-slot');
                 slot.classList.add('active-slot');
                 document.getElementById(gemId).style.display = 'none';
                 solved++;
                 document.getElementById('divine-fill').style.width = (solved * 25) + '%';
                 updateLines();
+                
                 const mage = document.getElementById('actual-mage');
                 mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
+                
+                if (solved === 3) { // Sblocca visivamente il cuore
+                    document.querySelector('#zone-heart .target-slot').style.opacity = "0.1";
+                    document.querySelector('#zone-heart .target-slot').style.pointerEvents = "auto";
+                }
+
                 if (solved === 4) {
                     document.body.classList.add('shake-active');
                     mage.classList.add('awakened');
-                    setTimeout(() => {
-                        document.body.classList.remove('shake-active');
-                        document.getElementById('ascension-msg').style.display = 'block';
-                    }, 1200);
+                    setTimeout(() => { document.body.classList.remove('shake-active'); document.getElementById('ascension-msg').style.display = 'block'; }, 1200);
                 }
             }
         }
 
-        // GESTORE UNIFICATO PIXEL-PERFECT
         function onStart(e) {
-            if (e.target.classList.contains('gem')) {
-                activeItem = e.target;
+            const target = e.target.closest('.gem');
+            if (target) {
+                activeItem = target;
                 activeItem.style.zIndex = "5000";
                 activeItem.style.pointerEvents = 'none';
             }
@@ -171,26 +141,21 @@
 
         function onMove(e) {
             if (!activeItem) return;
-            if (e.cancelable) e.preventDefault(); // Blocca scroll solo se trascino
-            const point = e.touches ? e.touches[0] : e;
+            if (e.cancelable) e.preventDefault();
+            const p = e.touches ? e.touches[0] : e;
             activeItem.style.position = 'fixed';
-            // Centra la gemma esattamente (metà di 85px = 42px)
-            activeItem.style.left = (point.clientX - 42) + 'px';
-            activeItem.style.top = (point.clientY - 42) + 'px';
+            activeItem.style.left = (p.clientX - 42) + 'px';
+            activeItem.style.top = (p.clientY - 42) + 'px';
         }
 
         function onEnd(e) {
             if (!activeItem) return;
-            const point = e.changedTouches ? e.changedTouches[0] : e;
-            const dropEl = document.elementFromPoint(point.clientX, point.clientY);
+            const p = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(p.clientX, p.clientY);
             const zone = dropEl ? dropEl.closest('.drop-zone') : null;
-            
             if (zone) handleDrop(activeItem.id, zone.id);
-            
-            activeItem.style.position = 'relative';
-            activeItem.style.left = '0'; activeItem.style.top = '0';
-            activeItem.style.pointerEvents = 'auto';
-            activeItem = null;
+            activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0';
+            activeItem.style.pointerEvents = 'auto'; activeItem = null;
         }
 
         document.addEventListener('mousedown', onStart);
