@@ -1,121 +1,126 @@
 /* =========================================
-   THE ARCHMAGE'S BRAIN - STILE DEFINITIVO
+   STYLE.CSS - IL GRIMORIO UNIFICATO 
    ========================================= */
 
 :root {
     --fire: #ff4d00;
     --amber: #ff9500;
     --gold: #c9932a;
+    --gold-glow: rgba(201, 147, 42, 0.4);
     --mana: #4fffe0;
-    --bg-dark: #0d0a07;
-    --ink: rgba(20, 15, 10, 0.9);
+    --bg-dark: #090603;
+    --ink: rgba(20, 15, 10, 0.95);
+    --parchment: #e4d0a6;
 }
 
-/* SFONDO DINAMICO: Effetto fumo e calore */
-body {
-    margin: 0; padding: 0;
+/* 1. ARCHITETTURA UNIVERSALE */
+body, html {
+    margin: 0; padding: 0; min-height: 100vh;
     background: var(--bg-dark);
-    color: #e4d0a6;
+    color: var(--parchment);
     font-family: 'MedievalSharp', serif;
+    /* Centratura Totale */
+    display: flex; flex-direction: column; 
+    align-items: center; justify-content: flex-start;
     overflow-x: hidden;
-    /* Gradiente che simula un calderone o un lume di candela */
-    background: radial-gradient(circle at center, #1a120b 0%, #0d0a07 100%);
+    background: radial-gradient(circle at center, #1a120b 0%, #090603 100%);
 }
 
-/* NEBBIA CALDA */
+/* Nebbia del Vuoto */
 body::before {
     content: ""; position: fixed; inset: 0;
-    background: radial-gradient(circle, transparent 20%, rgba(13, 10, 7, 0.8) 100%);
+    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
     z-index: 2; pointer-events: none;
+    animation: pulse-fog 8s ease-in-out infinite alternate;
 }
+@keyframes pulse-fog { 0% { opacity: 0.6; } 100% { opacity: 1; } }
 
-/* TITOLO: L'oro che brucia */
+/* 2. TITOLI METALLICI INFRECCIA */
 .arch-title {
-    font-size: clamp(3rem, 10vw, 5rem);
-    text-align: center;
-    color: var(--gold);
-    text-shadow: 0 0 20px var(--fire), 0 0 40px var(--amber);
-    animation: title-flicker 3s infinite alternate;
-    z-index: 5; position: relative;
-    margin: 2rem 0;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    background: linear-gradient(to bottom, #fff 5%, var(--gold) 50%, #5c4008 95%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px var(--fire));
+    text-align: center; margin: 2rem 0;
+    position: relative; z-index: 5;
+    letter-spacing: 3px;
 }
 
-@keyframes title-flicker {
-    0% { opacity: 0.9; filter: brightness(1); }
-    100% { opacity: 1; filter: brightness(1.3) drop-shadow(0 0 25px var(--fire)); }
-}
-
-/* MEDAGLIONE OVALE MORBIDO (Index) */
+/* 3. IL MEDAGLIONE (Sanctum) */
 .archmage-frame {
-    width: fit-content; margin: 0 auto 3rem;
-    padding: 15px;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Forma a uovo magico */
+    position: relative; width: 250px; height: 250px;
+    margin: 2rem auto; padding: 12px;
     background: linear-gradient(145deg, var(--gold), #3d2c0e);
-    box-shadow: 0 0 50px var(--fire);
+    box-shadow: 0 0 50px var(--fire), inset 0 0 20px #000;
     border: 3px solid var(--amber);
-    transition: 0.5s;
-    z-index: 5; position: relative;
-}
-
-.archmage-frame img {
-    max-width: 250px;
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    display: block;
-}
-
-/* BOTTONE TARGA ARROTONDATA */
-.arch-btn {
-    display: inline-block; padding: 1.5rem 4rem;
-    background: var(--ink);
-    color: var(--gold);
-    text-decoration: none;
-    border: 2px solid var(--gold);
-    border-radius: 50px 15px 50px 15px; /* Forma asimmetrica e morbida */
-    transition: 0.4s;
-    cursor: pointer;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    z-index: 5; position: relative;
-}
-
-.arch-btn:hover {
-    background: var(--gold);
-    color: var(--bg-dark);
-    box-shadow: 0 0 30px var(--amber);
-    border-radius: 15px 50px 15px 50px; /* Si inverte al passaggio */
-}
-
-/* CARD INVENTARIO MORBIDE (Emporio) */
-.card {
-    background: var(--ink);
-    border-radius: 30px 5px 30px 5px;
-    border: 1px solid var(--gold);
-    padding: 25px;
-    transition: 0.4s;
-    text-align: center;
-    position: relative;
     z-index: 5;
 }
 
-.card:hover {
-    transform: scale(1.05) rotate(1deg);
-    border-color: var(--fire);
-    box-shadow: 0 0 20px var(--fire);
+.archmage-frame img {
+    width: 100%; height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    border: 2px solid var(--bg-dark);
 }
 
-/* EFFETTI INTERATTIVI SPECIFICI */
-.fire-border { border: 3px solid var(--fire) !important; animation: burn 1s infinite alternate; }
-.spectral-border { border: 3px solid var(--mana) !important; animation: ghost 2s infinite alternate; }
+/* 4. BOTTONI TARGA UNIVERSALI */
+.arch-btn {
+    display: inline-block; padding: 1.2rem 3.5rem;
+    background: var(--ink); color: var(--gold);
+    text-decoration: none; border: 2px solid var(--gold);
+    border-radius: 50px 15px 50px 15px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer; font-family: 'MedievalSharp', serif;
+    font-size: 1.1rem; text-transform: uppercase;
+    position: relative; z-index: 5; margin: 10px;
+}
+.arch-btn:hover {
+    background: var(--gold); color: #000;
+    box-shadow: 0 0 30px var(--amber);
+    border-radius: 15px 50px 15px 50px;
+    transform: scale(1.05);
+}
 
-@keyframes burn { 0% { box-shadow: 0 0 10px var(--fire); } 100% { box-shadow: 0 0 30px var(--fire); } }
-@keyframes ghost { 0% { box-shadow: 0 0 10px var(--mana); } 100% { box-shadow: 0 0 30px var(--mana); } }
-
-/* PERGAMENA CARRELLO */
-.parchment-box {
-    background: #e4d0a6;
-    color: #3d2810;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 20px 20px 0 rgba(0,0,0,0.4);
+/* 5. SISTEMA EMPORIO (Card Inventario) */
+.products-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem; padding: 3rem 1.5rem; max-width: 1100px; width: 100%;
     position: relative; z-index: 5;
 }
+
+.card {
+    background: var(--ink); border: 1px solid var(--gold);
+    border-radius: 30px 5px 30px 5px;
+    padding: 25px; transition: 0.4s; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+}
+.card:hover { border-color: var(--fire); transform: translateY(-10px); }
+
+.item-img { width: 100%; max-width: 180px; height: 180px; object-fit: contain; margin-bottom: 1rem; }
+
+/* 6. PERGAMENA (Carrello e Bollettini) */
+.parchment-box {
+    background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
+    color: #3d2810; border-radius: 20px; padding: 3rem;
+    box-shadow: 0 0 50px #000, 15px 15px 0 rgba(0,0,0,0.3);
+    max-width: 650px; width: 90%; margin: 2rem auto;
+    position: relative; z-index: 5;
+}
+
+/* 7. DECORAZIONI */
+.corner { position: fixed; width: 50px; height: 50px; border: 2px solid var(--gold); opacity: 0.3; z-index: 10; pointer-events: none; }
+.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+.bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+.rune-deco { margin-top: 3rem; color: var(--gold); opacity: 0.4; font-size: 2rem; position: relative; z-index: 5; }
+
+/* 8. EFFETTI SPECIALI */
+.fire-border { animation: burn 1.5s infinite alternate; border: 2px solid var(--fire) !important; }
+@keyframes burn { 0% { box-shadow: 0 0 10px var(--fire); } 100% { box-shadow: 0 0 30px var(--fire); } }
+
+.spectral-border { animation: ghost 2s infinite alternate; border: 2px solid var(--mana) !important; }
+@keyframes ghost { 0% { box-shadow: 0 0 10px var(--mana); } 100% { box-shadow: 0 0 30px var(--mana); } }
