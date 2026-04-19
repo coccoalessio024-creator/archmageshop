@@ -4,44 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Royal Depository - Cart</title>
-  <!-- Google Fonts -->
   <link href="https://googleapis.com" rel="stylesheet">
-  <!-- Link al CSS Esterno -->
   <link rel="stylesheet" href="../style.css">
-  
   <style>
-    /* Reset per centratura e visibilità */
     body { justify-content: flex-start !important; padding: 2rem 0; }
-
-    .item-row { 
-        display: flex; justify-content: space-between; align-items: center; 
-        border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; 
-        color: #3d2b1f;
-    }
-    .remove-btn { 
-        background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; 
-        cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif;
-        font-size: 0.7rem; border-radius: 5px; transition: 0.3s;
-    }
-    .remove-btn:hover { background: #a01e1e; transform: scale(1.05); }
-    
-    .total { 
-        font-size: 2rem; color: #7a1515; display: flex; 
-        justify-content: space-between; font-weight: bold; margin-top: 1rem; 
-    }
-    .back { 
-        display: block; text-align: center; margin-top: 2rem; 
-        color: #3d2b1f; text-decoration: underline; font-weight: bold; 
-    }
+    .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(61, 40, 16, 0.4); padding: 1rem 0; color: #3d2b1f; }
+    .remove-btn { background: #7a1515; border: 1px solid #3d2810; color: #e4d0a6; cursor: pointer; padding: 5px 10px; font-family: 'MedievalSharp', serif; font-size: 0.7rem; border-radius: 5px; }
+    .total { font-size: 2rem; color: #7a1515; display: flex; justify-content: space-between; font-weight: bold; margin-top: 1rem; }
+    .back { display: block; text-align: center; margin-top: 2rem; color: #3d2b1f; text-decoration: underline; font-weight: bold; }
   </style>
 </head>
 <body>
-
   <h1 class="arch-title">The Royal Depository</h1>
-
   <div class="parchment-box">
     <div id="cart-content"></div>
-    
     <div class="summary">
       <div style="display:flex; justify-content:space-between; color: #5c4008; margin-bottom: 0.5rem; font-weight: bold;">
         <span>Arcane Tax (5%)</span>
@@ -52,20 +28,13 @@
         <span id="total-val">0.00 Gold</span>
       </div>
     </div>
-
     <div class="paypal-section">
-      <!-- Bottone PayPal -->
-      <a href="#" id="paypal-link" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
+      <!-- Il bottone che userà il link -->
+      <a href="#" id="paypal-link" target="_blank" class="arch-btn" style="display: block; text-align: center; margin-top: 2rem;">TRIBUTE TO THE BRAVES</a>
       <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:1.5rem; color: #5c4008;">Monitored by the Archmage.</p>
       <a href="index.html" class="back">← Return to Emporium</a>
     </div>
   </div>
-
-  <!-- Decorazioni -->
-  <div class="corner top-left"></div>
-  <div class="corner top-right"></div>
-  <div class="corner bottom-left"></div>
-  <div class="corner bottom-right"></div>
 
   <script>
     function render() {
@@ -84,30 +53,29 @@
           </div>`;
       });
 
-      const tax = subtotal * 0.05;
-      const finalValue = (subtotal + tax).toFixed(2);
-
-      document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
+      const finalValue = (subtotal + (subtotal * 0.05)).toFixed(2);
+      document.getElementById('tax-val').innerText = (subtotal * 0.05).toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = finalValue + " Gold";
       
-      // FIX DEFINITIVO LINK PAYPAL PER @HEAVENCATEN
-      const paypalBtn = document.getElementById('paypal-link');
+      // CONFIGURAZIONE PAYPAL DIRETTA
+      // Ecco dove inseriamo il tuo account:
+      const accountLink = "https://paypal.me/heavencaten";
+      const btn = document.getElementById('paypal-link');
+      
       if (parseFloat(finalValue) > 0) {
-        // Questa riga collega il carrello al tuo account
-        paypalBtn.href = "https://paypal.me" + finalValue;
-        paypalBtn.style.display = 'block';
+        // Uniamo l'indirizzo dell'account con l'importo totale
+        btn.href = accountLink + finalValue;
+        btn.style.display = 'block';
       } else {
-        paypalBtn.style.display = 'none';
+        btn.style.display = 'none';
       }
     }
 
     function removeItem(id) {
       let cart = JSON.parse(localStorage.getItem('magicCart')) || [];
-      cart = cart.filter(item => item.id !== id);
-      localStorage.setItem('magicCart', JSON.stringify(cart));
+      localStorage.setItem('magicCart', JSON.stringify(cart.filter(i => i.id !== id)));
       render();
     }
-
     render();
   </script>
 </body>
