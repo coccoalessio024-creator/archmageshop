@@ -6,6 +6,7 @@
     <title>The Final Awakening</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
+        /* RESET E FONT */
         * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
         body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
 
@@ -16,7 +17,6 @@
             20% { transform: translate(5px, 5px); }
             30% { transform: translate(-5px, 5px); }
             40% { transform: translate(5px, -5px); }
-            50% { transform: translate(-5px, 0); }
             100% { transform: translate(0, 0); }
         }
         .shake-active { animation: earthquake 0.1s linear infinite; }
@@ -36,23 +36,16 @@
             width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; 
             margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); z-index: 150;
         }
-        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.8s; }
+        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff); transition: width 0.8s; }
 
         /* AREA RITUALE */
         .ritual-wrapper { position: relative; width: 100vw; height: 75vh; display: flex; justify-content: center; align-items: center; }
         #actual-mage { height: 95%; max-width: 90%; object-fit: contain; transition: 2s; filter: brightness(0.15) grayscale(1); z-index: 5; }
-        
-        .awakened { 
-            filter: brightness(1.4) grayscale(0) !important; 
-            drop-shadow: 0 0 80px #00fbff !important; 
-        }
+        .awakened { filter: brightness(1.4) grayscale(0) !important; drop-shadow: 0 0 80px #00fbff !important; }
 
         /* LINEE SVG */
         #ritual-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-        .ritual-line {
-            stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff);
-            transition: opacity 1s; opacity: 0;
-        }
+        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); transition: opacity 1s; opacity: 0; }
         .line-active { opacity: 1; }
 
         /* DROP ZONES */
@@ -65,7 +58,7 @@
         .target-slot { width: 100px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
         .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 30px #00fbff) brightness(2) !important; }
 
-        /* GEM STACK */
+        /* GEM STACK VERTICALE */
         .gem-stack { position: fixed; left: 70px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 1000; }
         .gem { width: 80px; cursor: grab; filter: drop-shadow(0 0 15px #fff); transition: 0.3s; user-select: none; }
 
@@ -112,7 +105,7 @@
     </div>
 
     <script>
-        // Generazione Vigne
+        // Setup Vigne
         const vL = document.getElementById('vines-l'); const vR = document.getElementById('vines-r');
         for(let i=0; i<20; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
 
@@ -150,7 +143,6 @@
                 mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
                 
                 if (solved === 4) {
-                    // ATTIVAZIONE SCOSSA E RISVEGLIO
                     document.body.classList.add('shake-active');
                     mage.classList.add('awakened');
                     setTimeout(() => {
@@ -159,6 +151,11 @@
                     }, 1200);
                 }
             }
+        }
+
+        // LOGICA MOVIMENTO PIXEL-PERFECT (UNIFICATA)
+        function getPoint(e) {
+            return e.touches ? e.touches[0] : e;
         }
 
         function onStart(e) {
@@ -172,25 +169,34 @@
 
         function onMove(e) {
             if (!activeItem) return;
-            const point = e.touches ? e.touches[0] : e;
+            const p = getPoint(e);
             activeItem.style.position = 'fixed';
-            activeItem.style.left = (point.clientX - 40) + 'px';
-            activeItem.style.top = (point.clientY - 40) + 'px';
+            // Centra la gemma (40px è metà di 80px)
+            activeItem.style.left = (p.clientX - 40) + 'px';
+            activeItem.style.top = (p.clientY - 40) + 'px';
+            if(e.cancelable) e.preventDefault();
         }
 
         function onEnd(e) {
             if (!activeItem) return;
-            const point = e.changedTouches ? e.changedTouches[0] : e;
-            const dropEl = document.elementFromPoint(point.clientX, point.clientY);
+            const p = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(p.clientX, p.clientY);
             const zone = dropEl ? dropEl.closest('.drop-zone') : null;
+            
             if (zone) handleDrop(activeItem.id, zone.id);
-            activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0';
-            activeItem.style.pointerEvents = 'auto'; activeItem = null;
+            
+            activeItem.style.position = 'relative'; 
+            activeItem.style.left = '0'; 
+            activeItem.style.top = '0';
+            activeItem.style.pointerEvents = 'auto'; 
+            activeItem = null;
         }
 
+        // Listeners Mouse
         document.addEventListener('mousedown', onStart);
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onEnd);
+        // Listeners Touch
         document.addEventListener('touchstart', onStart, {passive:false});
         document.addEventListener('touchmove', onMove, {passive:false});
         document.addEventListener('touchend', onEnd, {passive:false});
