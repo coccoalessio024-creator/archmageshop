@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="loading-overlay" style="position: fixed; inset: 0; background: #0a0a0a; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h2 class="arch-title" style="font-size: 2rem;">Summoning Spirits...</h2>
+    <div style="width: 280px; height: 25px; border: 4px solid #fff; background: #2d2d2d; padding: 2px;">
+        <div id="loading-bar" style="width: 0%; height: 100%; background: #9e1a1a; transition: width 0.2s steps(10);"></div>
+    </div>
+    <p id="loading-text" style="margin-top: 10px; color: #fff; font-family: 'MedievalSharp';">0%</p>
+</div>
+
     <!-- Elementi decorativi -->
     <div class="corner top-left"></div>
     <div class="corner top-right"></div>
@@ -53,5 +61,22 @@
         }
         setInterval(createSpark, 400);
     </script>
+    <script>
+    let w = 0;
+    const interval = setInterval(() => {
+        w += Math.random() * 20;
+        if (w >= 100) {
+            w = 100;
+            clearInterval(interval);
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => document.getElementById('loading-overlay').remove(), 500);
+            }, 400);
+        }
+        document.getElementById('loading-bar').style.width = w + '%';
+        document.getElementById('loading-text').innerText = Math.floor(w) + '%';
+    }, 150);
+</script>
+
 </body>
 </html>
