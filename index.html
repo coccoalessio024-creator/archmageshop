@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Sanctum</title>
-    <!-- Font Corretto -->
+    <!-- Font Medievale -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- Link al CSS Esterno -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="loading-overlay" style="position: fixed; inset: 0; background: #0a0a0a; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <h2 class="arch-title" style="font-size: 2rem;">Summoning Spirits...</h2>
-    <div style="width: 280px; height: 25px; border: 4px solid #fff; background: #2d2d2d; padding: 2px;">
-        <div id="loading-bar" style="width: 0%; height: 100%; background: #9e1a1a; transition: width 0.2s steps(10);"></div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <h2 class="arch-title" style="font-size: 2rem;">Summoning Spirits...</h2>
+        <div class="loading-container">
+            <div id="loading-bar"></div>
+        </div>
+        <p id="loading-text">0%</p>
     </div>
-    <p id="loading-text" style="margin-top: 10px; color: #fff; font-family: 'MedievalSharp';">0%</p>
-</div>
 
-    <!-- Elementi decorativi -->
+    <!-- Cornici decorative -->
     <div class="corner top-left"></div>
     <div class="corner top-right"></div>
     <div class="corner bottom-left"></div>
     <div class="corner bottom-right"></div>
 
+    <!-- Container Principale -->
     <div class="sanctum-container">
         <div class="archmage-frame">
             <img src="archives/Archmage.png.png" alt="The Archmage">
@@ -40,18 +41,32 @@
         <div class="rune-deco">᚛ ᚫ ᚜</div>
     </div>
 
+    <!-- Script Unificato (Caricamento + Scintille) -->
     <script>
+        // Gestione Loading
+        let w = 0;
+        const interval = setInterval(() => {
+            w += Math.random() * 20;
+            if (w >= 100) {
+                w = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    const loader = document.getElementById('loading-overlay');
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }, 400);
+            }
+            document.getElementById('loading-bar').style.width = w + '%';
+            document.getElementById('loading-text').innerText = Math.floor(w) + '%';
+        }, 150);
+
+        // Scintille Magiche
         function createSpark() {
             const spark = document.createElement('div');
-            spark.style.position = 'fixed';
-            spark.style.width = '2px';
-            spark.style.height = '2px';
-            spark.style.background = '#c9932a';
+            spark.className = 'spark';
             spark.style.left = Math.random() * 100 + 'vw';
             spark.style.top = '110vh';
             spark.style.opacity = Math.random();
-            spark.style.transition = 'transform ' + (Math.random() * 5 + 5) + 's linear, opacity 2s';
-            spark.style.zIndex = '1';
             document.body.appendChild(spark);
             setTimeout(() => {
                 spark.style.transform = 'translateY(-120vh) translateX(' + (Math.random() * 100 - 50) + 'px)';
@@ -61,22 +76,5 @@
         }
         setInterval(createSpark, 400);
     </script>
-    <script>
-    let w = 0;
-    const interval = setInterval(() => {
-        w += Math.random() * 20;
-        if (w >= 100) {
-            w = 100;
-            clearInterval(interval);
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.opacity = '0';
-                setTimeout(() => document.getElementById('loading-overlay').remove(), 500);
-            }, 400);
-        }
-        document.getElementById('loading-bar').style.width = w + '%';
-        document.getElementById('loading-text').innerText = Math.floor(w) + '%';
-    }, 150);
-</script>
-
 </body>
 </html>
