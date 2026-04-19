@@ -6,39 +6,31 @@
   <title>The Archmage's Emporium</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-  <!-- Link al CSS Esterno (esce dalla cartella emporium con ../) -->
+  <!-- Link al CSS Esterno (Esce dalla cartella con ../) -->
   <link rel="stylesheet" href="../style.css">
   
   <style>
-    /* Manteniamo qui solo gli effetti specifici degli oggetti per non appesantire il CSS generale */
-    .products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2.5rem; padding: 3rem 1.5rem; max-width: 80rem; margin: 0 auto;
-      position: relative; z-index: 5;
-    }
-    .item-img { width: 100%; max-width: 180px; height: 180px; object-fit: contain; margin-bottom: 1rem; }
-    
+    /* Stili specifici per l'animazione degli oggetti */
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @keyframes fire-glow { 0% { box-shadow: 0 0 10px #ff4d00; } 100% { box-shadow: 0 0 30px #ff9500; } }
-    @keyframes spectral-glow { 0% { box-shadow: 0 0 10px #4fffe0; } 100% { box-shadow: 0 0 30px #2a93c9; } }
-
-    .fire-border { animation: fire-glow 1.5s infinite alternate; border-color: #ff4d00 !important; }
-    .fire-border .item-img { animation: float 3s ease-in-out infinite; }
-    .spectral-border { animation: spectral-glow 2s infinite alternate; border-color: #4fffe0 !important; }
-    .spectral-border .item-img { animation: float 4s ease-in-out infinite; }
     
+    .fire-border .item-img { animation: float 3s ease-in-out infinite; }
+    .spectral-border .item-img { animation: float 4s ease-in-out infinite; }
+
+    /* Fix per la navigazione superiore */
     .tavern-header {
       position: sticky; top: 0; z-index: 50; padding: 1rem 1.5rem;
       background: linear-gradient(180deg, #050301 0%, #120a04 100%);
-      border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center;
+      width: 100%; box-sizing: border-box;
     }
     .nav-link { color: var(--gold); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; font-size: 14px; }
+    .nav-link:hover { color: var(--amber); text-shadow: 0 0 5px var(--fire); }
   </style>
 </head>
 <body>
 
   <header class="tavern-header">
-    <span class="tavern-sign" style="color: var(--gold); font-size: 1.5rem;">The Emporium</span>
+    <span class="tavern-sign" style="color: var(--gold); font-size: 1.5rem; font-weight: bold;">The Emporium</span>
     <nav>
       <a href="../index.html" class="nav-link">Sanctum</a>
       <a href="bulletins.html" class="nav-link">Bulletins</a>
@@ -46,42 +38,50 @@
     </nav>
   </header>
 
-  <section class="hero" style="text-align: center; padding: 3rem 1rem;">
-    <!-- Classe metallica applicata qui -->
+  <section class="hero" style="text-align: center; width: 100%;">
     <h1 class="arch-title">Magical Trinkets</h1>
-    <p style="color: var(--gold); font-style: italic;">Artifacts of moderate power and questionable stability.</p>
+    <p style="color: var(--gold); font-style: italic; margin-top: -1rem;">"Artifacts of moderate power and questionable stability."</p>
   </section>
 
   <main class="products-grid">
+    <!-- Invisibility Brew -->
     <article class="card fire-border">
       <img src="../archives/invisibilitybrew.png.png" class="item-img" alt="Brew">
       <h3>Invisibility Brew</h3>
-      <p style="color: var(--gold-bright); font-size: 1.4rem;">45 Gold</p>
-      <!-- Classe bottone universale applicata qui -->
+      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">45 Gold</p>
       <button class="arch-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cauldron</button>
     </article>
 
+    <!-- Ring of Silence -->
     <article class="card">
       <img src="../archives/silentring.png.png" class="item-img" alt="Ring">
       <h3>Ring of Silence</h3>
-      <p style="color: var(--gold-bright); font-size: 1.4rem;">120 Gold</p>
+      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">120 Gold</p>
       <button class="arch-btn" onclick="addToCart('Silence Ring', 120)">Add to Cauldron</button>
     </article>
     
+    <!-- Magic Mirror -->
     <article class="card spectral-border">
       <img src="../archives/magicmirror.png.png" class="item-img" alt="Mirror">
       <h3>Magic Mirror</h3>
-      <p style="color: var(--gold-bright); font-size: 1.4rem;">55 Gold</p>
+      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">55 Gold</p>
       <button class="arch-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cauldron</button>
     </article>
     
+    <!-- Treasure Map -->
     <article class="card">
       <img src="../archives/treasuremap.png.png" class="item-img" alt="Map">
       <h3>Treasure Map</h3>
-      <p style="color: var(--gold-bright); font-size: 1.4rem;">15 Gold</p>
+      <p style="color: var(--amber); font-size: 1.4rem; margin: 0.5rem 0;">15 Gold</p>
       <button class="arch-btn" onclick="addToCart('Treasure Map', 15)">Add to Cauldron</button>
     </article>
   </main>
+
+  <!-- Angoli decorativi -->
+  <div class="corner top-left"></div>
+  <div class="corner top-right"></div>
+  <div class="corner bottom-left"></div>
+  <div class="corner bottom-right"></div>
 
   <script>
     function addToCart(name, price) {
