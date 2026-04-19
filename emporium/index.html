@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Archmage's Emporium</title>
+  <!-- Link Font MedievalSharp -->
   <link href="https://googleapis.com" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   
@@ -70,16 +71,41 @@
     @keyframes rotateCoin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     .coin-inner img { width: 90%; filter: drop-shadow(0 0 15px #ff4500); }
 
-    /* SIDEBAR */
+    /* SIDEBAR (Desktop) / PANEL (Mobile) */
     #checkout-sidebar {
       width: 0; height: calc(100vh - 72px); position: sticky; top: 72px;
       background: linear-gradient(180deg, #2a1a0a 0%, #1a120b 100%);
       border-left: 0px solid #d4af37; overflow: hidden; display: flex; flex-direction: column;
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1001;
     }
+
     #checkout-sidebar.visible { width: 350px; border-left: 3px solid #d4af37; padding: 2rem 1.5rem; }
 
-    /* CERTIFICATO SEGRETO (EFFETTO POKEBALL) */
+    /* FIX SPECIFICO PER MOBILE */
+    @media (max-width: 768px) {
+        #checkout-sidebar {
+            position: fixed; bottom: 0; top: auto; left: 0;
+            width: 100%; height: 0; border-left: none;
+        }
+        #checkout-sidebar.visible {
+            height: 50vh; /* Compare dal basso */
+            border-top: 3px solid #d4af37;
+            padding: 1.5rem;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+        }
+        .main-wrapper { flex-direction: column; }
+        .products-grid { padding-bottom: 55vh; } /* Evita che il carrello copra i prodotti */
+    }
+
+    /* ELEMENTI CARRELLO */
+    .recap-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #d4af37; }
+    .remove-tiny { background: #7a1515; color: white; border: 1px solid #d4af37; padding: 2px 6px; cursor: pointer; border-radius: 3px; }
+    .sidebar-btn { background: #7a1515; color: white; padding: 15px; text-align: center; text-decoration: none; border: 2px solid #d4af37; margin-top: auto; font-weight: bold; }
+    .price-tag { color: #ffcc00; font-size: 1.2rem; margin: 10px 0; }
+    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: 'MedievalSharp'; }
+
+    /* CERTIFICATO SEGRETO */
     .secret-warranty-card {
         grid-column: 1 / -1; display: flex; flex-direction: column;
         align-items: center; margin-top: 4rem; padding-bottom: 3rem;
@@ -98,11 +124,6 @@
         25% { transform: rotate(-8deg); }
         75% { transform: rotate(8deg); }
     }
-
-    .price-tag { color: #ffcc00; font-size: 1.2rem; margin: 10px 0; }
-    .small-buy-btn { background: #8b4513; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-    .recap-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #d4af37; }
-    .sidebar-btn { background: #7a1515; color: white; padding: 15px; text-align: center; text-decoration: none; border: 2px solid #d4af37; margin-top: auto; }
   </style>
 </head>
 <body>
@@ -117,8 +138,7 @@
 
   <div class="main-wrapper">
     <main class="products-grid">
-      
-      <!-- Manufatti Classici -->
+      <!-- Invisibility Brew -->
       <article class="card">
         <img src="../archives/invisibilitybrew.png.png" class="item-img" onclick="addToCart('Invisibility Brew', 45)">
         <h3>Invisibility Brew</h3>
@@ -126,6 +146,7 @@
         <button class="small-buy-btn" onclick="addToCart('Invisibility Brew', 45)">Add to Cart</button>
       </article>
 
+      <!-- Silence Ring -->
       <article class="card">
         <img src="../archives/silentring.png.png" class="item-img" onclick="addToCart('Silence Ring', 120)">
         <h3>Ring of Silence</h3>
@@ -133,6 +154,7 @@
         <button class="small-buy-btn" onclick="addToCart('Silence Ring', 120)">Add to Cart</button>
       </article>
 
+      <!-- Magic Mirror -->
       <article class="card">
         <img src="../archives/magicmirror.png.png" class="item-img" onclick="addToCart('Magic Mirror', 55)">
         <h3>Magic Mirror</h3>
@@ -140,6 +162,7 @@
         <button class="small-buy-btn" onclick="addToCart('Magic Mirror', 55)">Add to Cart</button>
       </article>
 
+      <!-- Treasure Map -->
       <article class="card">
         <img src="../archives/treasuremap.png.png" class="item-img" onclick="addToCart('Treasure Map', 15)">
         <h3>Treasure Map</h3>
@@ -147,7 +170,7 @@
         <button class="small-buy-btn" onclick="addToCart('Treasure Map', 15)">Add to Cart</button>
       </article>
 
-      <!-- Servizi dell'Arcimago -->
+      <!-- Blessing -->
       <article class="card">
         <img src="../archives/blessing.png" class="item-img" onclick="addToCart('Archmage Blessing', 10)">
         <h3>Archmage's Blessing</h3>
@@ -155,6 +178,7 @@
         <button class="small-buy-btn" onclick="addToCart('Archmage Blessing', 10)">Add to Cart</button>
       </article>
 
+      <!-- Buff -->
       <article class="card">
         <img src="../archives/buff.png" class="item-img" onclick="addToCart('Archmage Buff', 5)">
         <h3>Archmage's Buff</h3>
@@ -175,6 +199,7 @@
         <button class="small-buy-btn" onclick="addToCart('Toilet Token', 2)">Add to Cart</button>
       </article>
 
+      <!-- Archmage Hug -->
       <article class="card">
         <img src="../archives/hugtoken.png" class="item-img" onclick="addToCart('Archmage Hug', 0.5)">
         <h3>Archmage's Hug</h3>
@@ -189,13 +214,13 @@
           </a>
           <p style="font-size: 0.7rem; color: rgba(212, 175, 55, 0.4); margin-top: 10px;">"A true seeker looks beyond the surface."</p>
       </article>
-
     </main>
 
+    <!-- SIDEBAR RECAP -->
     <aside id="checkout-sidebar">
       <h2 style="color:#d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Order Manifest</h2>
       <div id="recap-list" style="flex: 1; overflow-y: auto;"></div>
-      <div id="total-price" style="font-size: 1.5rem; color: #ffcc00; padding: 15px 0;">Total: 0.00 Gold</div>
+      <div id="total-price" style="font-size: 1.4rem; color: #ffcc00; padding: 15px 0;">Total: 0.00 Gold</div>
       <a href="cart.html" class="sidebar-btn">PROCEED TO CHECKOUT →</a>
     </aside>
   </div>
@@ -222,7 +247,7 @@
       const totalPrice = document.getElementById('total-price');
       const countEl = document.getElementById('cart-count');
 
-      countEl.innerText = cart.length;
+      if(countEl) countEl.innerText = cart.length;
       recapList.innerHTML = '';
       let total = 0;
       cart.forEach(item => {
