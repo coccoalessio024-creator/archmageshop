@@ -13,35 +13,60 @@
             font-family: 'MedievalSharp', serif !important; 
         }
 
-        body { background: #140f0a; color: #f3e5ab; margin: 0; overflow: hidden; height: 100vh; }
+        body { 
+            background: #140f0a; 
+            color: #f3e5ab; 
+            margin: 0; 
+            overflow: hidden; 
+            height: 100vh; 
+        }
 
-        /* LOGO FISSO ANGOLO */
+        /* LOGO FISSO ANGOLO - Slegato da tutto, sempre in primo piano */
         .brand-logo-fixed {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 70px; z-index: 1000;
-            filter: drop-shadow(0 0 5px #d4af37);
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px;
+            width: 80px; 
+            z-index: 2000; /* Sopra ogni altra cosa */
+            filter: drop-shadow(0 0 8px #d4af37);
+            transition: 0.5s;
         }
+        .brand-logo-fixed:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
 
-        /* PERGAMENE LATERALI */
+        /* PERGAMENE LATERALI - PIÙ LARGHE E CHIUSURA PARZIALE */
         .welcome-scroll {
-            position: fixed; top: 0; width: 130px; height: 100%;
-            background: #fdf5e6; border: 2px solid #8b4513; 
-            z-index: 500; transition: transform 1.5s ease-in-out;
-            display: flex; flex-direction: column; align-items: center; padding-top: 2rem;
-            color: #3d2b1f; text-align: center;
+            position: fixed; 
+            top: 0; 
+            width: 180px; /* Allargate per incorniciare meglio */
+            height: 100%;
+            background: #fdf5e6; 
+            background-image: url('https://transparenttextures.com');
+            border: 3px solid #8b4513; 
+            z-index: 500; 
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding-top: 2rem;
+            color: #3d2b1f; 
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
         }
-        .scroll-left { left: 0; transform: translateY(0); }
-        .scroll-right { right: 0; transform: translateY(0); }
-        .welcome-scroll.rolled { transform: translateY(-100%); }
+        .scroll-left { left: 0; border-radius: 0 0 30px 0; }
+        .scroll-right { right: 0; border-radius: 0 0 0 30px; }
 
-        /* CORIANDOLI DI SISTEMA (🧪) */
-        .potion-particle {
+        /* CHIUSURA PARZIALE: lascia 40px visibili in alto */
+        .welcome-scroll.rolled { transform: translateY(-92%); cursor: pointer !important; }
+        .welcome-scroll.rolled:hover { transform: translateY(-88%); }
+
+        /* PIOGGIA MAGICA DI EMOJI */
+        .magic-particle {
             position: fixed;
-            font-size: 24px;
+            font-size: 28px;
             pointer-events: none;
             z-index: 1500;
             animation: fall linear forwards;
-            filter: drop-shadow(0 0 5px #00ff00); /* Bagliore magico verde */
+            filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
         }
 
         @keyframes fall {
@@ -51,31 +76,41 @@
 
         /* CONTENUTO CENTRALE */
         .sanctum-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; text-align: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            height: 100vh; 
+            text-align: center;
+            padding: 0 200px; /* Spazio per non sovrapporsi alle pergamene larghe */
         }
 
         .archmage-frame {
-            width: 240px; height: 240px; border-radius: 50%;
+            width: 260px; height: 260px; border-radius: 50%;
             border: 4px solid #d4af37; overflow: hidden;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
-            margin-bottom: 1rem;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+            margin-bottom: 1.5rem;
+            background: #1a120b;
         }
         .archmage-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        .actions-row { display: flex; gap: 15px; margin-top: 1.5rem; justify-content: center; }
+        .actions-row { display: flex; gap: 20px; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
+        .arch-title { font-size: 3.2rem; color: #d4af37; margin: 0; text-shadow: 0 0 10px #000; }
     </style>
 </head>
 <body>
 
-    <!-- PERGAMENE -->
-    <div class="welcome-scroll scroll-left" id="s-left">
-        <h3 style="color:#7a1515; font-size: 0.9rem;">WELCOME</h3>
-        <p>✧<br>Adept<br>of the<br>Arts<br>✧</p>
+    <!-- PERGAMENE LATERALI (Cliccabili per riaprirle se chiuse) -->
+    <div class="welcome-scroll scroll-left" id="s-left" onclick="this.classList.toggle('rolled')">
+        <h3 style="color:#7a1515; font-size: 1.1rem;">WELCOME</h3>
+        <p>✧<br>Adept<br>of the<br>Ancient<br>Arts<br>✧</p>
+        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.6rem;">(Click to Toggle)</small>
     </div>
-    <div class="welcome-scroll scroll-right" id="s-right">
-        <h3 style="color:#7a1515; font-size: 0.9rem;">REJOICE</h3>
-        <p>✧<br>The Lore<br>is<br>Open<br>✧</p>
+    
+    <div class="welcome-scroll scroll-right" id="s-right" onclick="this.classList.toggle('rolled')">
+        <h3 style="color:#7a1515; font-size: 1.1rem;">REJOICE</h3>
+        <p>✧<br>The Lore<br>of the<br>Void<br>Open<br>✧</p>
+        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.6rem;">(Click to Toggle)</small>
     </div>
 
     <div class="sanctum-container">
@@ -83,38 +118,42 @@
             <img src="archives/Archmage.png.png" alt="The Archmage">
         </div>
         
-        <h1 style="font-size: 2.8rem; color: #d4af37; margin: 0;">The Archmage</h1>
-        <p style="font-style: italic; max-width: 500px;">"Rejoice in the light of guidance of The Archmage."</p>
+        <h1 class="arch-title">The Archmage</h1>
+        <p style="font-style: italic; max-width: 550px; font-size: 1.1rem;">"Rejoice in the light of guidance of The Archmage."</p>
         
         <div class="actions-row">
-            <a href="emporium/index.html" class="arch-btn">EMPORIUM</a>
+            <a href="emporium/index.html" class="arch-btn">THE EMPORIUM</a>
             <a href="emporium/bulletins.html" class="arch-btn" style="background: #2a1a0a;">BULLETINS</a>
             <a href="trial.html" class="arch-btn" style="background: #4a0404; border-color: #ffcc00;">THE TRIAL</a>
         </div>
     </div>
 
+    <!-- LOGO FISSO SEMPRE VISIBILE -->
     <a href="secret.html" class="brand-logo-fixed">
         <img src="archives/logo_archmage.png" alt="Logo" style="width: 100%;">
     </a>
 
     <script>
         window.onload = function() {
-            // PIOGGIA DI POZIONI DI SISTEMA (🧪)
-            for (let i = 0; i < 6; i++) {
+            // PIOGGIA MAGICA VARIATA (🧪, 🧙‍♂️, 🔮, ✨, 💎)
+            const magicIcons = ['🧪', '⚗️', '🔮', '✨', '🧙‍♂️', '💎', '📜', '💙', '❤️'];
+            
+            for (let i = 0; i < 12; i++) {
                 setTimeout(() => {
                     const p = document.createElement('div');
-                    p.innerHTML = '🧪'; // Icona pozione di sistema
-                    p.className = 'potion-particle';
-                    p.style.left = (Math.random() * 90) + 'vw';
-                    p.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    p.innerHTML = magicIcons[Math.floor(Math.random() * magicIcons.length)];
+                    p.className = 'magic-particle';
+                    p.style.left = (Math.random() * 95) + 'vw';
+                    p.style.animationDuration = (Math.random() * 3 + 2) + 's';
                     document.body.appendChild(p);
                     setTimeout(() => p.remove(), 5000);
-                }, i * 400);
+                }, i * 300);
             }
 
-            // CHIUSURA PERGAMENE
+            // CHIUSURA AUTOMATICA PARZIALE DOPO 15 SECONDI
             setTimeout(() => {
-                document.querySelectorAll('.welcome-scroll').forEach(s => s.classList.add('rolled'));
+                document.getElementById('s-left').classList.add('rolled');
+                document.getElementById('s-right').classList.add('rolled');
             }, 15000);
         };
     </script>
