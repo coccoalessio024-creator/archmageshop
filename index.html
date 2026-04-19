@@ -7,7 +7,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* FONT GLOBALE */
+        /* FORZA FONT E CURSORE */
         * { font-family: 'MedievalSharp', serif !important; }
 
         body { 
@@ -21,16 +21,20 @@
             align-items: center;
         }
 
-        /* LOGO FISSO ANGOLO */
+        /* LOGO FISSO ANGOLO - IMPONENTE */
         .brand-logo-fixed {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 80px; z-index: 2000;
-            filter: drop-shadow(0 0 8px #d4af37);
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px;
+            width: 120px; 
+            z-index: 2000;
+            filter: drop-shadow(0 0 15px #d4af37);
             transition: 0.5s;
+            display: block;
         }
-        .brand-logo-fixed:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
+        .brand-logo-fixed:hover { transform: scale(1.1); filter: drop-shadow(0 0 25px #ffcc00); }
 
-        /* PERGAMENE LATERALI (BENVENUTO) */
+        /* PERGAMENE LATERALI */
         .welcome-scroll {
             position: fixed; top: 0; width: 180px; height: 100%;
             background: #fdf5e6 url('https://transparenttextures.com');
@@ -44,70 +48,52 @@
         .scroll-right { right: 0; border-radius: 0 0 0 30px; }
         .welcome-scroll.rolled { transform: translateY(-92%); cursor: pointer; }
 
-        /* CONTENUTO CENTRALE - RE-DESIGN PC */
+        /* CONTENUTO CENTRALE */
         .sanctum-container {
-            position: relative;
             display: flex; flex-direction: column; align-items: center;
-            z-index: 10; width: 100%; max-width: 1200px;
+            z-index: 10; width: 100%; text-align: center;
         }
 
-        /* RITRATTO ARCIMAGO (PIÙ GRANDE) */
         .archmage-frame {
-            width: 320px; height: 320px; border-radius: 50%;
+            width: 350px; height: 350px; border-radius: 50%;
             border: 6px solid #d4af37; overflow: hidden;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.7);
-            background: #1a120b; margin-bottom: 20px;
-            transition: 0.5s;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.8);
+            background: #1a120b; margin-bottom: 25px;
         }
-        .archmage-frame img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
+        .archmage-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* TITOLI */
-        .arch-title { font-size: 4rem; color: #d4af37; margin: 0; text-shadow: 0 0 20px #000; }
-        .intro-text { font-style: italic; font-size: 1.3rem; margin-bottom: 30px; max-width: 600px; text-align: center; }
+        .arch-title { font-size: 4.5rem; color: #d4af37; margin: 0; text-shadow: 0 0 20px #000; }
+        .intro-text { font-style: italic; font-size: 1.4rem; margin-bottom: 40px; }
 
-        /* BOTTONI STILE PERGAMENA ORIZZONTALE */
-        .actions-row { 
-            display: flex; gap: 30px; justify-content: center; align-items: center; 
-            width: 100%; padding: 20px;
+        /* BOTTONI CLASSICI */
+        .actions-row { display: flex; gap: 25px; justify-content: center; align-items: center; }
+
+        .arch-btn {
+            display: flex; align-items: center; gap: 12px;
+            background: #4a0404; color: #f3e5ab; padding: 15px 30px;
+            text-decoration: none; border: 2px solid #d4af37;
+            font-weight: bold; font-size: 1.2rem; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
+        .arch-btn:hover { background: #7a1515; transform: translateY(-5px); box-shadow: 0 10px 20px #d4af37; }
+        .btn-icon { width: 24px; height: 24px; object-fit: contain; }
 
-        .scroll-btn {
-            position: relative;
-            background: #fdf5e6 url('https://transparenttextures.com');
-            color: #3d2b1f;
-            padding: 15px 40px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border: 2px solid #8b4513;
-            border-radius: 5px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-            transition: 0.3s;
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        /* Potion mini come decorazione */
-        .scroll-btn::before {
-            content: '';
-            width: 24px; height: 24px;
-            background: url('archives/potionmini.png') no-repeat center/contain;
-            display: inline-block;
+        /* PIOGGIA DI RUNE ARCANO-DORATE */
+        .magic-rune {
+            position: fixed;
+            color: #d4af37;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 1500;
+            animation: fall linear forwards;
+            text-shadow: 0 0 10px #ffcc00;
+            font-family: serif !important;
         }
 
-        .scroll-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 0 20px #d4af37;
-            background-color: #fff;
-        }
-
-        /* PIOGGIA MAGICA */
-        .magic-particle {
-            position: fixed; font-size: 28px; pointer-events: none; z-index: 1500;
-            animation: fall linear forwards; filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
-        }
         @keyframes fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -115,15 +101,15 @@
 
     <!-- PERGAMENE LATERALI -->
     <div class="welcome-scroll scroll-left" id="s-left" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.1rem;">WELCOME MORTAL</h3>
+        <h3 style="color:#7a1515; font-size: 1.2rem;">WELCOME MORTAL</h3>
         <p>✧<br>Adept<br>of the<br>Ancient<br>Arts<br>✧</p>
-        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.6rem;">(Click to Toggle)</small>
+        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.7rem;">(Click to Toggle)</small>
     </div>
     
     <div class="welcome-scroll scroll-right" id="s-right" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.1rem;">REJOICE</h3>
+        <h3 style="color:#7a1515; font-size: 1.2rem;">REJOICE</h3>
         <p>✧<br>The Lore<br>of the<br>Void<br>Open<br>✧</p>
-        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.6rem;">(Click to Toggle)</small>
+        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.7rem;">(Click to Toggle)</small>
     </div>
 
     <div class="sanctum-container">
@@ -135,34 +121,45 @@
         <p class="intro-text">"Rejoice in the light of guidance of The Archmage."</p>
         
         <div class="actions-row">
-            <a href="emporium/index.html" class="scroll-btn">THE EMPORIUM</a>
-            <a href="emporium/bulletins.html" class="scroll-btn" style="filter: sepia(0.5);">BULLETINS</a>
-            <a href="trial.html" class="scroll-btn" style="border-color: #7a1515;">THE TRIAL</a>
+            <a href="emporium/index.html" class="arch-btn">
+                <img src="archives/potionmini.png" class="btn-icon"> THE EMPORIUM
+            </a>
+            <a href="emporium/bulletins.html" class="arch-btn" style="background: #2a1a0a;">
+                <img src="archives/potionmini.png" class="btn-icon"> BULLETINS
+            </a>
+            <a href="trial.html" class="arch-btn" style="background: #1a1a1a; border-color: #7a1515;">
+                <img src="archives/potionmini.png" class="btn-icon"> THE TRIAL
+            </a>
         </div>
     </div>
 
-    <!-- LOGO FISSO -->
     <a href="secret.html" class="brand-logo-fixed">
         <img src="archives/logo_archmage.png" alt="Logo" style="width: 100%;">
     </a>
 
     <script>
         window.onload = function() {
-            const magicIcons = ['🧪', '⚗️', '🔮', '✨', '🧙‍♂️', '💎', '📜', '💙', '❤️'];
-            for (let i = 0; i < 12; i++) {
+            // PIOGGIA DI RUNE
+            const runes = ['✧', '✦', '⚛', '⌬', '⚿', '⛤', '♅', '𐕣', '✨'];
+            for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const p = document.createElement('div');
-                    p.innerHTML = magicIcons[Math.floor(Math.random() * magicIcons.length)];
-                    p.className = 'magic-particle';
+                    p.innerHTML = runes[Math.floor(Math.random() * runes.length)];
+                    p.className = 'magic-rune';
                     p.style.left = (Math.random() * 95) + 'vw';
-                    p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    p.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                    p.style.animationDuration = (Math.random() * 3 + 4) + 's';
                     document.body.appendChild(p);
-                    setTimeout(() => p.remove(), 5000);
-                }, i * 300);
+                    setTimeout(() => p.remove(), 7000);
+                }, i * 400);
             }
+            
+            // CHIUSURA AUTOMATICA
             setTimeout(() => {
-                document.getElementById('s-left').classList.add('rolled');
-                document.getElementById('s-right').classList.add('rolled');
+                const left = document.getElementById('s-left');
+                const right = document.getElementById('s-right');
+                if(left) left.classList.add('rolled');
+                if(right) right.classList.add('rolled');
             }, 15000);
         };
     </script>
