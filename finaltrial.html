@@ -6,22 +6,25 @@
     <title>The Final Awakening</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        /* RESET E FONT */
-        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
-        body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
+        * { font-family: 'MedievalSharp', serif !important; -webkit-user-drag: none; box-sizing: border-box; }
+        
+        body { 
+            background: #050505; color: #00fbff; margin: 0; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; overflow-x: hidden;
+            overflow-y: auto; /* Permette lo scroll per raggiungere le gemme */
+        }
 
         /* EFFETTO SCOSSA */
         @keyframes earthquake {
             0% { transform: translate(0, 0); }
             10% { transform: translate(-5px, -5px); }
             20% { transform: translate(5px, 5px); }
-            30% { transform: translate(-5px, 5px); }
-            40% { transform: translate(5px, -5px); }
             100% { transform: translate(0, 0); }
         }
         .shake-active { animation: earthquake 0.1s linear infinite; }
 
-        /* FASCIA ARCANO E VIGNE */
+        /* VIGNE E FASCIA ARCANO */
         .arcane-border {
             position: fixed; top: 0; bottom: 0; width: 50px; background: rgba(0, 251, 255, 0.1);
             box-shadow: 0 0 30px rgba(0, 251, 255, 0.3); display: flex; flex-direction: column; 
@@ -31,36 +34,48 @@
         .b-right { right: 0; border-left: 1px solid #00fbff; }
         .vine-leaf { font-size: 1.2rem; filter: drop-shadow(0 0 5px #00ff00); }
 
-        /* DIVINE BAR */
+        /* DIVINE BAR STICKY */
         .divine-container { 
             width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; 
-            margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); z-index: 150;
+            margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); 
+            z-index: 150; position: sticky; top: 10px; flex-shrink: 0;
         }
-        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff); transition: width 0.8s; }
+        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.8s; }
 
         /* AREA RITUALE */
-        .ritual-wrapper { position: relative; width: 100vw; height: 75vh; display: flex; justify-content: center; align-items: center; }
-        #actual-mage { height: 95%; max-width: 90%; object-fit: contain; transition: 2s; filter: brightness(0.15) grayscale(1); z-index: 5; }
+        .ritual-wrapper { 
+            position: relative; width: 100vw; height: 75vh; 
+            display: flex; justify-content: center; align-items: center; 
+            flex-shrink: 0;
+        }
+        #actual-mage { height: 90%; max-width: 90%; object-fit: contain; transition: 2s; filter: brightness(0.15) grayscale(1); z-index: 5; }
         .awakened { filter: brightness(1.4) grayscale(0) !important; drop-shadow: 0 0 80px #00fbff !important; }
 
         /* LINEE SVG */
         #ritual-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); transition: opacity 1s; opacity: 0; }
+        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); opacity: 0; }
         .line-active { opacity: 1; }
 
         /* DROP ZONES */
-        .drop-zone { position: absolute; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; z-index: 20; }
+        .drop-zone { position: absolute; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; z-index: 20; }
         #zone-head { top: 5%; left: 50%; transform: translateX(-50%); }
         #zone-heart { top: 35%; left: 50%; transform: translateX(-50%); }
         #zone-hand { top: 45%; left: 25%; }
         #zone-base { bottom: 10%; left: 50%; transform: translateX(-50%); }
 
-        .target-slot { width: 100px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
+        .target-slot { width: 90px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
         .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 30px #00fbff) brightness(2) !important; }
 
-        /* GEM STACK VERTICALE */
-        .gem-stack { position: fixed; left: 70px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 1000; }
-        .gem { width: 80px; cursor: grab; filter: drop-shadow(0 0 15px #fff); transition: 0.3s; user-select: none; }
+        /* GEM STACK IN BASSO (Scorri per prenderle) */
+        .gem-stack { 
+            display: flex; justify-content: center; gap: 20px; 
+            padding: 40px 0 80px 0; z-index: 1000; width: 100%;
+        }
+        .gem { 
+            width: 85px; height: 85px; cursor: grab; 
+            filter: drop-shadow(0 0 15px #fff); transition: 0.3s; 
+            touch-action: none;
+        }
 
         #ascension-msg {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -78,14 +93,10 @@
 
     <div class="ritual-wrapper" id="capture-area">
         <svg id="ritual-svg">
-            <line id="line1" class="ritual-line" />
-            <line id="line2" class="ritual-line" />
-            <line id="line3" class="ritual-line" />
-            <line id="line4" class="ritual-line" />
+            <line id="line1" class="ritual-line" /><line id="line2" class="ritual-line" />
+            <line id="line3" class="ritual-line" /><line id="line4" class="ritual-line" />
         </svg>
-
         <img src="archives/actualmage.png" id="actual-mage">
-        
         <div class="drop-zone" id="zone-head"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-hand"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-base"><img src="archives/coinslot.png" class="target-slot"></div>
@@ -101,25 +112,23 @@
 
     <div id="ascension-msg">
         <h1 style="color:#fff; font-size: 3rem;">VOID-ASCENSION-000</h1>
-        <a href="index.html" style="color:#d4af37; text-decoration: none; font-weight: bold;">[ TRANSCEND ]</a>
+        <a href="index.html" style="color:#d4af37; text-decoration: none;">[ TRANSCEND ]</a>
     </div>
 
     <script>
-        // Setup Vigne
         const vL = document.getElementById('vines-l'); const vR = document.getElementById('vines-r');
-        for(let i=0; i<20; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
+        for(let i=0; i<25; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
 
         let solved = 0;
         let activeItem = null;
-        const zones = ['zone-head', 'zone-hand', 'zone-base', 'zone-heart'];
+        const zonesOrder = ['zone-head', 'zone-hand', 'zone-base', 'zone-heart'];
 
         function updateLines() {
             const area = document.getElementById('capture-area').getBoundingClientRect();
-            const points = zones.map(id => {
+            const points = zonesOrder.map(id => {
                 const rect = document.getElementById(id).getBoundingClientRect();
                 return { x: rect.left + rect.width/2 - area.left, y: rect.top + rect.height/2 - area.top };
             });
-
             for(let i=0; i < solved; i++) {
                 let line = document.getElementById('line' + (i+1));
                 let nextIdx = (i + 1) % 4;
@@ -138,10 +147,8 @@
                 solved++;
                 document.getElementById('divine-fill').style.width = (solved * 25) + '%';
                 updateLines();
-                
                 const mage = document.getElementById('actual-mage');
                 mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
-                
                 if (solved === 4) {
                     document.body.classList.add('shake-active');
                     mage.classList.add('awakened');
@@ -153,53 +160,45 @@
             }
         }
 
-        // LOGICA MOVIMENTO PIXEL-PERFECT (UNIFICATA)
-        function getPoint(e) {
-            return e.touches ? e.touches[0] : e;
-        }
-
+        // GESTORE UNIFICATO PIXEL-PERFECT
         function onStart(e) {
-            const target = e.target.closest('.gem');
-            if (target) {
-                activeItem = target;
-                activeItem.style.zIndex = "2000";
+            if (e.target.classList.contains('gem')) {
+                activeItem = e.target;
+                activeItem.style.zIndex = "5000";
                 activeItem.style.pointerEvents = 'none';
             }
         }
 
         function onMove(e) {
             if (!activeItem) return;
-            const p = getPoint(e);
+            if (e.cancelable) e.preventDefault(); // Blocca scroll solo se trascino
+            const point = e.touches ? e.touches[0] : e;
             activeItem.style.position = 'fixed';
-            // Centra la gemma (40px è metà di 80px)
-            activeItem.style.left = (p.clientX - 40) + 'px';
-            activeItem.style.top = (p.clientY - 40) + 'px';
-            if(e.cancelable) e.preventDefault();
+            // Centra la gemma esattamente (metà di 85px = 42px)
+            activeItem.style.left = (point.clientX - 42) + 'px';
+            activeItem.style.top = (point.clientY - 42) + 'px';
         }
 
         function onEnd(e) {
             if (!activeItem) return;
-            const p = e.changedTouches ? e.changedTouches[0] : e;
-            const dropEl = document.elementFromPoint(p.clientX, p.clientY);
+            const point = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(point.clientX, point.clientY);
             const zone = dropEl ? dropEl.closest('.drop-zone') : null;
             
             if (zone) handleDrop(activeItem.id, zone.id);
             
-            activeItem.style.position = 'relative'; 
-            activeItem.style.left = '0'; 
-            activeItem.style.top = '0';
-            activeItem.style.pointerEvents = 'auto'; 
+            activeItem.style.position = 'relative';
+            activeItem.style.left = '0'; activeItem.style.top = '0';
+            activeItem.style.pointerEvents = 'auto';
             activeItem = null;
         }
 
-        // Listeners Mouse
         document.addEventListener('mousedown', onStart);
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onEnd);
-        // Listeners Touch
-        document.addEventListener('touchstart', onStart, {passive:false});
-        document.addEventListener('touchmove', onMove, {passive:false});
-        document.addEventListener('touchend', onEnd, {passive:false});
+        document.addEventListener('touchstart', onStart, {passive: false});
+        document.addEventListener('touchmove', onMove, {passive: false});
+        document.addEventListener('touchend', onEnd, {passive: false});
     </script>
 </body>
 </html>
