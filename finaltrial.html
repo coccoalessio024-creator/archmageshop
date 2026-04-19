@@ -6,44 +6,52 @@
     <title>The Final Awakening</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; }
-        body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; overflow-y: auto; }
+        * { font-family: 'MedievalSharp', serif !important; touch-action: none; -webkit-user-drag: none; box-sizing: border-box; outline: none; border: none; }
+        body { background: #050505; color: #00fbff; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; }
 
-        @keyframes earthquake { 0% { transform: translate(0, 0); } 10% { transform: translate(-5px, -5px); } 20% { transform: translate(5px, 5px); } 100% { transform: translate(0, 0); } }
-        .shake-active { animation: earthquake 0.1s linear infinite; }
-
-        .arcane-border { position: fixed; top: 0; bottom: 0; width: 50px; background: rgba(0, 251, 255, 0.1); box-shadow: 0 0 30px rgba(0, 251, 255, 0.3); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; z-index: 100; }
+        /* VIGNE E BORDI */
+        .arcane-border { position: fixed; top: 0; bottom: 0; width: 40px; background: rgba(0, 251, 255, 0.05); z-index: 100; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
         .b-left { left: 0; border-right: 1px solid #00fbff; } .b-right { right: 0; border-left: 1px solid #00fbff; }
-        .vine-leaf { font-size: 1.2rem; filter: drop-shadow(0 0 5px #00ff00); }
+        .vine-leaf { font-size: 1rem; }
 
-        .divine-container { width: 70%; max-width: 800px; height: 35px; border: 2px solid #00fbff; margin: 20px 0; background: #000; box-shadow: 0 0 25px rgba(0, 251, 255, 0.5); z-index: 150; position: sticky; top: 10px; }
-        #divine-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #00fbff, #d4af37); transition: width 0.8s; }
+        /* DIVINE BAR */
+        .divine-container { width: 70%; max-width: 600px; height: 25px; border: 2px solid #00fbff; margin: 20px 0; background: #000; z-index: 150; }
+        #divine-fill { width: 0%; height: 100%; background: #00fbff; transition: width 0.5s; }
 
-        .ritual-wrapper { position: relative; width: 100vw; height: 75vh; display: flex; justify-content: center; align-items: center; }
-        #actual-mage { height: 90%; max-width: 90%; object-fit: contain; transition: 2s; filter: brightness(0.15) grayscale(1); z-index: 5; }
-        .awakened { filter: brightness(1.4) grayscale(0) !important; drop-shadow: 0 0 80px #00fbff !important; }
+        /* AREA CENTRALE */
+        .ritual-wrapper { position: relative; width: 100vw; height: 60vh; display: flex; justify-content: center; align-items: center; }
+        #actual-mage { height: 100%; max-width: 90%; object-fit: contain; transition: 1.5s; filter: brightness(0.2) grayscale(1); z-index: 5; }
+        .awakened { filter: brightness(1.2) grayscale(0) !important; drop-shadow: 0 0 50px #d4af37 !important; }
 
+        /* SVG LINEE */
         #ritual-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-        .ritual-line { stroke: #00fbff; stroke-width: 3; filter: drop-shadow(0 0 8px #00fbff); opacity: 0; transition: opacity 1s; }
+        .ritual-line { stroke: #00fbff; stroke-width: 2; opacity: 0; transition: 1s; }
         .line-active { opacity: 1; }
 
-        .drop-zone { position: absolute; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; z-index: 20; }
+        /* SLOT */
+        .drop-zone { position: absolute; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; z-index: 20; }
         #zone-head { top: 5%; left: 50%; transform: translateX(-50%); }
-        #zone-hand { top: 45%; left: 25%; }
-        #zone-base { bottom: 10%; left: 50%; transform: translateX(-50%); }
-        /* Cuore spostato a destra e bloccato */
+        #zone-hand { top: 40%; left: 25%; }
+        #zone-base { bottom: 5%; left: 50%; transform: translateX(-50%); }
         #zone-heart { top: 35%; left: 55%; transform: translateX(-50%); }
 
-        .target-slot { width: 90px; opacity: 0.1; transition: 0.5s; filter: invert(1); }
-        .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 30px #00fbff) brightness(2) !important; }
-        .locked-slot { opacity: 0 !important; pointer-events: none; }
+        .target-slot { width: 60px; opacity: 0.1; filter: invert(1); }
+        .active-slot { opacity: 1 !important; filter: drop-shadow(0 0 20px #00fbff) brightness(2) !important; }
 
-        .gem-stack { display: flex; justify-content: center; gap: 20px; padding: 40px 0 80px 0; z-index: 1000; width: 100%; }
-        /* Gemme con stile Emporio: No bordi, solo bagliore */
-        .gem { width: 85px; height: 85px; cursor: grab; filter: drop-shadow(0 0 15px #ff4500); transition: 0.3s; touch-action: none; border: none !important; outline: none !important; }
-        .gem:hover { filter: drop-shadow(0 0 25px #ff8c00) brightness(1.2); }
+        /* GEMME (Stile Emporio) */
+        .gem-stack { display: flex; justify-content: center; gap: 20px; padding: 20px; z-index: 1000; width: 100%; background: rgba(0,0,0,0.3); }
+        .gem { 
+            width: 70px; height: 70px; 
+            filter: drop-shadow(0 0 10px #ff4500); 
+            cursor: pointer; 
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-        #ascension-msg { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 4rem; border: 5px solid #fff; text-align: center; z-index: 10000; box-shadow: 0 0 200px #00fbff; }
+        #ascension-msg { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 2rem; border: 2px solid #fff; text-align: center; z-index: 10000; box-shadow: 0 0 100px #00fbff; }
+        
+        .shake-active { animation: earthquake 0.1s linear infinite; }
+        @keyframes earthquake { 0% { transform: translate(0,0); } 20% { transform: translate(-4px,4px); } 40% { transform: translate(4px,-4px); } 100% { transform: translate(0,0); } }
     </style>
 </head>
 <body>
@@ -53,16 +61,12 @@
     <div class="divine-container"><div id="divine-fill"></div></div>
 
     <div class="ritual-wrapper" id="capture-area">
-        <svg id="ritual-svg">
-            <line id="line1" class="ritual-line" /><line id="line2" class="ritual-line" />
-            <line id="line3" class="ritual-line" /><line id="line4" class="ritual-line" />
-        </svg>
+        <svg id="ritual-svg"><line id="line1" class="ritual-line"/><line id="line2" class="ritual-line"/><line id="line3" class="ritual-line"/><line id="line4" class="ritual-line"/></svg>
         <img src="archives/actualmage.png" id="actual-mage">
         <div class="drop-zone" id="zone-head"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-hand"><img src="archives/coinslot.png" class="target-slot"></div>
         <div class="drop-zone" id="zone-base"><img src="archives/coinslot.png" class="target-slot"></div>
-        <!-- Slot cuore inizialmente nascosto -->
-        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot locked-slot"></div>
+        <div class="drop-zone" id="zone-heart"><img src="archives/coinslot.png" class="target-slot" style="display:none"></div>
     </div>
 
     <div class="gem-stack">
@@ -73,13 +77,13 @@
     </div>
 
     <div id="ascension-msg">
-        <h1 style="color:#fff; font-size: 3rem;">VOID-ASCENSION-000</h1>
-        <a href="index.html" style="color:#d4af37; text-decoration: none;">[ TRANSCEND ]</a>
+        <h1 style="color:#fff;">VOID-ASCENSION-000</h1>
+        <a href="index.html" style="color:#d4af37; text-decoration: none;">[ RETURN ]</a>
     </div>
 
     <script>
         const vL = document.getElementById('vines-l'); const vR = document.getElementById('vines-r');
-        for(let i=0; i<25; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
+        for(let i=0; i<15; i++) { vL.innerHTML += '<span class="vine-leaf">🌿</span>'; vR.innerHTML += '<span class="vine-leaf">🌿</span>'; }
 
         let solved = 0;
         let activeItem = null;
@@ -87,83 +91,74 @@
 
         function updateLines() {
             const area = document.getElementById('capture-area').getBoundingClientRect();
-            const points = zonesOrder.map(id => {
-                const el = document.getElementById(id);
-                const rect = el.getBoundingClientRect();
-                return { x: rect.left + rect.width/2 - area.left, y: rect.top + rect.height/2 - area.top };
+            const pts = zonesOrder.map(id => {
+                const r = document.getElementById(id).getBoundingClientRect();
+                return { x: r.left + r.width/2 - area.left, y: r.top + r.height/2 - area.top };
             });
             for(let i=0; i < solved; i++) {
-                let line = document.getElementById('line' + (i+1));
-                let nextIdx = (i + 1) % 4;
-                line.setAttribute('x1', points[i].x); line.setAttribute('y1', points[i].y);
-                line.setAttribute('x2', points[nextIdx].x); line.setAttribute('y2', points[nextIdx].y);
-                line.classList.add('line-active');
+                let l = document.getElementById('line' + (i+1));
+                let n = (i + 1) % 4;
+                l.setAttribute('x1', pts[i].x); l.setAttribute('y1', pts[i].y);
+                l.setAttribute('x2', pts[n].x); l.setAttribute('y2', pts[n].y);
+                l.classList.add('line-active');
             }
         }
 
         function handleDrop(gemId, zoneId) {
-            if (solved < 3 && zoneId === 'zone-heart') return; // Blocca cuore se non hai fatto gli altri 3
-
+            if (solved < 3 && zoneId === 'zone-heart') return;
             const zone = document.getElementById(zoneId);
             const slot = zone.querySelector('.target-slot');
             if (!slot.classList.contains('active-slot')) {
-                slot.classList.remove('locked-slot');
+                slot.style.display = "block";
                 slot.classList.add('active-slot');
                 document.getElementById(gemId).style.display = 'none';
                 solved++;
                 document.getElementById('divine-fill').style.width = (solved * 25) + '%';
                 updateLines();
-                
-                const mage = document.getElementById('actual-mage');
-                mage.style.filter = `brightness(${0.15 + (solved * 0.25)}) grayscale(${1 - (solved * 0.25)})`;
-                
-                if (solved === 3) { // Sblocca visivamente il cuore
-                    document.querySelector('#zone-heart .target-slot').style.opacity = "0.1";
-                    document.querySelector('#zone-heart .target-slot').style.pointerEvents = "auto";
-                }
-
+                document.getElementById('actual-mage').style.filter = `brightness(${0.2 + (solved * 0.2)}) grayscale(${1 - (solved * 0.25)})`;
+                if (solved === 3) document.querySelector('#zone-heart .target-slot').style.display = "block";
                 if (solved === 4) {
                     document.body.classList.add('shake-active');
-                    mage.classList.add('awakened');
-                    setTimeout(() => { document.body.classList.remove('shake-active'); document.getElementById('ascension-msg').style.display = 'block'; }, 1200);
+                    document.getElementById('actual-mage').classList.add('awakened');
+                    setTimeout(() => { document.body.classList.remove('shake-active'); document.getElementById('ascension-msg').style.display = 'block'; }, 1000);
                 }
             }
         }
 
-        function onStart(e) {
-            const target = e.target.closest('.gem');
-            if (target) {
-                activeItem = target;
-                activeItem.style.zIndex = "5000";
-                activeItem.style.pointerEvents = 'none';
-            }
-        }
-
-        function onMove(e) {
+        function moveHandler(e) {
             if (!activeItem) return;
-            if (e.cancelable) e.preventDefault();
-            const p = e.touches ? e.touches[0] : e;
+            e.preventDefault();
+            const t = e.touches ? e.touches[0] : e;
             activeItem.style.position = 'fixed';
-            activeItem.style.left = (p.clientX - 42) + 'px';
-            activeItem.style.top = (p.clientY - 42) + 'px';
+            activeItem.style.left = (t.clientX - 35) + 'px';
+            activeItem.style.top = (t.clientY - 35) + 'px';
         }
 
-        function onEnd(e) {
+        function endHandler(e) {
             if (!activeItem) return;
-            const p = e.changedTouches ? e.changedTouches[0] : e;
-            const dropEl = document.elementFromPoint(p.clientX, p.clientY);
+            const t = e.changedTouches ? e.changedTouches[0] : e;
+            const dropEl = document.elementFromPoint(t.clientX, t.clientY);
             const zone = dropEl ? dropEl.closest('.drop-zone') : null;
             if (zone) handleDrop(activeItem.id, zone.id);
-            activeItem.style.position = 'relative'; activeItem.style.left = '0'; activeItem.style.top = '0';
-            activeItem.style.pointerEvents = 'auto'; activeItem = null;
+            activeItem.style.position = 'static';
+            activeItem.style.pointerEvents = 'auto';
+            activeItem = null;
         }
 
-        document.addEventListener('mousedown', onStart);
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onEnd);
-        document.addEventListener('touchstart', onStart, {passive: false});
-        document.addEventListener('touchmove', onMove, {passive: false});
-        document.addEventListener('touchend', onEnd, {passive: false});
+        document.querySelectorAll('.gem').forEach(g => {
+            const start = (e) => {
+                activeItem = g;
+                g.style.pointerEvents = 'none';
+                if(e.type === 'touchstart') e.preventDefault();
+            };
+            g.addEventListener('mousedown', start);
+            g.addEventListener('touchstart', start, {passive: false});
+        });
+
+        document.addEventListener('mousemove', moveHandler);
+        document.addEventListener('touchmove', moveHandler, {passive: false});
+        document.addEventListener('mouseup', endHandler);
+        document.addEventListener('touchend', endHandler, {passive: false});
     </script>
 </body>
 </html>
