@@ -7,36 +7,31 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* FORZA FONT E CURSORE */
-        * { font-family: 'MedievalSharp', serif !important; }
+        * { font-family: 'MedievalSharp', serif !important; box-sizing: border-box; }
 
         body { 
             background: #140f0a; 
             color: #f3e5ab; 
             margin: 0; 
-            overflow: hidden; 
-            height: 100vh; 
+            min-height: 100vh; 
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* LOGO FISSO ANGOLO - IMPONENTE */
+        /* LOGO FISSO - Adattivo */
         .brand-logo-fixed {
-            position: fixed; 
-            bottom: 30px; 
-            right: 30px;
-            width: 120px; 
-            z-index: 2000;
+            position: fixed; bottom: 20px; right: 20px;
+            width: clamp(80px, 10vw, 120px); z-index: 2000;
             filter: drop-shadow(0 0 15px #d4af37);
             transition: 0.5s;
-            display: block;
         }
         .brand-logo-fixed:hover { transform: scale(1.1); filter: drop-shadow(0 0 25px #ffcc00); }
 
-        /* PERGAMENE LATERALI */
+        /* PERGAMENE LATERALI - Nascondi su mobile piccolo per pulizia */
         .welcome-scroll {
-            position: fixed; top: 0; width: 180px; height: 100%;
+            position: fixed; top: 0; width: 150px; height: 100%;
             background: #fdf5e6 url('https://transparenttextures.com');
             border: 3px solid #8b4513; z-index: 500; 
             transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -46,50 +41,79 @@
         }
         .scroll-left { left: 0; border-radius: 0 0 30px 0; }
         .scroll-right { right: 0; border-radius: 0 0 0 30px; }
-        .welcome-scroll.rolled { transform: translateY(-92%); cursor: pointer; }
+        .welcome-scroll.rolled { transform: translateY(-94%); cursor: pointer; }
 
         /* CONTENUTO CENTRALE */
         .sanctum-container {
             display: flex; flex-direction: column; align-items: center;
-            z-index: 10; width: 100%; text-align: center;
+            z-index: 10; width: 90%; max-width: 1000px; text-align: center;
+            padding: 20px;
         }
 
+        /* RITRATTO ARCIMAGO */
         .archmage-frame {
-            width: 350px; height: 350px; border-radius: 50%;
-            border: 6px solid #d4af37; overflow: hidden;
+            width: clamp(200px, 40vw, 350px);
+            height: clamp(200px, 40vw, 350px);
+            border-radius: 50%; border: 6px solid #d4af37; overflow: hidden;
             box-shadow: 0 0 60px rgba(212, 175, 55, 0.8);
-            background: #1a120b; margin-bottom: 25px;
+            background: #1a120b; margin-bottom: 20px;
         }
         .archmage-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        .arch-title { font-size: 4.5rem; color: #d4af37; margin: 0; text-shadow: 0 0 20px #000; }
-        .intro-text { font-style: italic; font-size: 1.4rem; margin-bottom: 40px; }
+        .arch-title { font-size: clamp(2rem, 8vw, 4.5rem); color: #d4af37; margin: 0; text-shadow: 0 0 20px #000; }
+        .intro-text { font-style: italic; font-size: clamp(0.9rem, 3vw, 1.4rem); margin-bottom: 30px; }
 
-        /* BOTTONI CLASSICI */
-        .actions-row { display: flex; gap: 25px; justify-content: center; align-items: center; }
+        /* BOTTONI EFFETTO PIETRA NERA */
+        .actions-row { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
 
         .arch-btn {
-            display: flex; align-items: center; gap: 12px;
-            background: #4a0404; color: #f3e5ab; padding: 15px 30px;
-            text-decoration: none; border: 2px solid #d4af37;
-            font-weight: bold; font-size: 1.2rem; transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 15px;
+            background: #1a1a1a; /* Nero Pietra */
+            background-image: url('https://transparenttextures.com');
+            color: #d4af37; padding: 15px 25px;
+            text-decoration: none; border: 2px solid #333;
+            font-weight: bold; font-size: clamp(0.8rem, 2vw, 1.2rem); 
+            transition: 0.3s; box-shadow: inset 0 0 15px #000, 0 5px 15px rgba(0,0,0,0.5);
+            border-radius: 4px; text-transform: uppercase;
         }
-        .arch-btn:hover { background: #7a1515; transform: translateY(-5px); box-shadow: 0 10px 20px #d4af37; }
-        .btn-icon { width: 24px; height: 24px; object-fit: contain; }
+        .arch-btn:hover { 
+            border-color: #d4af37; color: #fff;
+            transform: translateY(-3px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
 
-        /* PIOGGIA DI RUNE ARCANO-DORATE */
+        .btn-icon { width: 35px; height: 35px; object-fit: contain; filter: drop-shadow(0 0 5px #d4af37); }
+
+        /* SISTEMA DI AIUTO (HELP) */
+        .help-wrapper { position: fixed; bottom: 25px; left: 25px; z-index: 2500; }
+        .help-btn {
+            width: 45px; height: 45px; background: #d4af37; color: #140f0a;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.5rem; cursor: pointer; border: 2px solid #140f0a;
+            box-shadow: 0 0 10px #d4af37;
+        }
+        .help-scroll {
+            position: absolute; bottom: 60px; left: 0; width: 280px;
+            background: #fdf5e6 url('https://transparenttextures.com');
+            border: 2px solid #8b4513; padding: 15px; color: #3d2b1f;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 5px;
+            opacity: 0; visibility: hidden; transition: 0.4s; font-size: 0.85rem; line-height: 1.4;
+        }
+        .help-wrapper:hover .help-scroll { opacity: 1; visibility: visible; transform: translateY(-5px); }
+
+        /* RESPONSIVE PER SMARTPHONE */
+        @media (max-width: 768px) {
+            .welcome-scroll { width: 100px; font-size: 0.7rem; }
+            .sanctum-container { padding: 0 10px; width: 100%; }
+            .actions-row { flex-direction: column; width: 100%; }
+            .arch-btn { width: 220px; justify-content: center; }
+            .brand-logo-fixed { bottom: 15px; right: 15px; }
+        }
+
+        /* PIOGGIA DI RUNE */
         .magic-rune {
-            position: fixed;
-            color: #d4af37;
-            font-size: 20px;
-            pointer-events: none;
-            z-index: 1500;
-            animation: fall linear forwards;
-            text-shadow: 0 0 10px #ffcc00;
-            font-family: serif !important;
+            position: fixed; color: #d4af37; font-size: 20px; pointer-events: none;
+            z-index: 1500; animation: fall linear forwards; text-shadow: 0 0 10px #ffcc00;
         }
-
         @keyframes fall {
             0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
             20% { opacity: 1; }
@@ -99,17 +123,25 @@
 </head>
 <body>
 
+    <!-- HELP SYSTEM -->
+    <div class="help-wrapper">
+        <div class="help-btn">?</div>
+        <div class="help-scroll">
+            <b style="color:#7a1515">GUIDE / GUIDA</b><br><br>
+            [EN] Click the banners to reveal greetings. Drag artifacts in Trials to unlock secrets.<br><br>
+            [IT] Clicca i banner per i saluti. Trascina gli artefatti nelle Prove per sbloccare i segreti.
+        </div>
+    </div>
+
     <!-- PERGAMENE LATERALI -->
     <div class="welcome-scroll scroll-left" id="s-left" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.2rem;">WELCOME MORTAL</h3>
+        <h3 style="color:#7a1515; font-size: 1.1rem;">WELCOME MORTAL</h3>
         <p>✧<br>Adept<br>of the<br>Ancient<br>Arts<br>✧</p>
-        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.7rem;">(Click to Toggle)</small>
     </div>
     
     <div class="welcome-scroll scroll-right" id="s-right" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.2rem;">REJOICE</h3>
+        <h3 style="color:#7a1515; font-size: 1.1rem;">REJOICE</h3>
         <p>✧<br>The Lore<br>of the<br>Void<br>Open<br>✧</p>
-        <small style="margin-top: auto; padding-bottom: 20px; font-size: 0.7rem;">(Click to Toggle)</small>
     </div>
 
     <div class="sanctum-container">
@@ -122,13 +154,13 @@
         
         <div class="actions-row">
             <a href="emporium/index.html" class="arch-btn">
-                <img src="archives/potionmini.png" class="btn-icon"> THE EMPORIUM
+                <img src="archives/actualmage.png" class="btn-icon"> THE EMPORIUM
             </a>
-            <a href="emporium/bulletins.html" class="arch-btn" style="background: #2a1a0a;">
-                <img src="archives/potionmini.png" class="btn-icon"> BULLETINS
+            <a href="emporium/bulletins.html" class="arch-btn">
+                <img src="archives/actualmage.png" class="btn-icon"> BULLETINS
             </a>
-            <a href="trial.html" class="arch-btn" style="background: #1a1a1a; border-color: #7a1515;">
-                <img src="archives/potionmini.png" class="btn-icon"> THE TRIAL
+            <a href="trial.html" class="arch-btn">
+                <img src="archives/actualmage.png" class="btn-icon"> THE TRIAL
             </a>
         </div>
     </div>
@@ -139,7 +171,6 @@
 
     <script>
         window.onload = function() {
-            // PIOGGIA DI RUNE
             const runes = ['✧', '✦', '⚛', '⌬', '⚿', '⛤', '♅', '𐕣', '✨'];
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
@@ -153,13 +184,8 @@
                     setTimeout(() => p.remove(), 7000);
                 }, i * 400);
             }
-            
-            // CHIUSURA AUTOMATICA
             setTimeout(() => {
-                const left = document.getElementById('s-left');
-                const right = document.getElementById('s-right');
-                if(left) left.classList.add('rolled');
-                if(right) right.classList.add('rolled');
+                document.querySelectorAll('.welcome-scroll').forEach(s => s.classList.add('rolled'));
             }, 15000);
         };
     </script>
