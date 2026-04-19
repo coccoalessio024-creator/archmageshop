@@ -7,28 +7,34 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Logo Brand in basso a destra con bagliore */
-        .brand-logo-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 180px;
-            z-index: 100;
-            filter: drop-shadow(0 0 8px #d4af37); /* Bagliore che esalta il nero */
+        /* Allineamento Parallelo dei Bottoni e del Logo */
+        .actions-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Logo Brand: Piccolo e in linea */
+        .brand-logo-inline {
+            width: 85px; /* Ridotto per stare in linea */
+            filter: drop-shadow(0 0 8px #d4af37);
             transition: 0.5s;
             cursor: help;
         }
-        .brand-logo-container:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
-        .brand-logo-container img { width: 100%; height: auto; display: block; }
+        .brand-logo-inline:hover { transform: scale(1.1); filter: drop-shadow(0 0 15px #ffcc00); }
+        .brand-logo-inline img { width: 100%; height: auto; display: block; }
 
-        /* Bulletin Button & Scroll Preview */
-        .bulletin-wrapper { position: relative; display: inline-block; margin-top: 1rem; }
+        /* Bulletin & Scroll Preview */
+        .bulletin-wrapper { position: relative; display: inline-block; }
         
         .scroll-preview {
             position: absolute;
-            bottom: 120%; left: 50%;
+            bottom: 130%; left: 50%;
             transform: translateX(-50%) translateY(20px);
-            width: 250px;
+            width: 230px;
             background: #fdf5e6;
             background-image: url('https://transparenttextures.com');
             color: #3d2b1f;
@@ -41,7 +47,7 @@
             transition: 0.4s;
             font-size: 0.85rem;
             pointer-events: none;
-            z-index: 10;
+            z-index: 100;
         }
 
         .bulletin-wrapper:hover .scroll-preview {
@@ -84,12 +90,12 @@
             <span class="highlight">Rejoice in the light of guidance of The Archmage.</span>
         </p>
         
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-            <a href="emporium/" class="arch-btn">ENTER THE EMPORIUM</a>
+        <!-- NUOVA RIGA AZIONI: Tutto parallelo -->
+        <div class="actions-row">
+            <a href="emporium/index.html" class="arch-btn">THE EMPORIUM</a>
             
-            <!-- Bulletin Button with Scroll Preview -->
             <div class="bulletin-wrapper">
-                <a href="emporium/bulletins.html" class="arch-btn" style="font-size: 0.9rem; background: #2a1a0a;">READ THE BULLETINS</a>
+                <a href="emporium/bulletins.html" class="arch-btn" style="font-size: 0.9rem; background: #2a1a0a;">THE BULLETINS</a>
                 <div class="scroll-preview">
                     <h4>Latest Visions</h4>
                     <ul>
@@ -99,21 +105,21 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- BRAND LOGO (Integrato nella riga) -->
+            <a href="secret.html" class="brand-logo-inline" title="Solve the Riddle">
+                <img src="archives/logo_archmage.png" alt="Archmage Logo">
+            </a>
         </div>
         
         <div class="rune-deco" style="margin-top: 2rem;">᚛ ᚫ ᚜</div>
     </div>
 
-    <!-- BRAND LOGO (Segreto) -->
-    <a href="#secret-chamber" class="brand-logo-container" title="Reveal the Truth">
-        <img src="archives/logo_archmage.png" alt="Archmage Logo">
-    </a>
-
     <script>
-        // Gestione Loading (Intervallo ridotto da 150 a 135 per -10% tempo)
+        // Gestione Loading velocizzato
         let w = 0;
         const interval = setInterval(() => {
-            w += Math.random() * 22; // Incremento leggermente più alto
+            w += Math.random() * 22;
             if (w >= 100) {
                 w = 100;
                 clearInterval(interval);
