@@ -1,0 +1,157 @@
+@import url('https://googleapis.com');
+
+body {
+    background-color: #050505;
+    color: #d4af37;
+    font-family: 'MedievalSharp', serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Layout Principale */
+.legacy-container {
+    display: flex;
+    width: 95%;
+    max-width: 1200px;
+    gap: 20px;
+    padding: 20px;
+    margin-top: 60px; /* Spazio per l'HUD */
+}
+
+/* Griglia Inventario (Sinistra) */
+.vault-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 15px;
+    background: rgba(20, 20, 20, 0.8);
+    padding: 20px;
+    border: 3px solid #d4af37;
+    border-radius: 5px;
+    height: fit-content;
+}
+
+.item-slot {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #333;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+}
+
+.item-slot img {
+    width: 80%;
+    image-rendering: pixelated;
+    transition: transform 0.2s;
+}
+
+/* Area Sacca (Centro) */
+.bag-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 4px dashed #8b4513;
+    border-radius: 50%;
+    min-height: 300px;
+    padding: 20px;
+    transition: background 0.3s;
+}
+
+.bag-zone.hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: #00fbff;
+}
+
+#bag-icon {
+    width: 150px;
+    filter: drop-shadow(0 0 10px #8b4513);
+}
+
+/* La Pergamena Finale (Destra) */
+.final-scroll {
+    flex: 1.5;
+    background: #d4af37;
+    color: #050505;
+    padding: 30px;
+    border: 4px solid #8b4513;
+    box-shadow: 10px 10px 0px #000;
+    min-height: 500px;
+}
+
+.scroll-header input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #8b4513;
+    font-family: 'MedievalSharp';
+    font-size: 24px;
+    width: 100%;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.3);
+    margin-bottom: 5px;
+}
+
+/* Oracle Infotip (Floating) */
+#oracle-info {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #050505;
+    border: 2px solid #00fbff;
+    padding: 10px 20px;
+    text-align: center;
+    display: none;
+    z-index: 1000;
+}
+
+/* Tasto Save */
+.save-btn {
+    background: #050505;
+    color: #d4af37;
+    padding: 15px 30px;
+    border: 2px solid #d4af37;
+    font-family: 'MedievalSharp';
+    font-size: 20px;
+    cursor: pointer;
+    margin: 30px 0;
+}
+
+.save-btn:hover {
+    background: #d4af37;
+    color: #050505;
+}
+
+/* REGOLE PER IL SALVATAGGIO (STAMPA) */
+@media print {
+    .vault-grid, .bag-zone, .save-btn, #oracle-info, #hero-scroll-container {
+        display: none !important;
+    }
+    body { background: white; }
+    .final-scroll {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        position: absolute;
+        top: 0; left: 0;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .legacy-container { flex-direction: column; }
+}
