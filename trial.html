@@ -124,6 +124,10 @@
                     solved++;
                     document.getElementById('mana-fill').style.width = (solved * 25) + '%';
                     if (solved === 4) document.getElementById('final-secret').style.display = 'block';
+                    if (solved === 4) {
+                        document.getElementById('final-secret').style.display = 'block';
+                        localStorage.setItem('trial_1', 'true'); // ACCENDE LA GEMMA 1
+                    }
                     return true;
                 }
             }
