@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Archmage's Legacy</title>
+    <link rel="stylesheet" href="legacy-style.css">
+</head>
+<body>
+
+    <button class="save-btn" onclick="window.print()">📜 SEAL YOUR LEGACY (SAVE)</button>
+
+    <div class="legacy-container">
+        <!-- VAULT: Contenitore oggetti -->
+        <div class="vault-grid" id="vault-items"></div>
+
+        <!-- SACCA: Area di Drop -->
+        <div class="bag-zone" id="drop-zone">
+            <img src="archives/bag.png" id="bag-icon" alt="Satchel">
+            <p>Drag items here to add to your legacy</p>
+        </div>
+
+        <!-- PERGAMENA: Recap Finale -->
+        <div class="final-scroll" id="print-area">
+            <div class="scroll-header">
+                <input type="text" placeholder="Enter your Name, Archmage..." id="hero-name">
+                <div class="stat-line">
+                    <span id="display-lvl">LEVEL: --</span>
+                    <span id="display-gems">GEMS: ---</span>
+                </div>
+            </div>
+
+            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px;">ACQUIRED RELICS</h3>
+            <ul id="recap-list" style="list-style: none; padding: 0;"></ul>
+
+            <div id="final-stats" style="margin-top: 30px; font-weight: bold; color: #8b4513;">
+                TOTAL RESONANCE:<br>
+                ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup durante il Drag -->
+    <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;"></div>
+
+    <script src="archmage-logic.js"></script>
+    <script>
+        // 1. DATABASE OGGETTI (Valori numerici aggiornati)
+        const legacyDatabase = {
+            "blessing.png": { name: "Ancient Blessing", lore: "A golden glow that resonates with the soul.", fun: 0, joy: 3, mana: 1 },
+            "buff.png": { name: "Vibrant Buff", lore: "A surge of pure adrenaline and light.", fun: 3, joy: 1, mana: 0 },
+            "certificate.png.png": { name: "Secret Certificate", lore: "Proof of your journey through the unknown.", fun: 3, joy: 3, mana: 3 },
+            "coincross.png": { name: "Tails Coin", lore: "Whispers of sacrifice and hidden paths.", fun: 1, joy: 0, mana: 2 },
+            "coinhead.png": { name: "Heads Coin", lore: "Shining with the luck of a thousand kings.", fun: 0, joy: 1, mana: 0 },
+            "hugtoken.png": { name: "Hug Token", lore: "Radiates warmth like a campfire in the rain.", fun: 2, joy: 3, mana: 0 },
+            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Become a shadow among the stars.", fun: 1, joy: 0, mana: 3 },
+            "magicmirror.png.png": { name: "Magic Mirror", lore: "Shows the hero you are destined to become.", fun: 0, joy: 3, mana: 2 },
+            "silentring.png.png": { name: "Silent Ring", lore: "Moonlight forged into silent footsteps.", fun: 0, joy: 1, mana: 2 },
+            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks the gold within your heart.", fun: 3, joy: 0, mana: 2 }
+        };
+
+        let totalStats = { fun: 0, joy: 0, mana: 0 };
+        const vault = document.getElementById('vault-items');
+        const dropZone = document.getElementById('drop-zone');
+        const recapList = document.getElementById('recap-list');
+        const oracle = document.getElementById('oracle-info');
+
+        // 2. INIZIALIZZAZIONE
+        window.addEventListener('DOMContentLoaded', () => {
+            const lvl = localStorage.getItem('hero_lvl') || 1;
+            const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
+            document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
+            document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
+
+            Object.keys(legacyDatabase).forEach(file => {
+                const slot = document.createElement('div');
+                slot.className = 'item-slot';
+                slot.draggable = true;
+                slot.id = file;
+                slot.innerHTML = `<img src="archives/${file}" style="width:50px; pointer-events:none;">`;
+                
+                slot.ondragstart = (e) => {
+                    e.dataTransfer.setData("text", e.target.id);
+                    const item = legacyDatabase[file];
+                    oracle.innerHTML = `<strong>${item.name}</strong><br><small>${item.lore}</small>`;
+                    oracle.style.display = 'block';
+                };
+                slot.ondragend = () => oracle.style.display = 'none';
+                vault.appendChild(slot);
+            });
+        });
+
+        // 3. LOGICA DROP
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('hover');
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('hover');
+            const file = e.dataTransfer.getData("text");
+            const item = legacyDatabase[file];
+            const element = document.getElementById(file);
+
+            if (element && item) {
+                element.remove();
+                const li = document.createElement('li');
+                li.style = "margin-bottom: 10px; border-bottom: 1px dashed #8b4513; padding: 5px 0;";
+                li.innerHTML = `<strong>${item.name}</strong> - ${item.lore}<br><small>Fun:+${item.fun} Joy:+${item.joy} Mana:+${item.mana}</small>`;
+                recapList.appendChild(li);
+
+                totalStats.fun += item.fun;
+                totalStats.joy += item.joy;
+                totalStats.mana += item.mana;
+                document.getElementById('final-stats').innerHTML = `TOTAL RESONANCE:<br>✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
+            }
+        };
+    </script>
+</body>
+</html>
