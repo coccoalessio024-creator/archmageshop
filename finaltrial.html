@@ -118,6 +118,7 @@
                 document.getElementById('actual-mage').style.filter = `brightness(${0.2 + (solved * 0.2)}) grayscale(${1 - (solved * 0.25)})`;
                 if (solved === 3) document.querySelector('#zone-heart .target-slot').style.display = "block";
                 if (solved === 4) {
+                    localStorage.setItem('trial_3', 'true'); // Accende la terza gemma
                     document.body.classList.add('shake-active');
                     document.getElementById('actual-mage').classList.add('awakened');
                     setTimeout(() => { document.body.classList.remove('shake-active'); document.getElementById('ascension-msg').style.display = 'block'; }, 1000);
