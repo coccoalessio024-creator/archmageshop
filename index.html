@@ -128,8 +128,8 @@
         <div class="help-btn">?</div>
         <div class="help-scroll">
             <b style="color:#7a1515">GUIDE / GUIDA</b><br><br>
-            [EN] Click the banners to reveal greetings. Drag artifacts in Trials to unlock secrets.<br><br>
-            [IT] Clicca i banner per i saluti. Trascina gli artefatti nelle Prove per sbloccare i segreti.
+            [EN] Click the banners to close greetings. Drag artifacts in Trials to unlock secrets.<br><br>
+            [IT] Clicca i banner per chiudere i saluti. Trascina gli artefatti nelle Prove per sbloccare i segreti.
         </div>
     </div>
 
@@ -180,7 +180,7 @@
             const locks = document.querySelectorAll('a[href="trial.html"], a[href="secret.html"]');
             const diffTime = unlockDate - today;
             const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const msg = "Gli astri non sono allineati. Cerca il terzo indizio nell'Emporio per capire come procedere il 4 Maggio.";
+            const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait fort he 4th of may, stars aren't aligned yet. try and find other clues";
 
             locks.forEach(link => {
                 link.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
