@@ -129,7 +129,9 @@
       const btn = document.getElementById('paypal-link');
       if (parseFloat(finalValue) > 0) {
         const currency = "USD"; 
-        btn.href = "https://www.paypal.me/heavencaten/" + finalValue;
+        const amount = Number(finalValue);
+        const rounded = Math.round(amount);
+        btn.href = "https://www.paypal.me/heavencaten/" + rounded;
         
         btn.style.display = 'block';
       } else {
