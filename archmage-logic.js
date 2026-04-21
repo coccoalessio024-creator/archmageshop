@@ -78,7 +78,7 @@ const initArchmageHUD = () => {
 
         <div id="scroll-handle" style="display:none; cursor:pointer; background:#d4af37; padding:8px; border:3px solid #050505; color:#050505; box-shadow:3px 3px 0px #8b4513; text-align:center;">
             ${renderGems(12)}
-            <div style="font-size:11px; font-weight:bold;">📜 STATUS</div>
+            <div style="font-size:11px; font-weight:bold;">📜 LVL 📜</div>
         </div>
     `;
 
