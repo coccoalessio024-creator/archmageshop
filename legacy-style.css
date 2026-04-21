@@ -18,112 +18,119 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* --- DECORAZIONE ANGOLI (Dal tuo stile) --- */
+/* --- DECORAZIONI ANGOLI --- */
 .corner-dec {
-    position: fixed; width: 60px; height: 60px;
-    border: 3px solid var(--gold); opacity: 0.5;
-    z-index: 10; pointer-events: none;
+    position: fixed; width: 50px; height: 50px;
+    border: 2px solid var(--gold); opacity: 0.4;
+    z-index: 1; pointer-events: none;
 }
 .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-.bottom-left-dec { 
-    bottom: 30px; left: 30px; 
-    border-right: none; border-top: none;
-    width: 100px; height: 100px; /* Più grande per enfasi */
-    filter: drop-shadow(0 0 10px var(--gold));
+.bottom-left-dec { bottom: 20px; left: 20px; border-right: none; border-top: none; width: 80px; height: 80px; opacity: 0.6; }
+
+/* --- LAYOUT PRINCIPALE --- */
+.legacy-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 350px; /* Vault | Sacca | Pergamena */
+    gap: 30px;
+    width: 95%;
+    max-width: 1300px;
+    margin-top: 80px;
+    z-index: 5;
+    align-items: start;
 }
 
-/* --- IL SATCHEL ILLUMINATO --- */
+/* --- VAULT (SINISTRA) --- */
+.vault-grid {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--gold);
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.item-slot {
+    width: 80px; height: 80px;
+    border: 1px solid var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    display: flex; justify-content: center; align-items: center;
+    cursor: grab;
+}
+
+/* --- SACCA ARCANICA (CENTRO) --- */
 .bag-zone {
-    flex: 1;
     position: relative;
+    width: 350px; height: 350px;
+    margin: 0 auto;
     background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
-    border: 4px double var(--gold);
-    border-radius: 20px;
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* Illuminazione Magica */
-    box-shadow: inset 0 0 50px #000, 0 0 20px var(--gold);
+    border: 6px double var(--gold);
+    border-radius: 50% 50% 45% 45%; /* Forma a sacca */
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    box-shadow: inset 0 0 50px #000, 0 0 30px var(--gold);
     animation: glow-pulse 3s infinite alternate;
 }
 
 @keyframes glow-pulse {
-    from { box-shadow: inset 0 0 50px #000, 0 0 15px var(--gold); }
-    to { box-shadow: inset 0 0 50px #000, 0 0 35px var(--amber); }
+    from { box-shadow: inset 0 0 50px #000, 0 0 15px var(--gold); transform: scale(1); }
+    to { box-shadow: inset 0 0 60px #000, 0 0 35px var(--amber); transform: scale(1.02); }
 }
 
-.bag-zone.hover {
-    border-color: var(--mana);
-    box-shadow: 0 0 40px var(--mana);
+.bag-zone.hover { border-color: var(--mana); box-shadow: 0 0 40px var(--mana); }
+
+#satchel-visual-content {
+    display: flex; flex-wrap: wrap; 
+    justify-content: center; gap: 10px;
+    width: 80%;
 }
 
-/* --- LA PERGAMENA (RECAP) --- */
+/* --- PERGAMENA (DESTRA) --- */
 .final-scroll {
-    flex: 1.5;
     background: var(--parchment);
     color: #2c1e12;
-    padding: 30px;
-    border: 5px solid #8b4513;
-    box-shadow: 10px 10px 0px #000;
-    background-image: url('https://transparenttextures.com'); /* Texture carta */
+    padding: 25px;
+    border: 4px solid #8b4513;
+    box-shadow: 8px 8px 0px #000;
+    min-height: 550px;
+    display: flex; flex-direction: column;
 }
 
 .scroll-header input {
-    background: transparent;
-    border: none;
+    background: transparent; border: none;
     border-bottom: 2px solid #8b4513;
-    font-family: 'MedievalSharp';
-    font-size: 26px;
-    color: #2c1e12;
-    width: 100%;
-    outline: none;
+    font-family: 'MedievalSharp'; font-size: 22px;
+    width: 100%; outline: none; color: #2c1e12;
 }
 
-/* --- ELEMENTI HUD E STATS --- */
-.stat-line {
-    display: flex;
-    justify-content: space-between;
-    color: #8b4513;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-#final-stats {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 2px double #8b4513;
-    color: #2c1e12;
-    font-size: 1.2rem;
-}
-
-/* --- TASTO SAVE (Stile Arch-Btn) --- */
+/* --- NOTIFICHE E BOTTONI --- */
 .save-btn {
-    margin: 20px 0;
+    margin-bottom: 20px;
     padding: 1rem 3rem;
     background: linear-gradient(135deg, #8b4513, #5d2e0a);
     color: var(--amber);
     border: 2px solid var(--gold);
     border-radius: 30px;
-    font-family: 'MedievalSharp';
-    font-size: 1.2rem;
     cursor: pointer;
+    font-size: 1.2rem;
     transition: 0.3s;
-    z-index: 100;
 }
 
-.save-btn:hover {
-    background: var(--gold);
-    color: #2c1e12;
-    box-shadow: 0 0 20px var(--amber);
+.save-btn:hover { background: var(--gold); color: #2c1e12; box-shadow: 0 0 20px var(--amber); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .legacy-container { grid-template-columns: 1fr; justify-items: center; }
+    .vault-grid { grid-template-columns: repeat(5, 1fr); order: 2; }
+    .bag-zone { order: 1; }
+    .final-scroll { order: 3; width: 90%; }
 }
 
-/* --- STAMPA --- */
 @media print {
-    .vault-grid, .bag-zone, .save-btn, .corner-dec, #hero-scroll-container { display: none !important; }
+    .vault-grid, .bag-zone, .save-btn, .corner-dec { display: none !important; }
     body { background: white; }
-    .final-scroll { box-shadow: none; border: none; width: 100%; }
+    .final-scroll { box-shadow: none; border: none; width: 100%; position: absolute; top: 0; }
 }
