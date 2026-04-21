@@ -64,11 +64,12 @@ body {
 /* --- SACCA ARCANICA (CENTRO) --- */
 .bag-zone {
     position: relative;
-    width: 350px; height: 350px;
+    width: 495px; height: 455px;
     margin: 0 auto;
     background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
-    border: 6px double var(--gold);
-    border-radius: 50% 50% 45% 45%; /* Forma a sacca */
+    border: 4px dashed var(--gold);(--gold);
+    border-radius: 42% 58% 46% 54%;
+    outline: 2px solid #5d2e0a;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     box-shadow: inset 0 0 50px #000, 0 0 30px var(--gold);
