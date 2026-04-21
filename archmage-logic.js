@@ -76,24 +76,31 @@ const initArchmageHUD = () => {
             <button id="toggle-scroll-btn" style="margin-top:8px; background:#050505; color:#d4af37; border:none; cursor:pointer; font-family:'MedievalSharp'; font-size:9px; padding:2px; width:100%;">[ CLOSE ]</button>
         </div>
 
-        <div id="scroll-handle" style="
-            display:none; 
-            cursor:pointer; 
-            background:#d4af37; 
-            padding:10px 5px; 
-            border:3px solid #050505; 
-            border-left:none; 
-            color:#050505; 
-            box-shadow:3px 3px 0px #8b4513; 
-            text-align:center;
-            position: absolute;
-            left: -15px; 
-            border-radius: 0 8px 8px 0; 
-            transition: left 0.3s; 
-        ">
-            ${renderGems(12)}
-            <div style="font-size:11px; font-weight:bold; writing-mode: vertical-rl; text-orientation: mixed; margin-top:5px;">📜 LVL 📜</div>
-        </div>
+<div id="scroll-handle" style="
+    display:none; 
+    cursor:pointer; 
+    background:#d4af37; 
+    padding:10px 3px; /* Ridotto il padding laterale a 3px */
+    width: 22px;      /* Larghezza fissa per renderlo sottile */
+    border:3px solid #050505; 
+    border-left:none; 
+    color:#050505; 
+    box-shadow:2px 2px 0px #8b4513; 
+    text-align:center; 
+    border-radius: 0 5px 5px 0; 
+    transition: all 0.2s;
+    overflow: hidden; /* Evita che il contenuto sbordi */
+">
+    ${renderGems(10)}
+    <div style="
+        font-size:10px; 
+        font-weight:bold; 
+        writing-mode: vertical-rl; 
+        text-orientation: mixed; 
+        margin-top:5px;
+        line-height: 1; /* Stringe lo spazio attorno alle lettere */
+    ">📜 LVL 📜</div>
+</div>
     `;
 
     document.body.appendChild(hud);
