@@ -16,6 +16,7 @@
             border: 6px double #d4af37;
             box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.8);
             overflow: visible;
+            min-height: 250px;
         }
         .bag-zone::before {
             content: "THE SATCHEL";
@@ -39,7 +40,7 @@
             image-rendering: pixelated;
         }
 
-        /* Oggetti nel Satchel (non scompaiono) */
+        /* Oggetti nel Satchel - Ingranditi */
         .satchel-item {
             width: 80px; height: 80px;
             margin: 10px;
@@ -53,27 +54,19 @@
     <button class="save-btn" onclick="window.print()">📜 SEAL YOUR LEGACY (SAVE)</button>
 
     <div class="legacy-container">
-        <!-- VAULT -->
         <div class="vault-grid" id="vault-items"></div>
 
-        <!-- SACCA (SATCHEL) -->
         <div class="bag-zone" id="drop-zone">
-            <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 20px;">
-                <!-- Gli item rimarranno qui visibili -->
-            </div>
-            <p style="color: rgba(212, 175, 55, 0.4); pointer-events: none;">Drop Relics into the Bag</p>
+            <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 20px;"></div>
+            <p style="color: rgba(212, 175, 55, 0.4); pointer-events: none; text-align: center;">Drop Relics into the Bag</p>
         </div>
 
-        <!-- PERGAMENA (RECAP) -->
         <div class="final-scroll" id="print-area">
             <div class="scroll-header">
-                <!-- Avatar Scelto (Zoom 1.35) -->
                 <div id="final-avatar-frame">
                     <img id="legacy-avatar-img" src="" alt="Hero">
                 </div>
-                
                 <input type="text" placeholder="Enter your Name, Hero..." id="hero-name">
-                
                 <div class="stat-line">
                     <span id="display-lvl">LEVEL: --</span>
                     <span id="display-gems">GEMS: ---</span>
@@ -96,18 +89,17 @@
         const legacyDatabase = {
             "blessing.png": { name: "Ancient Blessing", lore: "Resonates with the first Archmage.", fun: 0, joy: 3, mana: 1 },
             "buff.png": { name: "Vibrant Buff", lore: "Surge of adrenaline and light.", fun: 3, joy: 2, mana: 1 },
-            "coinhead.png": {  name: "Toilet token" lore: "An eternal flip between destiny and... necessity.", fun: 3, joy: 2, mana: 1, 
+            "coinhead.png": { name: "Toilet Token", lore: "An eternal flip between destiny and necessity.", fun: 3, joy: 2, mana: 1 },
             "hugtoken.png": { name: "Hug Token", lore: "Warmth in the winter rain.", fun: 2, joy: 3, mana: 0 },
             "invisibilitybrew.png.png": { name: "(Maybe) Invisibility Brew", lore: "Shadow among the stars.", fun: 1, joy: 0, mana: 3 },
             "magicmirror.png.png": { name: "Magic Mirror", lore: "Reflects your true destiny.", fun: 0, joy: 3, mana: 2 },
             "silentring.png.png": { name: "Silent Ring", lore: "Moonlight forged into silence.", fun: 0, joy: 0, mana: 5 },
-            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks your path..", fun: 3, joy: 0, mana: 2 }
+            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks your path.", fun: 3, joy: 0, mana: 2 }
         };
 
         let totalStats = { fun: 0, joy: 0, mana: 0 };
         
         window.addEventListener('DOMContentLoaded', () => {
-            // Carica Dati HUD
             const lvl = localStorage.getItem('hero_lvl') || 1;
             const idx = localStorage.getItem('hero_avatar_idx') || 0;
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
@@ -117,7 +109,6 @@
             document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
-            // Popola Vault
             Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
                 slot.className = 'item-slot';
@@ -136,7 +127,6 @@
             });
         });
 
-        // Logica Drop
         const dropZone = document.getElementById('drop-zone');
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
         dropZone.ondragleave = () => dropZone.classList.remove('hover');
@@ -148,29 +138,23 @@
             const element = document.getElementById(file);
 
             if (element && item) {
-                // 1. Sposta visivamente nella sacca (non scompare)
                 const satchelImg = document.createElement('img');
                 satchelImg.src = `archives/${file}`;
                 satchelImg.className = 'satchel-item';
                 document.getElementById('satchel-visual-content').appendChild(satchelImg);
                 element.remove();
 
-                // 2. Aggiungi alla Pergamena
                 const li = document.createElement('li');
+                li.style.marginBottom = "5px";
                 li.innerHTML = `<strong>${item.name}</strong>: ${item.lore} (F:${item.fun} J:${item.joy} M:${item.mana})`;
                 document.getElementById('recap-list').appendChild(li);
 
-                // 3. Update Stats
                 totalStats.fun += item.fun;
                 totalStats.joy += item.joy;
                 totalStats.mana += item.mana;
                 document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
             }
         };
-    </script>
-</body>
-</html>
-
     </script>
 </body>
 </html>
