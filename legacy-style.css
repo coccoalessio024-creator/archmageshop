@@ -130,8 +130,35 @@ body {
     .final-scroll { order: 3; width: 90%; }
 }
 
+/* --- IL SIGILLO DI OCCULTAMENTO (PRINT RULES) --- */
 @media print {
-    .vault-grid, .bag-zone, .save-btn, .corner-dec { display: none !important; }
-    body { background: white; }
-    .final-scroll { box-shadow: none; border: none; width: 100%; position: absolute; top: 0; }
+    /* Nascondi tutto il superfluo */
+    .vault-grid, 
+    .bag-zone, 
+    .save-btn, 
+    .corner-dec, 
+    #hero-scroll-container, 
+    #ritual-help-system, 
+    #oracle-info { 
+        display: none !important; 
+    }
+
+    /* Pulisci lo sfondo per il PDF/Stampa */
+    body { 
+        background: white !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Espandi la pergamena a tutta pagina */
+    .final-scroll { 
+        box-shadow: none !important; 
+        border: none !important; 
+        width: 100% !important; 
+        position: absolute !important; 
+        top: 0 !important; 
+        left: 0 !important;
+        background: #fdf5e6 !important; /* Forza il colore carta */
+        -webkit-print-color-adjust: exact; /* Assicura che i colori vengano stampati */
+    }
 }
