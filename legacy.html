@@ -158,7 +158,36 @@
             document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
             document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
+            
+           const cartItems = JSON.parse(localStorage.getItem('magicCart')) || [];
+           const goldSpent = cartItems.reduce((total, item) => total + parseFloat(item.price || 0), 0);
+           const tax = goldSpent * 0.05; // La tassa arcana che hai nel carrello
+           const finalGold = (goldSpent + tax).toFixed(2);
 
+// Salva il valore per mostrarlo
+           if(document.getElementById('display-gold')) {
+             document.getElementById('display-gold').innerText = `TRIBUTE: ${finalGold} Gold`;
+           const purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
+
+    // Mostra solo gli oggetti che l'utente ha effettivamente "toccato" nell'Emporio
+           Object.keys(legacyDatabase).forEach(file => {
+        // Controlla se l'oggetto è nel carrello (usando il nome o l'immagine come link)
+           const isInCart = cartItems.some(item => item.image.includes(file));
+
+           if (purchased.includes(file)) {
+            // Se è già nella sacca, lo renderizziamo lì
+            renderInSatchel(file);
+        } else if (isInCart) {
+            // Se è nel carrello ma non ancora nella sacca, lo mettiamo nel Vault
+            createVaultItem(file);
+        }
+    });
+
+    // Messaggio se il Vault è vuoto
+    if (document.getElementById('vault-items').children.length === 0 && purchased.length === 0) {
+        document.getElementById('vault-items').innerHTML = "<p style='font-size:10px; color:var(--gold);'>Your cart was empty, traveler...</p>";
+    }
+});
             Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
                 slot.className = 'item-slot';
