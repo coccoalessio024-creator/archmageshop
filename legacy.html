@@ -50,6 +50,55 @@
     </style>
 </head>
 <body>
+    <!-- Help Ritual System -->
+<div id="ritual-help-system" style="position: fixed; bottom: 25px; left: 25px; z-index: 10005;">
+    <!-- Bottone "?" -->
+    <button id="quest-btn" onclick="toggleQuest()" style="
+        width: 45px; height: 45px; border-radius: 50%; background: #2c1e12; 
+        border: 2px solid #d4af37; color: #d4af37; font-family: 'MedievalSharp'; 
+        font-size: 24px; cursor: pointer; box-shadow: 0 0 15px #d4af37;
+        animation: pulse-quest 2s infinite;">?</button>
+
+    <!-- Pergamena Istruzioni -->
+    <div id="quest-scroll" style="
+        display: none; position: absolute; bottom: 60px; left: 0; width: 280px; 
+        background: #fdf5e6; color: #2c1e12; border: 3px solid #8b4513; 
+        padding: 15px; box-shadow: 8px 8px 0px #000; font-family: 'MedievalSharp';">
+        
+        <h4 style="margin: 0 0 10px 0; border-bottom: 2px solid #8b4513;">📜 RITUAL GUIDE</h4>
+        
+        <div style="font-size: 13px; line-height: 1.4;">
+            <p><strong>EN:</strong> Drag your relics into the Satchel. Enter your name and "Seal" to save. 
+            <br><i style="color: #ff4d00;">Close Hero Status before saving!</i></p>
+            <hr style="border: 0; border-top: 1px dashed #8b4513;">
+            <p><strong>IT:</strong> Trascina le reliquie nella Sacca. Inserisci il nome e premi "Seal" per salvare. 
+            <br><i style="color: #ff4d00;">Chiudi lo Status Eroe prima di salvare!</i></p>
+        </div>
+        
+        <button onclick="toggleQuest()" style="
+            background: #8b4513; color: #fdf5e6; border: none; 
+            padding: 5px 10px; cursor: pointer; width: 100%; margin-top: 10px;
+            font-family: 'MedievalSharp';">CLOSE / CHIUDI</button>
+    </div>
+</div>
+
+<style>
+    @keyframes pulse-quest {
+        0% { box-shadow: 0 0 5px #d4af37; }
+        50% { box-shadow: 0 0 20px #ffbf00; }
+        100% { box-shadow: 0 0 5px #d4af37; }
+    }
+    /* Scompare durante il "Seal" (Stampa) */
+    @media print { #ritual-help-system { display: none !important; } }
+</style>
+
+<script>
+    function toggleQuest() {
+        const scroll = document.getElementById('quest-scroll');
+        scroll.style.display = (scroll.style.display === 'none' || scroll.style.display === '') ? 'block' : 'none';
+    }
+</script>
+
 <div class="corner-dec top-left"></div>
 <div class="corner-dec bottom-left-dec"></div>
     <button class="save-btn" onclick="window.print()">📜 SEAL YOUR LEGACY (SAVE)</button>
