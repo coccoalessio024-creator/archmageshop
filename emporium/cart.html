@@ -126,27 +126,14 @@
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = finalValue + " Gold";
       
-
-
       const btn = document.getElementById('paypal-link');
-
-if (parseFloat(finalValue) > 0) {
-
-  const amount = Math.round(Number(finalValue));
-  const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=heavencaten&amount=${amount}&currency_code=USD`;
-
-  btn.href = paypalUrl;              
-  btn.style.display = 'block';
-
-  btn.onclick = function (e) {
-    e.preventDefault();
-    location.assign(paypalUrl);
-  };
-
-} else {
-  btn.style.display = 'none';
-  btn.onclick = null; // importante per evitare click vecchi
-}
+      if (parseFloat(finalValue) > 0) {
+        const currency = "USD"; 
+        btn.href = "https://www.paypal.me/heavencaten/" + finalValue;
+        btn.style.display = 'block';
+      } else {
+        btn.style.display = 'none';
+      }
       
       // --- CONTROLLO ACCESSO LEGACY PAGE ---
       const t1 = localStorage.getItem('trial_1') === 'true';
