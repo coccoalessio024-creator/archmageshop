@@ -21,9 +21,14 @@ const initArchmageHUD = () => {
         setTimeout(() => notice.remove(), 3000);
     };
 
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = `@keyframes fadeUp { 0% { opacity:0; transform:translate(-50%, 20px); } 20% { opacity:1; } 80% { opacity:1; } 100% { opacity:0; transform:translate(-50%, -60px); } }`;
-    document.head.appendChild(styleSheet);
+    if (!document.getElementById('fadeUpStyle')) {
+        const styleSheet = document.createElement("style");
+        styleSheet.id = 'fadeUpStyle';
+        styleSheet.innerText = `@keyframes fadeUp { 0% { opacity:0; transform:translate(-50%, 20px); } 20% { opacity:1; } 80% { opacity:1; } 100% { opacity:0; transform:translate(-50%, -60px); } }`;
+        document.head.appendChild(styleSheet);
+    }
+    
+    // Mostra notifica solo se non è un refresh rapido (opzionale)
     showNotice();
 
     // 3. Setup Avatar & Percorsi
@@ -36,17 +41,20 @@ const initArchmageHUD = () => {
     
     const hud = document.createElement('div');
     hud.id = 'hero-scroll-container';
-    hud.style =
+    
+    // --- CORREZIONE QUI: Aggiunti i backticks ` ---
+    hud.style = `
        position: fixed; 
        left: 15px; 
-       top: 60%; /* Spinto verso il basso, ma centrato */
-       transform: translateY(-50%); /* Centratura verticale perfetta */
+       top: 60%; 
+       transform: translateY(-50%); 
        z-index: 10000; 
        font-family: 'MedievalSharp', serif;
        display: flex;
        flex-direction: column;
        align-items: flex-start;
-`;
+       pointer-events: auto;
+    `;
 
     // 4. HTML (Gemme Incastonate nella Pergamena)
     const renderGems = (size) => `
