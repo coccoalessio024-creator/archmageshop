@@ -126,14 +126,24 @@
       document.getElementById('tax-val').innerText = tax.toFixed(2) + " Gold";
       document.getElementById('total-val').innerText = finalValue + " Gold";
       
-      const btn = document.getElementById('paypal-link');
+           const btn = document.getElementById('paypal-link');
       if (parseFloat(finalValue) > 0) {
-        // --- LINK PAYPAL CONFIGURATO CORRETTAMENTE ---
-        btn.href = "https://paypal.me/heavencaten/" + finalValue;
+        const baseURL = "https://paypal.com";
+        const params = [
+            "cmd=_xclick",
+            "business=venv794@gmail.com", 
+            "item_name=Order Tribute - The Archmage Shop",
+            "amount=" + finalValue,
+            "currency_code=USD",
+            "no_shipping=1"
+        ];
+        
+        btn.href = baseURL + "?" + params.join("&");
         btn.style.display = 'block';
       } else {
         btn.style.display = 'none';
       }
+
 
       // --- CONTROLLO ACCESSO LEGACY PAGE ---
       const t1 = localStorage.getItem('trial_1') === 'true';
