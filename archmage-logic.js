@@ -63,23 +63,26 @@ const initArchmageHUD = () => {
         </div>`;
 
     hud.innerHTML = `
-        <div id="scroll-body" style="background:#d4af37; border:3px solid #050505; padding:8px; width:95px; box-shadow:4px 4px 0px #8b4513; display:flex; flex-direction:column; align-items:center;">
-            ${renderGems(16)}
-            <div style="width:60px; height:60px; border:3px solid #050505; background:#333; overflow:hidden; cursor:pointer; margin-top:5px;">
-                <img src="${pathPrefix}${avatars[idx]}" id="avatar-toggle" 
-                     style="width:100%; height:100%; object-fit:cover; transform:scale(1.35); image-rendering:pixelated;">
-            </div>
-            <div style="text-align:center; margin-top:5px; color:#050505;">
-                <div style="font-size:10px; font-weight:bold;">LEVEL</div>
-                <div style="font-size:24px;">${finalLvl}</div>
-            </div>
-            <button id="toggle-scroll-btn" style="margin-top:8px; background:#050505; color:#d4af37; border:none; cursor:pointer; font-family:'MedievalSharp'; font-size:9px; padding:2px; width:100%;">[ CLOSE ]</button>
-        </div>
 
-        <div id="scroll-handle" style="display:none; cursor:pointer; background:#d4af37; padding:8px; border:3px solid #050505; color:#050505; box-shadow:3px 3px 0px #8b4513; text-align:center;">
-            ${renderGems(12)}
-            <div style="font-size:11px; font-weight:bold;">📜 LVL 📜</div>
-        </div>
+        
+    <div id="scroll-handle" style="
+    display:none; 
+    cursor:pointer; 
+    background:#d4af37; 
+    padding:10px 5px; 
+    border:3px solid #050505; 
+    border-left:none; /* Rimuove il bordo a sinistra per farlo sembrare un'uscita dal bordo */
+    color:#050505; 
+    box-shadow:3px 3px 0px #8b4513; 
+    text-align:center;
+    position: absolute;
+    left: -15px; /* Lo sposta contro il bordo della pagina ignorando il padding del container padre */
+    border-radius: 0 8px 8px 0; /* Arrotonda solo gli angoli esterni */
+    transition: left 0.3s; /* Effetto movimento fluido */
+">
+    ${renderGems(12)}
+    <div style="font-size:11px; font-weight:bold; writing-mode: vertical-rl; text-orientation: mixed; margin-top:5px;">📜 LVL 📜</div>
+</div>
     `;
 
     document.body.appendChild(hud);
