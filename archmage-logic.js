@@ -62,10 +62,8 @@ const initArchmageHUD = () => {
             ${trialGems.map(unlocked => `<img src="${pathPrefix}coingem.png" style="width:${size}px; height:${size}px; filter:${unlocked ? 'drop-shadow(0 0 5px #00fbff)' : 'grayscale(1) opacity(0.3)'};">`).join('')}
         </div>`;
 
-    hud.innerHTML = `
-
-        
-    <div id="scroll-handle" style="
+    hud.innerHTML = `        
+    <div id="scroll-body" style="
     display:none; 
     cursor:pointer; 
     background:#d4af37; 
