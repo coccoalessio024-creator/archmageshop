@@ -1,90 +1,75 @@
 @import url('https://googleapis.com');
 
+:root {
+    --gold: #d4af37;
+    --amber: #ffbf00;
+    --parchment: #fdf5e6;
+    --bg-dark: #2c1e12;
+    --fire: #ff4d00;
+    --mana: #4fffe0;
+}
+
 body {
-    background-color: #050505;
-    color: #d4af37;
+    background: radial-gradient(circle at center, #4a3520 0%, var(--bg-dark) 100%);
+    color: var(--parchment);
     font-family: 'MedievalSharp', serif;
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
-/* Layout Principale */
-.legacy-container {
-    display: flex;
-    width: 95%;
-    max-width: 1200px;
-    gap: 20px;
-    padding: 20px;
-    margin-top: 60px; /* Spazio per l'HUD */
+/* --- DECORAZIONE ANGOLI (Dal tuo stile) --- */
+.corner-dec {
+    position: fixed; width: 60px; height: 60px;
+    border: 3px solid var(--gold); opacity: 0.5;
+    z-index: 10; pointer-events: none;
+}
+.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.bottom-left-dec { 
+    bottom: 30px; left: 30px; 
+    border-right: none; border-top: none;
+    width: 100px; height: 100px; /* Più grande per enfasi */
+    filter: drop-shadow(0 0 10px var(--gold));
 }
 
-/* Griglia Inventario (Sinistra) */
-.vault-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 15px;
-    background: rgba(20, 20, 20, 0.8);
-    padding: 20px;
-    border: 3px solid #d4af37;
-    border-radius: 5px;
-    height: fit-content;
-}
-
-.item-slot {
-    width: 70px;
-    height: 70px;
-    border: 2px solid #333;
-    background: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: grab;
-}
-
-.item-slot img {
-    width: 80%;
-    image-rendering: pixelated;
-    transition: transform 0.2s;
-}
-
-/* Area Sacca (Centro) */
+/* --- IL SATCHEL ILLUMINATO --- */
 .bag-zone {
     flex: 1;
+    position: relative;
+    background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
+    border: 4px double var(--gold);
+    border-radius: 20px;
+    min-height: 350px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 4px dashed #8b4513;
-    border-radius: 50%;
-    min-height: 300px;
-    padding: 20px;
-    transition: background 0.3s;
+    /* Illuminazione Magica */
+    box-shadow: inset 0 0 50px #000, 0 0 20px var(--gold);
+    animation: glow-pulse 3s infinite alternate;
+}
+
+@keyframes glow-pulse {
+    from { box-shadow: inset 0 0 50px #000, 0 0 15px var(--gold); }
+    to { box-shadow: inset 0 0 50px #000, 0 0 35px var(--amber); }
 }
 
 .bag-zone.hover {
-    background: rgba(212, 175, 55, 0.1);
-    border-color: #00fbff;
+    border-color: var(--mana);
+    box-shadow: 0 0 40px var(--mana);
 }
 
-#bag-icon {
-    width: 150px;
-    filter: drop-shadow(0 0 10px #8b4513);
-}
-
-/* La Pergamena Finale (Destra) */
+/* --- LA PERGAMENA (RECAP) --- */
 .final-scroll {
     flex: 1.5;
-    background: #d4af37;
-    color: #050505;
+    background: var(--parchment);
+    color: #2c1e12;
     padding: 30px;
-    border: 4px solid #8b4513;
+    border: 5px solid #8b4513;
     box-shadow: 10px 10px 0px #000;
-    min-height: 500px;
+    background-image: url('https://transparenttextures.com'); /* Texture carta */
 }
 
 .scroll-header input {
@@ -92,66 +77,53 @@ body {
     border: none;
     border-bottom: 2px solid #8b4513;
     font-family: 'MedievalSharp';
-    font-size: 24px;
+    font-size: 26px;
+    color: #2c1e12;
     width: 100%;
-    margin-bottom: 10px;
     outline: none;
 }
 
+/* --- ELEMENTI HUD E STATS --- */
 .stat-line {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(139, 69, 19, 0.3);
-    margin-bottom: 5px;
+    color: #8b4513;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
-/* Oracle Infotip (Floating) */
-#oracle-info {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #050505;
-    border: 2px solid #00fbff;
-    padding: 10px 20px;
-    text-align: center;
-    display: none;
-    z-index: 1000;
+#final-stats {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px double #8b4513;
+    color: #2c1e12;
+    font-size: 1.2rem;
 }
 
-/* Tasto Save */
+/* --- TASTO SAVE (Stile Arch-Btn) --- */
 .save-btn {
-    background: #050505;
-    color: #d4af37;
-    padding: 15px 30px;
-    border: 2px solid #d4af37;
+    margin: 20px 0;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, #8b4513, #5d2e0a);
+    color: var(--amber);
+    border: 2px solid var(--gold);
+    border-radius: 30px;
     font-family: 'MedievalSharp';
-    font-size: 20px;
+    font-size: 1.2rem;
     cursor: pointer;
-    margin: 30px 0;
+    transition: 0.3s;
+    z-index: 100;
 }
 
 .save-btn:hover {
-    background: #d4af37;
-    color: #050505;
+    background: var(--gold);
+    color: #2c1e12;
+    box-shadow: 0 0 20px var(--amber);
 }
 
-/* REGOLE PER IL SALVATAGGIO (STAMPA) */
+/* --- STAMPA --- */
 @media print {
-    .vault-grid, .bag-zone, .save-btn, #oracle-info, #hero-scroll-container {
-        display: none !important;
-    }
+    .vault-grid, .bag-zone, .save-btn, .corner-dec, #hero-scroll-container { display: none !important; }
     body { background: white; }
-    .final-scroll {
-        width: 100%;
-        border: none;
-        box-shadow: none;
-        position: absolute;
-        top: 0; left: 0;
-    }
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .legacy-container { flex-direction: column; }
+    .final-scroll { box-shadow: none; border: none; width: 100%; }
 }
