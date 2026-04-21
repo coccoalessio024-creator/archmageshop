@@ -36,7 +36,17 @@ const initArchmageHUD = () => {
     
     const hud = document.createElement('div');
     hud.id = 'hero-scroll-container';
-    hud.style = `position:fixed; top:10px; left:10px; z-index:10000; font-family:'MedievalSharp', serif;`;
+    hud.style =
+       position: fixed; 
+       left: 15px; 
+       top: 60%; /* Spinto verso il basso, ma centrato */
+       transform: translateY(-50%); /* Centratura verticale perfetta */
+       z-index: 10000; 
+       font-family: 'MedievalSharp', serif;
+       display: flex;
+       flex-direction: column;
+       align-items: flex-start;
+`;
 
     // 4. HTML (Gemme Incastonate nella Pergamena)
     const renderGems = (size) => `
