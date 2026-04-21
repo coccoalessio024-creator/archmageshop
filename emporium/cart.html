@@ -57,11 +57,12 @@
     </div>
 
     <div class="paypal-section">
+      <!-- BOTTONE PAYPAL RIPARATO -->
       <a href="#" id="paypal-link" target="_blank" class="arch-btn" style="display: none; text-align: center; margin-top: 2rem; background: #8b4513; color: white; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; border: 2px solid #d4af37;">TRIBUTE TO THE BRAVES</a>
       
       <!-- PORTALE LEGACY -->
       <div id="legacy-portal">
-        <a href="https://thearchmagemagicshop.duckdns.org/legacy.html" style="text-decoration: none;">
+        <a href="https://duckdns.org/../legacy.html" style="text-decoration: none;">
             <div class="legacy-crown-btn">
                 <img src="../archives/crown.png" alt="Crown">
             </div>
@@ -98,13 +99,14 @@
       
       const btn = document.getElementById('paypal-link');
       if (parseFloat(finalValue) > 0) {
-        btn.href = "https://paypal.me" + finalValue;
+        // Link pulito senza doppie barre
+        btn.href = "https://paypal.com/heavencaten" + finalValue;
         btn.style.display = 'block';
       } else {
         btn.style.display = 'none';
       }
 
-      // --- CONTROLLO SIGILLI TRIAL ---
+      // CONTROLLO GEMME
       const t1 = localStorage.getItem('trial_1') === 'true';
       const t2 = localStorage.getItem('trial_2') === 'true';
       const t3 = localStorage.getItem('trial_3') === 'true';
