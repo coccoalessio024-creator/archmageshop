@@ -128,6 +128,9 @@ body {
     .vault-grid { grid-template-columns: repeat(5, 1fr); order: 2; }
     .bag-zone { order: 1; }
     .final-scroll { order: 3; width: 90%; }
+     #qr-legacy-frame {
+        display: block !important;
+        opacity: 1 !important;
 }
 
 /* --- IL SIGILLO DI OCCULTAMENTO (PRINT RULES) --- */
@@ -137,6 +140,8 @@ body {
     .bag-zone, 
     .save-btn, 
     .corner-dec, 
+    #failed-tribute-box,
+    #qr-legacy-frame,
     #hero-scroll-container, 
     #ritual-help-system, 
     #oracle-info { 
