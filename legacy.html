@@ -5,73 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Legacy</title>
     <link rel="stylesheet" href="legacy-style.css">
+    <style>
+        /* Integrazione MedievalSharp e Stili Visivi */
+        body, input, button { font-family: 'MedievalSharp', serif !important; }
+        
+        /* Sacca Arcanica creata via CSS */
+        .bag-zone {
+            position: relative;
+            background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
+            border: 6px double #d4af37;
+            box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.8);
+            overflow: visible;
+        }
+        .bag-zone::before {
+            content: "THE SATCHEL";
+            position: absolute; top: -15px; background: #050505;
+            padding: 0 15px; color: #d4af37; font-size: 14px;
+        }
+
+        /* Avatar nella Pergamena */
+        #final-avatar-frame {
+            width: 120px; height: 120px;
+            border: 4px solid #8b4513;
+            background: #333;
+            margin: 10px auto;
+            overflow: hidden;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+        #final-avatar-frame img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transform: scale(1.35);
+            image-rendering: pixelated;
+        }
+
+        /* Oggetti nel Satchel (non scompaiono) */
+        .satchel-item {
+            width: 40px; height: 40px;
+            margin: 5px;
+            display: inline-block;
+            filter: drop-shadow(0 0 5px #d4af37);
+        }
+    </style>
 </head>
 <body>
 
     <button class="save-btn" onclick="window.print()">📜 SEAL YOUR LEGACY (SAVE)</button>
 
     <div class="legacy-container">
-        <!-- VAULT: Contenitore oggetti -->
+        <!-- VAULT -->
         <div class="vault-grid" id="vault-items"></div>
 
-        <!-- SACCA: Area di Drop -->
+        <!-- SACCA (SATCHEL) -->
         <div class="bag-zone" id="drop-zone">
-            <img src="archives/bag.png" id="bag-icon" alt="Satchel">
-            <p>Drag items here to add to your legacy</p>
+            <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 20px;">
+                <!-- Gli item rimarranno qui visibili -->
+            </div>
+            <p style="color: rgba(212, 175, 55, 0.4); pointer-events: none;">Drop Relics into the Bag</p>
         </div>
 
-        <!-- PERGAMENA: Recap Finale -->
+        <!-- PERGAMENA (RECAP) -->
         <div class="final-scroll" id="print-area">
             <div class="scroll-header">
+                <!-- Avatar Scelto (Zoom 1.35) -->
+                <div id="final-avatar-frame">
+                    <img id="legacy-avatar-img" src="" alt="Hero">
+                </div>
+                
                 <input type="text" placeholder="Enter your Name, Archmage..." id="hero-name">
+                
                 <div class="stat-line">
                     <span id="display-lvl">LEVEL: --</span>
                     <span id="display-gems">GEMS: ---</span>
                 </div>
             </div>
 
-            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px;">ACQUIRED RELICS</h3>
-            <ul id="recap-list" style="list-style: none; padding: 0;"></ul>
+            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 15px;">SCRIBED CHRONICLES</h3>
+            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 14px;"></ul>
 
-            <div id="final-stats" style="margin-top: 30px; font-weight: bold; color: #8b4513;">
-                TOTAL RESONANCE:<br>
+            <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
                 ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
             </div>
         </div>
     </div>
 
-    <!-- Popup durante il Drag -->
     <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;"></div>
 
     <script src="archmage-logic.js"></script>
     <script>
-        // 1. DATABASE OGGETTI (Valori numerici aggiornati)
         const legacyDatabase = {
-            "blessing.png": { name: "Ancient Blessing", lore: "A golden glow that resonates with the soul.", fun: 0, joy: 3, mana: 1 },
-            "buff.png": { name: "Vibrant Buff", lore: "A surge of pure adrenaline and light.", fun: 3, joy: 1, mana: 0 },
-            "certificate.png.png": { name: "Secret Certificate", lore: "Proof of your journey through the unknown.", fun: 3, joy: 3, mana: 3 },
-            "coincross.png": { name: "Tails Coin", lore: "Whispers of sacrifice and hidden paths.", fun: 1, joy: 0, mana: 2 },
-            "coinhead.png": { name: "Heads Coin", lore: "Shining with the luck of a thousand kings.", fun: 0, joy: 1, mana: 0 },
-            "hugtoken.png": { name: "Hug Token", lore: "Radiates warmth like a campfire in the rain.", fun: 2, joy: 3, mana: 0 },
-            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Become a shadow among the stars.", fun: 1, joy: 0, mana: 3 },
-            "magicmirror.png.png": { name: "Magic Mirror", lore: "Shows the hero you are destined to become.", fun: 0, joy: 3, mana: 2 },
-            "silentring.png.png": { name: "Silent Ring", lore: "Moonlight forged into silent footsteps.", fun: 0, joy: 1, mana: 2 },
-            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks the gold within your heart.", fun: 3, joy: 0, mana: 2 }
+            "blessing.png": { name: "Ancient Blessing", lore: "Resonates with the first Archmage.", fun: 0, joy: 3, mana: 1 },
+            "buff.png": { name: "Vibrant Buff", lore: "Surge of adrenaline and light.", fun: 3, joy: 1, mana: 0 },
+            "certificate.png.png": { name: "Secret Certificate", lore: "Proof of the unknown journey.", fun: 3, joy: 3, mana: 3 },
+            "coincross.png": { name: "Tails Coin", lore: "Whispers of sacrifice.", fun: 1, joy: 0, mana: 2 },
+            "coinhead.png": { name: "Heads Coin", lore: "Shining with the luck of kings.", fun: 0, joy: 1, mana: 0 },
+            "hugtoken.png": { name: "Hug Token", lore: "Warmth in the winter rain.", fun: 2, joy: 3, mana: 0 },
+            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Shadow among the stars.", fun: 1, joy: 0, mana: 3 },
+            "magicmirror.png.png": { name: "Magic Mirror", lore: "Reflects your true destiny.", fun: 0, joy: 3, mana: 2 },
+            "silentring.png.png": { name: "Silent Ring", lore: "Moonlight forged into silence.", fun: 0, joy: 1, mana: 2 },
+            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks the heart.", fun: 3, joy: 0, mana: 2 }
         };
 
         let totalStats = { fun: 0, joy: 0, mana: 0 };
-        const vault = document.getElementById('vault-items');
-        const dropZone = document.getElementById('drop-zone');
-        const recapList = document.getElementById('recap-list');
-        const oracle = document.getElementById('oracle-info');
-
-        // 2. INIZIALIZZAZIONE
+        
         window.addEventListener('DOMContentLoaded', () => {
+            // Carica Dati HUD
             const lvl = localStorage.getItem('hero_lvl') || 1;
+            const idx = localStorage.getItem('hero_avatar_idx') || 0;
+            const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
             const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
+
             document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
             document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
+            document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
+            // Popola Vault
             Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
                 slot.className = 'item-slot';
@@ -82,15 +130,16 @@
                 slot.ondragstart = (e) => {
                     e.dataTransfer.setData("text", e.target.id);
                     const item = legacyDatabase[file];
-                    oracle.innerHTML = `<strong>${item.name}</strong><br><small>${item.lore}</small>`;
-                    oracle.style.display = 'block';
+                    document.getElementById('oracle-info').innerHTML = `<strong>${item.name}</strong><br><small>${item.lore}</small>`;
+                    document.getElementById('oracle-info').style.display = 'block';
                 };
-                slot.ondragend = () => oracle.style.display = 'none';
-                vault.appendChild(slot);
+                slot.ondragend = () => document.getElementById('oracle-info').style.display = 'none';
+                document.getElementById('vault-items').appendChild(slot);
             });
         });
 
-        // 3. LOGICA DROP
+        // Logica Drop
+        const dropZone = document.getElementById('drop-zone');
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
         dropZone.ondragleave = () => dropZone.classList.remove('hover');
         dropZone.ondrop = (e) => {
@@ -101,18 +150,29 @@
             const element = document.getElementById(file);
 
             if (element && item) {
+                // 1. Sposta visivamente nella sacca (non scompare)
+                const satchelImg = document.createElement('img');
+                satchelImg.src = `archives/${file}`;
+                satchelImg.className = 'satchel-item';
+                document.getElementById('satchel-visual-content').appendChild(satchelImg);
                 element.remove();
-                const li = document.createElement('li');
-                li.style = "margin-bottom: 10px; border-bottom: 1px dashed #8b4513; padding: 5px 0;";
-                li.innerHTML = `<strong>${item.name}</strong> - ${item.lore}<br><small>Fun:+${item.fun} Joy:+${item.joy} Mana:+${item.mana}</small>`;
-                recapList.appendChild(li);
 
+                // 2. Aggiungi alla Pergamena
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.name}</strong>: ${item.lore} (F:${item.fun} J:${item.joy} M:${item.mana})`;
+                document.getElementById('recap-list').appendChild(li);
+
+                // 3. Update Stats
                 totalStats.fun += item.fun;
                 totalStats.joy += item.joy;
                 totalStats.mana += item.mana;
-                document.getElementById('final-stats').innerHTML = `TOTAL RESONANCE:<br>✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
+                document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
             }
         };
+    </script>
+</body>
+</html>
+
     </script>
 </body>
 </html>
