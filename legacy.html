@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Archmage's Legacy</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="legacy-style.css">
 </head>
 <body>
@@ -11,62 +14,62 @@
     <div class="corner-dec top-left"></div>
     <div class="corner-dec bottom-left-dec"></div>
 
-    <!-- Pulsante per aprire il Vault -->
-    <button id="vault-toggle-btn" onclick="toggleVault()">🎒 OPEN VAULT</button>
+    <button id="vault-toggle-btn" onclick="toggleVault()">🎒 VAULT</button>
     <div id="vault-container">
         <div class="vault-grid" id="vault-items"></div>
     </div>
 
-    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block; z-index: 1001; background:#8b4513; color:white; border:2px solid #d4af37; padding:10px 20px; cursor:pointer;">📜 SEAL YOUR LEGACY (SAVE)</button>
+    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block; z-index: 1001; background:#8b4513; color:var(--amber); border:2px solid var(--gold); padding:12px 25px; cursor:pointer; border-radius:30px;">📜 SEAL YOUR LEGACY (SAVE)</button>
 
-    <div class="legacy-container" style="display: flex; gap: 40px; align-items: flex-start; margin-top: 50px;">
-        <!-- Sacca -->
+    <div class="legacy-container" style="display: flex; gap: 30px; align-items: flex-start; justify-content: center; width: 100%;">
+        
         <div id="bag-and-support">
             <div class="bag-zone" id="drop-zone">
-                <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 10px;"></div>
-                <p style="color: rgba(212, 175, 55, 0.6); font-size: 12px;">Drop relics from Vault</p>
+                <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+                <p style="color: rgba(212,175,55,0.5); font-size: 11px;">Drop Relics from Vault</p>
             </div>
-            <div id="failed-tribute-box" style="text-align: center; font-size: 12px; margin-top: 20px;">
+            
+            <div id="failed-tribute-box" style="text-align: center; margin-top: 20px; font-size: 12px;">
                 <p>Troubles? <a href="summon-support.html" style="color: var(--amber);">Invoke Support</a></p>
+            </div>
+
+            <!-- QR CODE: Fuoco alla pergamena, solo a schermo -->
+            <div id="qr-legacy-frame" style="text-align: center; margin-top: 30px; border: 1px dashed var(--gold); padding: 10px;">
+                <img src="archives/legacy-qr.jpeg" style="width: 80px; border: 1px solid var(--gold);">
+                <p style="font-size: 10px; color: var(--gold); margin-top: 5px;">VERIFY LEGACY</p>
             </div>
         </div>
 
-        <!-- Pergamena Integrata -->
         <div class="final-scroll" id="print-area">
             <div class="scroll-header" style="text-align: center;">
-                <div id="final-avatar-frame" style="width:100px; height:100px; margin:auto; overflow:hidden; border:3px solid #8b4513;">
+                <div id="final-avatar-frame" style="width:100px; height:100px; margin:auto; overflow:hidden; border:3px solid #8b4513; background:#333;">
                     <img id="legacy-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; transform:scale(1.35);">
                 </div>
-                <input type="text" placeholder="Enter Hero Name..." id="hero-name" style="font-family:'MedievalSharp'; font-size: 24px; border:none; border-bottom: 1px solid #8b4513; background: transparent; width: 100%; text-align: center; margin-top: 10px;">
+                <input type="text" placeholder="Enter Hero Name..." id="hero-name" style="font-size: 24px; border:none; border-bottom: 1px solid #8b4513; background: transparent; width: 100%; text-align: center; margin-top: 10px; color: #2c1e12;">
                 
-                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; margin-top: 15px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; margin-top: 15px; color: #8b4513;">
                     <span id="display-lvl">LVL: --</span>
                     <span id="display-gems">GEMS: -/3</span>
-                    <span id="display-gold">TRIBUTE: 0.00</span>
+                    <span id="display-gold">TRIBUTE: 0.00 Gold</span>
                 </div>
             </div>
 
             <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px; text-align: center;">INVENTORY</h3>
-            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 12px;"></ul>
+            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 12px; min-height: 50px;"></ul>
 
-            <!-- Casella Note spostata dentro la pergamena -->
-            <div style="margin-top: 20px;">
-                <textarea placeholder="Notes and Greetings / Note e Congratulazioni..." style="width: 100%; height: 60px; background: rgba(0,0,0,0.05); border: 1px dashed #8b4513; font-family: 'MedievalSharp'; padding: 5px;"></textarea>
-            </div>
+            <textarea placeholder="Notes and Greetings / Note e Congratulazioni..." style="width: 100%; height: 80px; background: rgba(0,0,0,0.03); border: 1px dashed #8b4513; margin-top: 20px; padding: 10px; resize: none;"></textarea>
 
-            <div id="final-stats" style="margin-top: 15px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
+            <div id="final-stats" style="margin-top: 15px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px; text-align: center;">
                 ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
             </div>
 
-            <!-- Questo appare solo nella stampa -->
+            <!-- Questo appare SOLO nel PDF -->
             <div id="legacy-print-only">
                 <p style="text-align: center; font-weight: bold; padding-top: 20px; border-top: 1px solid #8b4513;">RELICS ACQUIRED BY TRIBUTE:</p>
                 <div id="print-relics-grid" class="print-relics-grid"></div>
             </div>
         </div>
     </div>
-
-    <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid var(--gold); padding:10px; color:var(--gold); z-index:10000;"></div>
 
     <script src="archmage-logic.js"></script>
     <script>
@@ -116,7 +119,7 @@
         function createVaultItem(file) {
             const slot = document.createElement('div');
             slot.className = 'item-slot'; slot.draggable = true; slot.id = file;
-            slot.innerHTML = `<img src="archives/${file}">`;
+            slot.innerHTML = `<img src="archives/${file}" style="width:50px;">`;
             slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); };
             document.getElementById('vault-items').appendChild(slot);
         }
@@ -131,9 +134,9 @@
             document.getElementById('recap-list').appendChild(li);
         }
 
-        const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => e.preventDefault();
-        dropZone.ondrop = (e) => {
+        const dz = document.getElementById('drop-zone');
+        dz.ondragover = (e) => e.preventDefault();
+        dz.ondrop = (e) => {
             e.preventDefault();
             const file = e.dataTransfer.getData("text");
             if (legacyDatabase[file]) {
