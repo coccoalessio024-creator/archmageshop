@@ -13,7 +13,7 @@
 body {
     background: radial-gradient(circle at center, #4a3520 0%, var(--bg-dark) 100%);
     color: var(--parchment);
-    font-family: 'MedievalSharp', serif;
+    font-family: 'MedievalSharp', cursive;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -22,27 +22,10 @@ body {
     overflow-x: hidden;
 }
 
-/* --- DECORAZIONI ANGOLI (FIXED) --- */
-.corner-dec {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    border: 2px solid var(--gold);
-    opacity: 0.4;
-    z-index: 1;
-    pointer-events: none;
-}
-.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-.bottom-left-dec { 
-    bottom: 20px; left: 20px; 
-    border-right: none; border-top: none; 
-    width: 80px; height: 80px; opacity: 0.6; 
-}
-
-/* --- LAYOUT PRINCIPALE (3 COLONNE) --- */
+/* --- LAYOUT --- */
 .legacy-container {
     display: grid;
-    grid-template-columns: 280px 1fr 380px; /* Vault | Sacca | Pergamena */
+    grid-template-columns: 280px 1fr 400px;
     gap: 20px;
     width: 98%;
     max-width: 1400px;
@@ -51,7 +34,6 @@ body {
     align-items: start;
 }
 
-/* --- VAULT (SINISTRA) --- */
 .vault-grid {
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid var(--gold);
@@ -59,100 +41,46 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
-.item-slot {
-    width: 85px; height: 85px;
-    border: 1px solid var(--gold);
-    background: rgba(212, 175, 55, 0.1);
-    display: flex; justify-content: center; align-items: center;
-    cursor: grab;
-    transition: transform 0.2s;
-}
-.item-slot:hover { transform: scale(1.05); background: rgba(212, 175, 55, 0.2); }
+.item-slot { width: 85px; height: 85px; border: 1px solid var(--gold); background: rgba(212, 175, 55, 0.1); display: flex; justify-content: center; align-items: center; cursor: grab; touch-action: none; }
 
-/* --- SACCA ARCANICA (CENTRO - FORMA IRREGOLARE) --- */
 .bag-zone {
-    position: relative;
-    width: 480px; height: 480px;
-    margin: 0 auto;
-    background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
-    border: 4px dashed var(--gold); /* FIX: rimosso errore sintassi */
-    border-radius: 42% 58% 46% 54% / 55% 48% 52% 45%; /* La tua forma irregolare */
-    outline: 2px solid #5d2e0a;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    box-shadow: inset 0 0 60px #000, 0 0 30px var(--gold);
+    position: relative; width: 350px; height: 350px; margin: 0 auto;
+    background: radial-gradient(circle, #5d4037 0%, #2c1e12 100%);
+    border: 4px dashed var(--gold); border-radius: 42% 58% 46% 54% / 55% 48% 52% 45%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.8);
     animation: glow-pulse 3s infinite alternate;
 }
 
-@keyframes glow-pulse {
-    from { box-shadow: inset 0 0 50px #000, 0 0 15px var(--gold); transform: scale(1); }
-    to { box-shadow: inset 0 0 70px #000, 0 0 40px var(--amber); transform: scale(1.02); }
-}
-
-.bag-zone.hover { border-color: var(--mana); box-shadow: 0 0 50px var(--mana); border-style: solid; }
-
-#satchel-visual-content {
-    display: flex; flex-wrap: wrap;
-    justify-content: center; align-content: center;
-    gap: 15px; width: 85%; height: 85%;
-}
-
-/* --- PERGAMENA (DESTRA) --- */
 .final-scroll {
     background: var(--parchment);
     background-image: url('https://transparenttextures.com');
-    color: #2c1e12;
-    padding: 30px;
-    border: 5px solid #8b4513;
-    box-shadow: 10px 10px 0px #000;
-    min-height: 600px;
-    display: flex; flex-direction: column;
+    color: #2c1e12; padding: 30px; border: 5px solid #8b4513;
+    box-shadow: 10px 10px 0px #000; min-height: 600px;
 }
 
-.scroll-header input {
-    background: transparent; border: none;
-    border-bottom: 2px solid #8b4513;
-    font-family: 'MedievalSharp', serif; font-size: 24px;
-    width: 100%; outline: none; color: #2c1e12; text-align: center;
-}
-
-.stat-line {
-    display: flex; justify-content: space-between;
-    font-size: 14px; margin-top: 15px; color: #8b4513; font-weight: bold;
-}
-
-/* --- BOTTONE SAVE (STILE ARCHMAGE) --- */
-.save-btn {
-    margin: 20px 0;
-    padding: 1.2rem 3rem;
-    background: linear-gradient(135deg, #8b4513, #5d2e0a);
-    color: var(--amber);
-    border: 2px solid var(--gold);
-    border-radius: 30px;
-    cursor: pointer; font-size: 1.3rem; font-family: 'MedievalSharp';
-    transition: 0.3s; z-index: 10;
-}
-.save-btn:hover { background: var(--gold); color: #2c1e12; box-shadow: 0 0 20px var(--amber); }
-
-/* --- RESPONSIVE MOBILE --- */
-@media (max-width: 1100px) {
-    .legacy-container { grid-template-columns: 1fr; justify-items: center; }
-    .vault-grid { grid-template-columns: repeat(4, 1fr); order: 2; width: 90%; }
-    .bag-zone { order: 1; width: 350px; height: 350px; }
-    .final-scroll { order: 3; width: 90%; }
-}
-
-/* --- SIGILLO DI STAMPA (PRINT) --- */
+/* --- STAMPA (PRINT CUSTOMIZATION) --- */
 @media print {
-    #ritual-help-system, .vault-grid, .bag-zone, .save-btn, .corner-dec, #failed-tribute-box, #oracle-info, #hero-scroll-container {
+    #ritual-help-system, .vault-grid, .bag-zone, .save-btn, .corner-dec, #failed-tribute-box, #oracle-info, #hero-scroll-container, #qr-legacy-frame {
         display: none !important;
     }
-    body { background: #fdf5e6 !important; -webkit-print-color-adjust: exact; }
+    body { background: #fdf5e6 !important; -webkit-print-color-adjust: exact; font-family: 'MedievalSharp', cursive !important; }
+    
     .final-scroll { 
-        box-shadow: none !important; border: none !important; 
-        width: 100% !important; position: absolute; top: 0; left: 0;
+        box-shadow: none !important; width: 100% !important; position: absolute; top: 0; left: 0;
+        border: 15px solid transparent !important;
+        border-image: url('https://transparenttextures.com') 30 round !important; /* Effetto ghirigoro bordo */
+        padding: 50px !important;
     }
+
+    .print-relics-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 15px; margin-top: 20px; text-align: center;
+    }
+    
+    .print-relic-item img { width: 60px; height: 60px; object-fit: contain; image-rendering: pixelated; }
+    .print-relic-item span { display: block; font-size: 10px; margin-top: 5px; }
 }
