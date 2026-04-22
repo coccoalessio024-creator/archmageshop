@@ -11,58 +11,57 @@
     <div class="corner-dec top-left"></div>
     <div class="corner-dec bottom-left-dec"></div>
 
-    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block; z-index: 100;">📜 SEAL YOUR LEGACY (SAVE)</button>
-
-    <div class="legacy-container">
+    <!-- Pulsante per aprire il Vault -->
+    <button id="vault-toggle-btn" onclick="toggleVault()">🎒 OPEN VAULT</button>
+    <div id="vault-container">
         <div class="vault-grid" id="vault-items"></div>
+    </div>
 
+    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block; z-index: 1001; background:#8b4513; color:white; border:2px solid #d4af37; padding:10px 20px; cursor:pointer;">📜 SEAL YOUR LEGACY (SAVE)</button>
+
+    <div class="legacy-container" style="display: flex; gap: 40px; align-items: flex-start; margin-top: 50px;">
+        <!-- Sacca -->
         <div id="bag-and-support">
             <div class="bag-zone" id="drop-zone">
                 <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 10px;"></div>
-                <p style="color: rgba(212, 175, 55, 0.6); font-size: 12px;">Drop relics here</p>
+                <p style="color: rgba(212, 175, 55, 0.6); font-size: 12px;">Drop relics from Vault</p>
             </div>
-            <div id="failed-tribute-box" style="margin-top: 15px; padding: 10px; border: 1px dashed #8b4513; text-align: center; font-size: 12px;">
-                <p>Troubles with tribute? / Problemi col tributo?</p>
-                <a href="summon-support.html" style="color: var(--fire); font-weight: bold;">Click here / Clicca qui</a>
+            <div id="failed-tribute-box" style="text-align: center; font-size: 12px; margin-top: 20px;">
+                <p>Troubles? <a href="summon-support.html" style="color: var(--amber);">Invoke Support</a></p>
             </div>
         </div>
 
+        <!-- Pergamena Integrata -->
         <div class="final-scroll" id="print-area">
             <div class="scroll-header" style="text-align: center;">
                 <div id="final-avatar-frame" style="width:100px; height:100px; margin:auto; overflow:hidden; border:3px solid #8b4513;">
-                    <img id="legacy-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; transform:scale(1.35); image-rendering:pixelated;">
+                    <img id="legacy-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; transform:scale(1.35);">
                 </div>
-                <input type="text" placeholder="Enter Name..." id="hero-name" style="font-family:'MedievalSharp'; font-size: 24px; border:none; border-bottom:1px solid #8b4513; background:transparent; width:80%; text-align:center;">
-                <div class="stat-line" style="display:flex; justify-content:space-around; margin-top:10px; font-size:12px;">
+                <input type="text" placeholder="Enter Hero Name..." id="hero-name" style="font-family:'MedievalSharp'; font-size: 24px; border:none; border-bottom: 1px solid #8b4513; background: transparent; width: 100%; text-align: center; margin-top: 10px;">
+                
+                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; margin-top: 15px;">
                     <span id="display-lvl">LVL: --</span>
                     <span id="display-gems">GEMS: -/3</span>
-                    <span id="display-gold">TRIBUTE: 0.00 Gold</span>
+                    <span id="display-gold">TRIBUTE: 0.00</span>
                 </div>
             </div>
 
-            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px;">INVENTORY</h3>
-            <ul id="recap-list" style="list-style:none; padding:0; font-size:13px;"></ul>
- </div>
-                <input type="text" placeholder="notes and greetings  - note e congratulazioni:" style="font-family:'MedievalSharp'; font-size: 24px; border:none; border-bottom:1px solid #8b4513; background:transparent; width:80%; text-align:center;">
-                <div class="stat-line" style="display:flex; justify-content:space-around; margin-top:10px; font-size:12px;">
-                </div>
-            </div>
-                    
-          <div id="legacy-print-only">
-    <p style="text-align: center; font-weight: bold; border-top: 1px solid #8b4513; padding-top: 15px;">
-        Your tributes have yielded these relics / I tuoi tributi ti hanno fruttato:
-    </p>
-    <div id="print-relics-grid" class="print-relics-grid">
-        <!-- Verrà popolato dal JS -->
-    </div>
-</div>
+            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px; text-align: center;">INVENTORY</h3>
+            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 12px;"></ul>
 
-            <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
+            <!-- Casella Note spostata dentro la pergamena -->
+            <div style="margin-top: 20px;">
+                <textarea placeholder="Notes and Greetings / Note e Congratulazioni..." style="width: 100%; height: 60px; background: rgba(0,0,0,0.05); border: 1px dashed #8b4513; font-family: 'MedievalSharp'; padding: 5px;"></textarea>
+            </div>
+
+            <div id="final-stats" style="margin-top: 15px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
                 ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
             </div>
 
-            <div id="qr-legacy-frame" style="margin-top:20px; text-align:center;">
-                <img src="archives/legacy-qr.jpeg" style="width:60px;">
+            <!-- Questo appare solo nella stampa -->
+            <div id="legacy-print-only">
+                <p style="text-align: center; font-weight: bold; padding-top: 20px; border-top: 1px solid #8b4513;">RELICS ACQUIRED BY TRIBUTE:</p>
+                <div id="print-relics-grid" class="print-relics-grid"></div>
             </div>
         </div>
     </div>
@@ -72,26 +71,23 @@
     <script src="archmage-logic.js"></script>
     <script>
         const legacyDatabase = {
-            "blessing.png": { name: "Archmage Blessing", lore: "Resonates with the first Archmage.", fun: 0, joy: 3, mana: 1 },
-            "buff.png": { name: "Archmage Buff", lore: "Surge of adrenaline and light.", fun: 3, joy: 2, mana: 1 },
-            "coinhead.png": { name: "Toilet Token", lore: "An eternal flip between destiny and necessity.", fun: 3, joy: 2, mana: 1 },
-            "hugtoken.png": { name: "Archmage Hug", lore: "Warmth in the winter rain.", fun: 2, joy: 3, mana: 0 },
-            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Shadow among the stars.", fun: 1, joy: 0, mana: 3 },
-            "magicmirror.png.png": { name: "Magic Mirror", lore: "Reflects your true destiny.", fun: 0, joy: 3, mana: 2 },
-            "silentring.png.png": { name: "Silence Ring", lore: "Moonlight forged into silence.", fun: 0, joy: 0, mana: 5 },
-            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks your path.", fun: 3, joy: 0, mana: 2 }
+            "blessing.png": { name: "Archmage Blessing", lore: "Soul resonance.", fun: 0, joy: 3, mana: 1 },
+            "buff.png": { name: "Archmage Buff", lore: "Pure light surge.", fun: 3, joy: 2, mana: 1 },
+            "coinhead.png": { name: "Toilet Token", lore: "Eternal flip.", fun: 3, joy: 2, mana: 1 },
+            "hugtoken.png": { name: "Archmage Hug", lore: "Winter warmth.", fun: 2, joy: 3, mana: 0 },
+            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Shadow walker.", fun: 1, joy: 0, mana: 3 },
+            "magicmirror.png.png": { name: "Magic Mirror", lore: "True destiny.", fun: 0, joy: 3, mana: 2 },
+            "silentring.png.png": { name: "Silence Ring", lore: "Moonlight steps.", fun: 0, joy: 0, mana: 5 },
+            "treasuremap.png.png": { name: "Treasure Map", lore: "X marks the heart.", fun: 3, joy: 0, mana: 2 }
         };
 
-        let totalStats = { fun: 0, joy: 0, mana: 0 };
+        function toggleVault() { document.getElementById('vault-container').classList.toggle('open'); }
 
         window.addEventListener('DOMContentLoaded', () => {
             const lvl = localStorage.getItem('hero_lvl') || 1;
             const idx = localStorage.getItem('hero_avatar_idx') || 0;
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
-            const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
-
             document.getElementById('display-lvl').innerText = `LVL: ${lvl}`;
-            document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
             const cartItems = JSON.parse(localStorage.getItem('magicCart')) || [];
@@ -99,24 +95,20 @@
             document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.05).toFixed(2)} Gold`;
 
             const purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
-            const printGrid = document.getElementById('print-relics-grid');
+            const pGrid = document.getElementById('print-relics-grid');
 
             Object.keys(legacyDatabase).forEach(file => {
                 const dbItem = legacyDatabase[file];
                 const isInCart = cartItems.some(item => item.name.toLowerCase().trim() === dbItem.name.toLowerCase().trim());
                 
                 if (isInCart) {
-                    // Aggiungi alla griglia di stampa (PNG + Nome)
                     const pDiv = document.createElement('div');
                     pDiv.className = 'print-relic-item';
-                    pDiv.innerHTML = `<img src="archives/${file}"><span>${dbItem.name}</span>`;
-                    printGrid.appendChild(pDiv);
+                    pDiv.innerHTML = `<img src="archives/${file}"><br><span style="font-size:8px;">${dbItem.name}</span>`;
+                    pGrid.appendChild(pDiv);
 
-                    if (purchased.includes(file)) {
-                        renderInSatchel(file);
-                    } else {
-                        createVaultItem(file);
-                    }
+                    if (purchased.includes(file)) renderInSatchel(file);
+                    else createVaultItem(file);
                 }
             });
         });
@@ -124,8 +116,8 @@
         function createVaultItem(file) {
             const slot = document.createElement('div');
             slot.className = 'item-slot'; slot.draggable = true; slot.id = file;
-            slot.innerHTML = `<img src="archives/${file}" style="width:50px; pointer-events:none;">`;
-            slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); showOracle(file); };
+            slot.innerHTML = `<img src="archives/${file}">`;
+            slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); };
             document.getElementById('vault-items').appendChild(slot);
         }
 
@@ -133,35 +125,27 @@
             const item = legacyDatabase[file];
             const satImg = document.createElement('img');
             satImg.src = `archives/${file}`; satImg.className = 'satchel-item';
-            satImg.style.transform = `rotate(${Math.random()*20-10}deg)`;
             document.getElementById('satchel-visual-content').appendChild(satImg);
-
             const li = document.createElement('li');
-            li.innerHTML = `<strong>${item.name}</strong> (+F:${item.fun} +J:${item.joy} +M:${item.mana})`;
+            li.innerHTML = `• <strong>${item.name}</strong>`;
             document.getElementById('recap-list').appendChild(li);
-
-            totalStats.fun += item.fun; totalStats.joy += item.joy; totalStats.mana += item.mana;
-            document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
         }
 
         const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
+        dropZone.ondragover = (e) => e.preventDefault();
         dropZone.ondrop = (e) => {
             e.preventDefault();
             const file = e.dataTransfer.getData("text");
             if (legacyDatabase[file]) {
                 let purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
-                if (!purchased.includes(file)) { purchased.push(file); localStorage.setItem('purchased_items', JSON.stringify(purchased)); }
+                if (!purchased.includes(file)) {
+                    purchased.push(file);
+                    localStorage.setItem('purchased_items', JSON.stringify(purchased));
+                }
                 renderInSatchel(file);
-                if (document.getElementById(file)) document.getElementById(file).remove();
+                const el = document.getElementById(file); if (el) el.remove();
             }
         };
-
-        function showOracle(file) {
-            const o = document.getElementById('oracle-info');
-            o.innerHTML = `<strong>${legacyDatabase[file].name}</strong><br><small>${legacyDatabase[file].lore}</small>`;
-            o.style.display = 'block';
-        }
     </script>
 </body>
 </html>
