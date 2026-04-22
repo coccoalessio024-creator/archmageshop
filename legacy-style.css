@@ -61,14 +61,36 @@ body {
 
 /* --- SIGILLO DI STAMPA (PDF) --- */
 @media print {
+    @page {
+        size: A4 portrait; /* Forza il formato A4 verticale */
+        margin: 0; /* Gestiamo i margini tramite il padding della pergamena */
+    }
     #vault-toggle-btn, #vault-container, .bag-zone, .save-btn, .corner-dec, 
     #ritual-help-system, #failed-tribute-box, #qr-legacy-frame, #hero-scroll-container { 
         display: none !important; 
     }
-    body { background: #fdf5e6 !important; -webkit-print-color-adjust: exact; padding: 0; }
+    body  body {
+        background-color: #fdf5e6 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        width: 210mm !important; /* Larghezza esatta A4 */
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+    }
     .final-scroll { 
-        width: 90% !important; position: absolute; top: 0; left: 0; border: 15px double #8b4513 !important;
-        box-shadow: none !important; padding: 40px !important;
+        position: relative !important;
+        width: 100% !important;
+        min-height: 297mm !important; /* Altezza minima A4 */
+        margin: 0 !important;
+        padding: 20mm !important; /* Margine interno per non tagliare i testi */
+        background-color: #fdf5e6 !important;
+        border: 15px double #8b4513 !important;
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+        display: block !important;
     }
     #legacy-print-only { display: block !important; margin-top: 30px; }
     .print-relics-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 15px; text-align: center; }
