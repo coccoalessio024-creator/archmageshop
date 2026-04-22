@@ -8,206 +8,131 @@
     <link rel="stylesheet" href="style.css">
     <style>
         * { font-family: 'MedievalSharp', serif !important; box-sizing: border-box; }
-        
-        body {
-            background: #140f0a; color: #f3e5ab; margin: 0;
-            min-height: 100vh; display: flex; justify-content: center;
-            align-items: center; overflow-x: hidden;
-        }
+        body { background: #140f0a; color: #f3e5ab; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
 
-        /* --- LOGO FISSO CON LUCE CELESTIALE --- */
-        .brand-logo-fixed {
-            position: fixed; bottom: 20px; right: 20px;
-            width: clamp(80px, 10vw, 120px); z-index: 2000;
-            transition: 0.8s ease;
-        }
-        .brand-logo-fixed.locked { filter: grayscale(1) brightness(0.3); opacity: 0.5; }
-        .brand-logo-fixed.unlocked { filter: drop-shadow(0 0 15px #00fbff); }
-
-        /* --- PERGAMENE LATERALI (Nascono ROLLATE) --- */
-        .welcome-scroll {
-            position: fixed; top: 0; width: 150px; height: 100%;
-            background: #fdf5e6; border: 3px solid #8b4513; z-index: 50;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; align-items: center;
-            padding-top: 2rem; color: #3d2b1f; text-align: center;
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
-        }
+        /* Welcome Scrolls - Inizialmente ROLLATE */
+        .welcome-scroll { position: fixed; top: 0; width: 150px; height: 100%; background: #fdf5e6; border: 3px solid #8b4513; z-index: 50; transition: transform 1.2s ease; display: flex; flex-direction: column; align-items: center; padding-top: 2rem; color: #3d2b1f; text-align: center; box-shadow: 0 0 30px #000; }
         .scroll-left { left: 0; border-radius: 0 0 30px 0; }
         .scroll-right { right: 0; border-radius: 0 0 0 30px; }
         .welcome-scroll.rolled { transform: translateY(-93%); cursor: pointer; }
 
-        /* --- CONTENUTO CENTRALE --- */
-        .sanctum-container {
-            display: flex; flex-direction: column; align-items: center;
-            z-index: 100; width: 90%; max-width: 1000px; text-align: center;
-        }
-
-        .archmage-frame {
-            width: clamp(200px, 35vw, 320px); height: clamp(200px, 35vw, 320px);
-            border-radius: 50%; border: 6px solid #d4af37; overflow: hidden;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6); background: #1a120b;
-        }
+        .sanctum-container { display: flex; flex-direction: column; align-items: center; z-index: 100; width: 90%; max-width: 1000px; text-align: center; position: relative; }
+        .archmage-frame { width: clamp(200px, 35vw, 320px); height: clamp(200px, 35vw, 320px); border-radius: 50%; border: 6px solid #d4af37; overflow: hidden; box-shadow: 0 0 50px rgba(212, 175, 55, 0.6); background: #1a120b; }
         .archmage-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- BOTTONI CON ICONE TEMATICHE --- */
-        .actions-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
-        
-        .arch-btn {
-            display: flex; align-items: center; gap: 10px;
-            background: #1a1a1a; color: #d4af37; padding: 12px 20px;
-            text-decoration: none; border: 2px solid #333;
-            font-weight: bold; transition: 0.3s; border-radius: 4px;
-            text-transform: uppercase; font-size: 0.9rem;
-        }
+        /* Bottoni con Icone */
+        .actions-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; z-index: 110; }
+        .arch-btn { display: flex; align-items: center; gap: 10px; background: #1a1a1a; color: #d4af37; padding: 12px 20px; text-decoration: none; border: 2px solid #333; font-weight: bold; transition: 0.3s; border-radius: 4px; text-transform: uppercase; }
         .arch-btn:hover { border-color: #d4af37; color: #fff; transform: translateY(-3px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-        
-        /* Icone bottoni */
-        .btn-sym { font-size: 1.2rem; color: #ffcc00; }
 
-        /* --- PIOGGIA DI RUNE ALCHEMICHE --- */
-        .magic-rune {
-            position: fixed; pointer-events: none; z-index: 10;
-            animation: fall linear forwards; font-weight: bold;
-        }
+        /* Logo & Help */
+        .brand-logo-fixed { position: fixed; bottom: 20px; right: 20px; width: clamp(80px, 10vw, 120px); z-index: 2000; transition: 0.8s ease; cursor: pointer; }
+        .brand-logo-fixed.locked { filter: grayscale(1) brightness(0.3); opacity: 0.5; }
+        .brand-logo-fixed.unlocked { filter: drop-shadow(0 0 15px #00fbff); }
+        .help-wrapper { position: fixed; bottom: 25px; left: 25px; z-index: 2500; }
+        .help-btn { width: 45px; height: 45px; background: #d4af37; color: #140f0a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; cursor: pointer; border: 2px solid #140f0a; box-shadow: 0 0 10px #d4af37; }
+        .help-scroll { position: absolute; bottom: 60px; left: 0; width: 280px; background: #fdf5e6; border: 2px solid #8b4513; padding: 15px; color: #3d2b1f; display: none; box-shadow: 0 10px 30px #000; border-radius: 5px; font-size: 0.85rem; }
+        .help-scroll.active { display: block; animation: fadeIn 0.3s; }
 
-        /* --- RESPONSIVE MOBILE --- */
+        .magic-rune { position: fixed; pointer-events: none; z-index: 10; animation: fall linear forwards; font-weight: bold; }
+        @keyframes fall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
         @media (max-width: 768px) {
             .welcome-scroll { width: 100%; z-index: 40; }
             .welcome-scroll.rolled { transform: translateY(-95%); }
             .welcome-scroll:not(.rolled) { transform: translateY(0); }
-            .sanctum-container { z-index: 100; } /* Bottoni restano sopra */
         }
-
-        /* --- HELP SYSTEM (CLICK LOGIC) --- */
-        .help-wrapper { position: fixed; bottom: 25px; left: 25px; z-index: 2500; }
-        .help-btn {
-            width: 45px; height: 45px; background: #d4af37; color: #140f0a;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.5rem; cursor: pointer; border: 2px solid #140f0a;
-            box-shadow: 0 0 10px #d4af37;
-        }
-        .help-scroll {
-            position: absolute; bottom: 60px; left: 0; width: 280px;
-            background: #fdf5e6; border: 2px solid #8b4513; padding: 15px; color: #3d2b1f;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 5px;
-            display: none; font-size: 0.85rem; line-height: 1.4;
-        }
-        .help-scroll.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-
-    <!-- HELP SYSTEM -->
     <div class="help-wrapper">
         <div class="help-btn" onclick="toggleHelp(event)">?</div>
-        <div class="help-scroll" id="helpScroll">
+        <div id="helpScroll" class="help-scroll">
             <b style="color:#7a1515">GUIDE / GUIDA</b><br><br>
-            [EN] Click banners to read lore. Complete trials to unlock the secret portal.<br><br>
-            [IT] Clicca i banner per la storia. Completa le prove per sbloccare il portale segreto.
+            [EN] Click banners to read lore. Trials unlock on May 4th.<br><br>
+            [IT] Clicca i banner per la storia. Le prove si sbloccano il 4 Maggio.
         </div>
     </div>
 
-    <!-- PERGAMENE LATERALI (Nascono Chiuse) -->
-    <div class="welcome-scroll scroll-left rolled" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.1rem;">WELCOME</h3>
-        <p>✧<br>Adept<br>of the<br>Ancient<br>Arts<br>✧</p>
+    <div class="welcome-scroll scroll-left rolled" id="s-left" onclick="this.classList.toggle('rolled')">
+        <h3 style="color:#7a1515; margin-bottom:1rem;">WELCOME Adept of Arts</h3>
+        <p>✧<br>The journey<br>begins<br>here<br>✧</p>
     </div>
-
-    <div class="welcome-scroll scroll-right rolled" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; font-size: 1.1rem;">REJOICE</h3>
-        <p>✧<br>The Lore<br>of the<br>Void<br>Open<br>✧</p>
+    <div class="welcome-scroll scroll-right rolled" id="s-right" onclick="this.classList.toggle('rolled')">
+        <h3 style="color:#7a1515; margin-bottom:1rem;">REJOICE Void Walker</h3>
+        <p>✧<br>The Lore<br>awaits<br>the worthy<br>✧</p>
     </div>
 
     <div class="sanctum-container">
-        <div class="archmage-frame">
-            <img src="archives/Archmage.png.png" alt="The Archmage">
-        </div>
-        <h1 class="arch-title" style="font-size: clamp(2rem, 8vw, 4.5rem); color: #d4af37; text-shadow: 0 0 20px #000;">The Archmage</h1>
-        <p class="intro-text" style="font-style: italic; margin-bottom: 20px;">"Rejoice in the light of guidance of The Archmage."</p>
-
+        <div class="archmage-frame"><img src="archives/Archmage.png.png" alt="The Archmage"></div>
+        <h1 style="color:#d4af37; text-shadow:0 0 20px #000; font-size: clamp(2rem, 8vw, 4.5rem);">The Archmage</h1>
         <div class="actions-row">
-            <a href="emporium/index.html" class="arch-btn">
-                <span class="btn-sym">💰</span> THE EMPORIUM
-            </a>
-            <a href="emporium/bulletins.html" class="arch-btn">
-                <span class="btn-sym">📜</span> BULLETINS
-            </a>
-            <a href="trial.html" class="arch-btn" id="trialBtn">
-                <span class="btn-sym">⚔️</span> THE TRIAL
-            </a>
+            <a href="emporium/index.html" class="arch-btn">💰 THE EMPORIUM</a>
+            <a href="emporium/bulletins.html" class="arch-btn">📜 BULLETINS</a>
+            <a href="trial.html" class="arch-btn" id="trialBtn">⚔️ THE TRIAL</a>
         </div>
     </div>
 
-    <a href="secret.html" class="brand-logo-fixed" id="fixedLogo">
-        <img src="archives/logo_archmage.png" alt="Logo" style="width: 100%;">
-    </a>
+    <div class="brand-logo-fixed" id="fixedLogo" onclick="location.href='secret.html'">
+        <img src="archives/logo_archmage.png" alt="Logo" style="width:100%;">
+    </div>
 
     <script>
-        // --- 1. LOGICA SIGILLO TEMPORALE (Dal PDF Originale) ---
-        const unlockDate = new Date(2026, 4, 4); 
+        const unlockDate = new Date(2026, 4, 4);
         const today = new Date();
+        const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait for the 4th of may, stars aren't aligned yet. Try and find other clues";
 
         function applyCelestialLock() {
-            const trialBtn = document.getElementById('trialBtn');
+            const tBtn = document.getElementById('trialBtn');
             const logo = document.getElementById('fixedLogo');
-            
             if (today < unlockDate) {
-                // Effetto "Spento"
-                if(trialBtn) {
-                    trialBtn.style.filter = "grayscale(1) brightness(0.3)";
-                    trialBtn.onclick = (e) => { 
-                        e.preventDefault(); 
-                        alert("Stars aren't aligned yet. Wait for May 4th. / Gli astri non sono allineati. Attendi il 4 Maggio."); 
-                    };
+                if(tBtn) {
+                    tBtn.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
+                    tBtn.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }
-                if(logo) logo.classList.add('locked');
+                if(logo) {
+                    logo.classList.add('locked');
+                    logo.onclick = (e) => { e.preventDefault(); alert(msg); };
+                }
             } else {
                 if(logo) logo.classList.add('unlocked');
             }
         }
 
-        // --- 2. PIOGGIA DI RUNE ALCHEMICHE ---
         function spawnRunes() {
-            // Simboli Alchemici: Zolfo, Mercurio, Sale, Aria, Acqua, Fuoco, Terra
-            const runes = ['🜍', '☿', '🜔', '🜁', '🜄', '🜂', '🜃', '❂', '❈'];
-            const glows = ['#d4af37', '#00fbff', '#ff4500']; // Oro, Mana, Fuoco
-            
+            const runes = ['🜍', '☿', '🜔', '🜁', '🜄', '🜂', '❂', '❈'];
+            const glows = ['#d4af37', '#00fbff', '#ff4500'];
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const r = document.createElement('div');
-                    r.innerHTML = runes[Math.floor(Math.random() * runes.length)];
+                    r.innerHTML = runes[Math.floor(Math.random()*runes.length)];
                     r.className = 'magic-rune';
-                    r.style.color = "#fff";
-                    r.style.textShadow = `0 0 10px ${glows[Math.floor(Math.random() * glows.length)]}`;
-                    r.style.left = (Math.random() * 95) + 'vw';
-                    r.style.fontSize = (Math.random() * 15 + 15) + 'px';
-                    r.style.animation = `fall ${Math.random() * 3 + 4}s linear forwards`;
+                    r.style.color = "#fff"; 
+                    r.style.textShadow = `0 0 10px ${glows[Math.floor(Math.random()*glows.length)]}`;
+                    r.style.left = (Math.random()*95)+'vw'; 
+                    r.style.fontSize = (Math.random()*15+15)+'px';
+                    r.style.animation = `fall ${Math.random()*3+4}s linear forwards`;
                     document.body.appendChild(r);
                     setTimeout(() => r.remove(), 7000);
                 }, i * 400);
             }
         }
 
-        // --- 3. LOGICA HELP (CLICK) ---
-        function toggleHelp(e) {
-            e.stopPropagation();
-            document.getElementById('helpScroll').classList.toggle('active');
-        }
+        function toggleHelp(e) { e.stopPropagation(); document.getElementById('helpScroll').classList.toggle('active'); }
         document.onclick = () => document.getElementById('helpScroll').classList.remove('active');
 
         window.onload = () => {
             applyCelestialLock();
             spawnRunes();
-            setInterval(spawnRunes, 8000); // Ripete la pioggia
+            setInterval(spawnRunes, 8000);
+            // Auto-close scrolls after 15s if opened
+            setTimeout(() => {
+                document.getElementById('s-left').classList.add('rolled');
+                document.getElementById('s-right').classList.add('rolled');
+            }, 15000);
         };
-
-        // Animazione Rune
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes fall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }`;
-        document.head.appendChild(style);
     </script>
     <script src="archmage-logic.js"></script>
 </body>
 </html>
+
