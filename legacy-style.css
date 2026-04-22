@@ -1,4 +1,4 @@
-/* --- ROOT VARIABLES & FONTS --- */
+/* --- FONTS & UNIVERSAL --- */
 @import url('https://googleapis.com');
 
 :root {
@@ -7,13 +7,12 @@
     --parchment: #fdf5e6;
     --bg-dark: #2c1e12;
     --fire: #ff4d00;
-    --mana: #4fffe0;
 }
 
 body {
     background: radial-gradient(circle at center, #4a3520 0%, var(--bg-dark) 100%);
     color: var(--parchment);
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'MedievalSharp', cursive !important;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -22,18 +21,19 @@ body {
     overflow-x: hidden;
 }
 
-/* --- LAYOUT --- */
+/* --- LAYOUT 3 COLONNE --- */
 .legacy-container {
     display: grid;
     grid-template-columns: 280px 1fr 400px;
     gap: 20px;
     width: 98%;
     max-width: 1400px;
-    margin-top: 60px;
+    margin-top: 40px;
     z-index: 5;
     align-items: start;
 }
 
+/* Vault Sinistra */
 .vault-grid {
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid var(--gold);
@@ -41,10 +41,13 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+    min-height: 300px;
 }
 
 .item-slot { width: 85px; height: 85px; border: 1px solid var(--gold); background: rgba(212, 175, 55, 0.1); display: flex; justify-content: center; align-items: center; cursor: grab; touch-action: none; }
+.item-slot img { width: 60px; image-rendering: pixelated; }
 
+/* Sacca Centrale */
 .bag-zone {
     position: relative; width: 350px; height: 350px; margin: 0 auto;
     background: radial-gradient(circle, #5d4037 0%, #2c1e12 100%);
@@ -54,33 +57,55 @@ body {
     animation: glow-pulse 3s infinite alternate;
 }
 
+@keyframes glow-pulse { from { box-shadow: inset 0 0 40px #000, 0 0 15px var(--gold); } to { box-shadow: inset 0 0 50px #000, 0 0 30px var(--amber); } }
+
+.satchel-item { width: 70px; height: 70px; margin: 5px; filter: drop-shadow(0 0 5px var(--gold)); }
+
+/* Pergamena Destra */
 .final-scroll {
     background: var(--parchment);
     background-image: url('https://transparenttextures.com');
     color: #2c1e12; padding: 30px; border: 5px solid #8b4513;
-    box-shadow: 10px 10px 0px #000; min-height: 600px;
+    box-shadow: 10px 10px 0px #000;
 }
 
-/* --- STAMPA (PRINT CUSTOMIZATION) --- */
+/* --- SEZIONE RELIQUIE (Invisibile a schermo) --- */
+#print-relics-section { display: none !important; }
+
+/* --- SIGILLO DI STAMPA (PRINT) --- */
 @media print {
     #ritual-help-system, .vault-grid, .bag-zone, .save-btn, .corner-dec, #failed-tribute-box, #oracle-info, #hero-scroll-container, #qr-legacy-frame {
         display: none !important;
     }
-    body { background: #fdf5e6 !important; -webkit-print-color-adjust: exact; font-family: 'MedievalSharp', cursive !important; }
+    body { background: #fdf5e6 !important; -webkit-print-color-adjust: exact; }
     
     .final-scroll { 
         box-shadow: none !important; width: 100% !important; position: absolute; top: 0; left: 0;
-        border: 15px solid transparent !important;
-        border-image: url('https://transparenttextures.com') 30 round !important; /* Effetto ghirigoro bordo */
-        padding: 50px !important;
+        border: 20px solid #8b4513 !important;
+        border-style: double !important; /* Effetto ghirigoro antico */
+        padding: 40px !important;
+    }
+
+    #print-relics-section {
+        display: block !important;
+        margin-top: 30px;
+        border-top: 2px solid #8b4513;
     }
 
     .print-relics-grid {
         display: grid !important;
         grid-template-columns: repeat(4, 1fr) !important;
-        gap: 15px; margin-top: 20px; text-align: center;
+        gap: 15px; margin-top: 20px;
     }
     
-    .print-relic-item img { width: 60px; height: 60px; object-fit: contain; image-rendering: pixelated; }
-    .print-relic-item span { display: block; font-size: 10px; margin-top: 5px; }
+    .print-relic-item { text-align: center; font-size: 10px; }
+    .print-relic-item img { width: 60px; height: 60px; object-fit: contain; }
+}
+
+/* Responsive Mobile */
+@media (max-width: 1100px) {
+    .legacy-container { grid-template-columns: 1fr; }
+    .vault-grid { order: 2; width: 90%; margin: 20px auto; }
+    #bag-and-support { order: 1; }
+    .final-scroll { order: 3; width: 90%; margin: 20px auto; }
 }
