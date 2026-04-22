@@ -5,133 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Archmage's Legacy</title>
     <link rel="stylesheet" href="legacy-style.css">
-    <style>
-        /* Integrazione MedievalSharp e Stili Visivi */
-        body, input, button { font-family: 'MedievalSharp', serif !important; }
-        
-        /* Sacca Arcanica: Fix colore e forma */
-        .bag-zone {
-            position: relative;
-            background: radial-gradient(circle, #5d4037 0%, #2c1e12 100%); /* Colore cuoio, non nero */
-            border: 4px dashed #d4af37;
-            border-radius: 42% 58% 46% 54% / 55% 48% 52% 45%;
-            box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.8);
-            overflow: visible;
-            min-height: 350px;
-            width: 350px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: glow-pulse 3s infinite alternate;
-        }
-        @keyframes glow-pulse {
-            from { box-shadow: inset 0 0 50px #000, 0 0 15px #d4af37; }
-            to { box-shadow: inset 0 0 60px #000, 0 0 35px #ffbf00; }
-        }
-        .bag-zone::before {
-            content: "THE SATCHEL";
-            position: absolute; top: -15px; background: #050505;
-            padding: 0 15px; color: #d4af37; font-size: 14px;
-        }
-
-        #final-avatar-frame {
-            width: 120px; height: 120px;
-            border: 4px solid #8b4513;
-            background: #333;
-            margin: 10px auto;
-            overflow: hidden;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-        }
-        #final-avatar-frame img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transform: scale(1.35);
-            image-rendering: pixelated;
-        }
-
-        .satchel-item {
-            width: 70px; height: 70px;
-            margin: 5px;
-            display: inline-block;
-            filter: drop-shadow(0 0 5px #d4af37);
-        }
-        
-        .item-slot { touch-action: none; cursor: grab; }
-    </style>
 </head>
 <body>
 
-    <!-- Help Ritual System -->
-    <div id="ritual-help-system" style="position: fixed; bottom: 25px; left: 25px; z-index: 10005;">
-        <button id="quest-btn" onclick="toggleQuest()" style="width: 45px; height: 45px; border-radius: 50%; background: #2c1e12; border: 2px solid #d4af37; color: #d4af37; font-family: 'MedievalSharp'; font-size: 24px; cursor: pointer; box-shadow: 0 0 15px #d4af37;">?</button>
-        <div id="quest-scroll" style="display: none; position: absolute; bottom: 60px; left: 0; width: 280px; background: #fdf5e6; color: #2c1e12; border: 3px solid #8b4513; padding: 15px; box-shadow: 8px 8px 0px #000;">
-            <h4 style="margin: 0 0 10px 0; border-bottom: 2px solid #8b4513;">📜 RITUAL GUIDE</h4>
-            <p style="font-size: 13px;">Drag relics into the Satchel. Close Hero Status before saving! / Trascina le reliquie nella sacca. Chiudi lo Status prima di salvare!</p>
-            <button onclick="toggleQuest()" style="background: #8b4513; color: #fdf5e6; border: none; padding: 5px; width: 100%; cursor: pointer;">CLOSE</button>
-        </div>
-    </div>
-
     <div class="corner-dec top-left"></div>
     <div class="corner-dec bottom-left-dec"></div>
-    
-    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block;">📜 SEAL YOUR LEGACY (SAVE)</button>
+
+    <button class="save-btn" onclick="window.print()" style="margin: 20px auto; display: block; z-index: 100;">📜 SEAL YOUR LEGACY (SAVE)</button>
 
     <div class="legacy-container">
-        <!-- Vault a sinistra -->
         <div class="vault-grid" id="vault-items"></div>
 
-        <!-- Sacca al centro -->
         <div id="bag-and-support">
             <div class="bag-zone" id="drop-zone">
                 <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 10px;"></div>
                 <p style="color: rgba(212, 175, 55, 0.6); font-size: 12px;">Drop relics here</p>
             </div>
-            
-            <div id="failed-tribute-box" style="margin-top: 15px; padding: 10px; border: 1px dashed #8b4513; background: rgba(139, 69, 19, 0.1); font-size: 12px; text-align: center; color: #d4af37;">
-                <p>Troubles with your tribute? / Problemi col tributo?</p>
-                <a href="summon-support.html" style="color: #ff4d00; font-weight: bold;">Click here / Clicca qui</a>
+            <div id="failed-tribute-box" style="margin-top: 15px; padding: 10px; border: 1px dashed #8b4513; text-align: center; font-size: 12px;">
+                <p>Troubles with tribute? / Problemi col tributo?</p>
+                <a href="summon-support.html" style="color: var(--fire); font-weight: bold;">Click here / Clicca qui</a>
             </div>
         </div>
 
-        <!-- Pergamena a destra -->
         <div class="final-scroll" id="print-area">
             <div class="scroll-header" style="text-align: center;">
-                <div id="final-avatar-frame">
-                    <img id="legacy-avatar-img" src="" alt="Hero">
+                <div id="final-avatar-frame" style="width:100px; height:100px; margin:auto; overflow:hidden; border:3px solid #8b4513;">
+                    <img id="legacy-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; transform:scale(1.35); image-rendering:pixelated;">
                 </div>
-                <input type="text" placeholder="Enter Name..." id="hero-name" style="font-size: 24px; border:none; border-bottom: 1px solid #8b4513; background: transparent; width: 80%;">
-                <div class="stat-line" style="display: flex; justify-content: space-around; margin-top: 15px; font-size: 12px; font-weight: bold;">
+                <input type="text" placeholder="Enter Name..." id="hero-name" style="font-family:'MedievalSharp'; font-size: 24px; border:none; border-bottom:1px solid #8b4513; background:transparent; width:80%; text-align:center;">
+                <div class="stat-line" style="display:flex; justify-content:space-around; margin-top:10px; font-size:12px;">
                     <span id="display-lvl">LVL: --</span>
                     <span id="display-gems">GEMS: -/3</span>
-                    <span id="display-gold" style="color: #8b4513;">TRIBUTE: 0.00 Gold</span>
+                    <span id="display-gold">TRIBUTE: 0.00 Gold</span>
                 </div>
             </div>
 
             <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px;">SCRIBED CHRONICLES</h3>
-            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 13px;"></ul>
-            
+            <ul id="recap-list" style="list-style:none; padding:0; font-size:13px;"></ul>
+
+            <!-- NUOVA SEZIONE PER LA STAMPA -->
+            <div id="print-relics-section" style="margin-top: 30px; border-top: 2px double #8b4513; padding-top: 15px;">
+                <p style="font-weight: bold; text-align: center;">Your tributes have yielded these relics / I tuoi tributi ti hanno fruttato questi oggetti:</p>
+                <div id="print-relics-grid" class="print-relics-grid" style="display:none;">
+                    <!-- Popolato via JS -->
+                </div>
+            </div>
+
             <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
                 ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
             </div>
 
-            <div id="qr-legacy-frame" style="margin-top: 30px; text-align: center;">
-                <img src="archives/legacy-qr.jpeg" alt="QR" style="width: 70px; border: 1px solid #8b4513; padding: 5px; background: white;">
-                <p style="font-size: 8px;">Scan to verify Legacy</p>
+            <div id="qr-legacy-frame" style="margin-top:20px; text-align:center;">
+                <img src="archives/legacy-qr.jpeg" style="width:60px;">
             </div>
         </div>
     </div>
 
-    <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; z-index:10000;"></div>
+    <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid var(--gold); padding:10px; color:var(--gold); z-index:10000;"></div>
 
     <script src="archmage-logic.js"></script>
     <script>
-        function toggleQuest() {
-            const scroll = document.getElementById('quest-scroll');
-            scroll.style.display = (scroll.style.display === 'none' || scroll.style.display === '') ? 'block' : 'none';
-        }
-
         const legacyDatabase = {
             "blessing.png": { name: "Archmage Blessing", lore: "Resonates with the first Archmage.", fun: 0, joy: 3, mana: 1 },
             "buff.png": { name: "Archmage Buff", lore: "Surge of adrenaline and light.", fun: 3, joy: 2, mana: 1 },
@@ -144,10 +77,8 @@
         };
 
         let totalStats = { fun: 0, joy: 0, mana: 0 };
-        let activeTouchItem = null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Dati HUD
             const lvl = localStorage.getItem('hero_lvl') || 1;
             const idx = localStorage.getItem('hero_avatar_idx') || 0;
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
@@ -157,102 +88,45 @@
             document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
-            // MEMORIA CARRELLO: Fix Riconoscimento per Nome
             const cartItems = JSON.parse(localStorage.getItem('magicCart')) || [];
             const goldSpent = cartItems.reduce((total, item) => total + parseFloat(item.price || 0), 0);
             document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.05).toFixed(2)} Gold`;
 
             const purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
+            const printGrid = document.getElementById('print-relics-grid');
 
             Object.keys(legacyDatabase).forEach(file => {
-                const dbName = legacyDatabase[file].name.toLowerCase().trim();
-                const isInCart = cartItems.some(item => item.name.toLowerCase().trim() === dbName);
+                const dbItem = legacyDatabase[file];
+                const isInCart = cartItems.some(item => item.name.toLowerCase().trim() === dbItem.name.toLowerCase().trim());
                 
-                if (purchased.includes(file)) {
-                    renderInSatchel(file);
-                } else if (isInCart) {
-                    createVaultItem(file);
+                if (isInCart) {
+                    // Aggiungi alla griglia di stampa (PNG + Nome)
+                    const pDiv = document.createElement('div');
+                    pDiv.className = 'print-relic-item';
+                    pDiv.innerHTML = `<img src="archives/${file}"><span>${dbItem.name}</span>`;
+                    printGrid.appendChild(pDiv);
+
+                    if (purchased.includes(file)) {
+                        renderInSatchel(file);
+                    } else {
+                        createVaultItem(file);
+                    }
                 }
             });
-
-            if (document.getElementById('vault-items').children.length === 0 && purchased.length === 0) {
-                document.getElementById('vault-items').innerHTML = "<p style='font-size:10px; color:#d4af37; padding:20px;'>Your cart was empty...</p>";
-            }
         });
 
         function createVaultItem(file) {
             const slot = document.createElement('div');
-            slot.className = 'item-slot';
-            slot.draggable = true;
-            slot.id = file;
+            slot.className = 'item-slot'; slot.draggable = true; slot.id = file;
             slot.innerHTML = `<img src="archives/${file}" style="width:50px; pointer-events:none;">`;
-            
-            // Desktop Drag
-            slot.ondragstart = (e) => {
-                e.dataTransfer.setData("text", e.target.id);
-                showOracle(file);
-            };
-            slot.ondragend = () => document.getElementById('oracle-info').style.display = 'none';
-
-            // Mobile Touch (Streamlined)
-            slot.addEventListener('touchstart', (e) => { activeTouchItem = slot; showOracle(file); }, {passive: false});
-            slot.addEventListener('touchmove', handleTouchMove, {passive: false});
-            slot.addEventListener('touchend', handleTouchEnd, {passive: false});
-
+            slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); showOracle(file); };
             document.getElementById('vault-items').appendChild(slot);
-        }
-
-        function handleTouchMove(e) {
-            if (!activeTouchItem) return;
-            e.preventDefault();
-            const touch = e.touches[0];
-            activeTouchItem.style.position = 'fixed';
-            activeTouchItem.style.left = (touch.clientX - 25) + 'px';
-            activeTouchItem.style.top = (touch.clientY - 25) + 'px';
-            activeTouchItem.style.zIndex = "11000";
-        }
-
-        function handleTouchEnd(e) {
-            if (!activeTouchItem) return;
-            const touch = e.changedTouches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (target && target.closest('#drop-zone')) {
-                processDrop(activeTouchItem.id);
-            } else {
-                activeTouchItem.style.position = 'relative';
-                activeTouchItem.style.left = '0'; activeTouchItem.style.top = '0';
-            }
-            activeTouchItem = null;
-            document.getElementById('oracle-info').style.display = 'none';
-        }
-
-        const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('hover');
-            processDrop(e.dataTransfer.getData("text"));
-        };
-
-        function processDrop(file) {
-            const item = legacyDatabase[file];
-            if (item) {
-                let purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
-                if (!purchased.includes(file)) {
-                    purchased.push(file);
-                    localStorage.setItem('purchased_items', JSON.stringify(purchased));
-                }
-                renderInSatchel(file);
-                const el = document.getElementById(file);
-                if (el) el.remove();
-            }
         }
 
         function renderInSatchel(file) {
             const item = legacyDatabase[file];
             const satImg = document.createElement('img');
-            satImg.src = `archives/${file}`;
-            satImg.className = 'satchel-item';
+            satImg.src = `archives/${file}`; satImg.className = 'satchel-item';
             satImg.style.transform = `rotate(${Math.random()*20-10}deg)`;
             document.getElementById('satchel-visual-content').appendChild(satImg);
 
@@ -263,6 +137,19 @@
             totalStats.fun += item.fun; totalStats.joy += item.joy; totalStats.mana += item.mana;
             document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
         }
+
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.getData("text");
+            if (legacyDatabase[file]) {
+                let purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
+                if (!purchased.includes(file)) { purchased.push(file); localStorage.setItem('purchased_items', JSON.stringify(purchased)); }
+                renderInSatchel(file);
+                if (document.getElementById(file)) document.getElementById(file).remove();
+            }
+        };
 
         function showOracle(file) {
             const o = document.getElementById('oracle-info');
