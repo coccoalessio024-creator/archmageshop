@@ -204,64 +204,70 @@
       }
     });
 
-   const playImABeliever = () => {
+const playImABeliever = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const tempo = 160; // Più veloce di All Star
+    const tempo = 165; 
     const beat = 60 / tempo;
 
-    // Frequenze chiave (Scala di Sol Maggiore): 
-    // G4=392, A4=440, B4=493, C5=523, D5=587, E5=659
+    // Frequenze Scala Sol Maggiore (G4=392, A4=440, B4=493, C5=523, D5=587, E5=659, F#5=740, G5=784)
+    const G4=392, A4=440, B4=493, C5=523, D5=587, E5=659, FS5=740, G5=784, R=0;
+
     const melody = [
-        { f: 587, d: 0.5 }, { f: 659, d: 0.5 }, { f: 587, d: 0.5 }, // I saw her
-        { f: 523, d: 0.5 }, { f: 493, d: 1.0 },                   // face...
-        { f: 0, d: 0.2 },                                         // (pausa)
-        { f: 392, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.5 }, // Now I'm a
-        { f: 587, d: 1.5 },                                         // Believer!
-        { f: 0, d: 0.4 },
-        // Il fischio/Riff iconico:
-        { f: 587, d: 0.4 }, { f: 587, d: 0.2 }, { f: 523, d: 0.2 }, { f: 493, d: 0.4 }, { f: 392, d: 0.8 }
+        // STROFA: "I thought love was only true in fairy tales..."
+        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:B4, d:0.5}, {f:G4, d:1}, {f:R, d:0.2},
+        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:B4, d:0.5}, {f:G4, d:1}, {f:R, d:0.2},
+        // "Meant for someone else but not for me..."
+        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:E5, d:0.5}, {f:D5, d:1}, 
+        {f:C5, d:0.5}, {f:B4, d:0.5}, {f:A4, d:1}, {f:R, d:0.5},
+
+        // PRE-CHORUS: "Love was out to get me..."
+        {f:G4, d:0.5}, {f:B4, d:0.5}, {f:D5, d:0.5}, {f:G5, d:1}, {f:FS5, d:0.5}, {f:G5, d:0.5}, {f:D5, d:1.5},
+        // "That's the way it seemed..."
+        {f:G4, d:0.5}, {f:B4, d:0.5}, {f:D5, d:0.5}, {f:G5, d:1}, {f:FS5, d:0.5}, {f:G5, d:0.5}, {f:A5, d:1.5},
+
+        // RITORNELLO: "Then I saw her face!"
+        {f:D5, d:0.3}, {f:E5, d:0.3}, {f:D5, d:0.3}, {f:C5, d:0.5}, {f:B4, d:1.2}, {f:R, d:0.3},
+        // "Now I'm a believer!"
+        {f:G4, d:0.3}, {f:G4, d:0.3}, {f:G4, d:0.3}, {f:A4, d:0.3}, {f:G4, d:0.3}, {f:D5, d:1.5}, {f:R, d:0.3},
+        // "Not a trace, of doubt in my mind..."
+        {f:D5, d:0.3}, {f:E5, d:0.3}, {f:D5, d:0.3}, {f:C5, d:0.5}, {f:B4, d:1.2}, {f:R, d:0.3},
+        {f:G4, d:0.3}, {f:G4, d:0.3}, {f:G4, d:0.3}, {f:A4, d:0.3}, {f:G4, d:0.3}, {f:D5, d:1.5},
+
+        // IL RIFF ICONICO (Il fischio finale)
+        {f:D5, d:0.4}, {f:D5, d:0.2}, {f:C5, d:0.2}, {f:B4, d:0.4}, {f:G4, d:0.8}, {f:R, d:0.2},
+        {f:D5, d:0.4}, {f:D5, d:0.2}, {f:C5, d:0.2}, {f:B4, d:0.4}, {f:G4, d:1.5}
     ];
 
     let now = ctx.currentTime + 0.1;
 
     melody.forEach((note) => {
         if (note.f > 0) {
-            // OSCILLATORE 1: Onda sinusoidale per il "fischio" (Whistle)
-            const osc1 = ctx.createOscillator();
-            const gain1 = ctx.createGain();
-            osc1.type = 'sine'; 
-            osc1.frequency.setValueAtTime(note.f, now);
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
             
-            // OSCILLATORE 2: Onda Triangolare per il corpo 8-bit (Chiptune)
-            const osc2 = ctx.createOscillator();
-            const gain2 = ctx.createGain();
-            osc2.type = 'triangle';
-            osc2.frequency.setValueAtTime(note.f, now);
+            // Mix tra Square (8bit) e Triangle (Whistle)
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(note.f, now);
 
-            // ENVELOPE: Attacco morbido (fischio) e decadimento rapido
-            gain1.gain.setValueAtTime(0, now);
-            gain1.gain.linearRampToValueAtTime(0.15, now + 0.05);
-            gain1.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.1, now + 0.02); // Attacco veloce
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + (note.d * beat));
 
-            gain2.gain.setValueAtTime(0, now);
-            gain2.gain.linearRampToValueAtTime(0.05, now + 0.05);
-            gain2.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
 
-            osc1.connect(gain1); gain1.connect(ctx.destination);
-            osc2.connect(gain2); gain2.connect(ctx.destination);
-
-            osc1.start(now); osc1.stop(now + note.d * beat);
-            osc2.start(now); osc2.stop(now + note.d * beat);
+            osc.start(now);
+            osc.stop(now + (note.d * beat));
         }
-        
-        // Calcolo tempo per la prossima nota
-        now += note.d * beat; 
+        now += (note.d * beat);
     });
 
     document.body.removeEventListener('click', playImABeliever);
 };
 
+// Attivazione al primo click sulla pagina
 document.body.addEventListener('click', playImABeliever);
+
     // 5. CORIANDOLI
     function confettiRain() {
       for(let i=0; i<100; i++) {
