@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Archmage's Legacy</title>
+        <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="legacy-style.css">
     <style>
         /* Integrazione MedievalSharp e Stili Visivi */
@@ -121,6 +124,12 @@
                     <span id="display-lvl">LEVEL: --</span>
                     <span id="display-gems">GEMS: ---</span>
                 </div>
+                     <div id="legacy-print-only">
+                <p style="text-align: center; font-weight: bold; padding-top: 20px; border-top: 1px solid #8b4513;">RELICS ACQUIRED BY TRIBUTE:</p>
+                <div id="print-relics-grid" class="print-relics-grid"></div>
+            </div>
+        </div>
+    </div>
             </div>
 
             <h3 style="border-bottom: 2px solid #8b4513; margin-top: 15px;">SCRIBED CHRONICLES</h3>
@@ -129,11 +138,21 @@
             <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
                 ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
             </div>
+                <div style="margin-top: 20px;">
+                <textarea placeholder="Notes and Greetings / Note e Congratulazioni..." style="width: 100%; height: 60px; background: rgba(0,0,0,0.05); border: 1px dashed #8b4513; font-family: 'MedievalSharp'; padding: 5px;"></textarea>
+            </div>
         </div>
     </div>
+             
 
-    <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;"></div>
-
+        <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;">
+    </div>
+    
+       <div id="qr-legacy-frame" style="text-align: center; margin-top: 30px; border: 1px dashed var(--gold); padding: 10px;">
+                <img src="archives/legacy-qr.jpeg" style="width: 80px; border: 1px solid var(--gold);">
+                <p style="font-size: 10px; color: var(--gold); margin-top: 5px;">VERIFY LEGACY</p>
+            </div>
+    
     <script src="archmage-logic.js"></script>
     <script>
         const legacyDatabase = {
