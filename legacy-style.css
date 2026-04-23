@@ -1,29 +1,25 @@
-@import url('https://googleapis.com');
+/* --- BASE --- */
+* { font-family: 'MedievalSharp', cursive !important; box-sizing: border-box; }
 
 :root {
     --gold: #d4af37;
-    --amber: #ffbf00;
     --parchment: #fdf5e6;
     --bg-dark: #2c1e12;
 }
-
-/* --- BASE --- */
-* { font-family: 'MedievalSharp', cursive !important; }
 
 body {
     background: radial-gradient(circle at center, #4a3520 0%, var(--bg-dark) 100%);
     color: var(--parchment);
     margin: 0; padding: 20px;
-    min-height: 100vh;
     display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
 }
 
-/* --- VAULT ICONIZZATO --- */
+/* --- VAULT --- */
 #vault-toggle-btn {
     position: fixed; top: 100px; left: 20px; z-index: 1000;
     background: var(--bg-dark); border: 2px solid var(--gold);
     color: var(--gold); padding: 10px; cursor: pointer;
-    box-shadow: 0 0 15px var(--gold);
 }
 #vault-container {
     position: fixed; top: 155px; left: -300px; width: 220px;
@@ -32,67 +28,44 @@ body {
 }
 #vault-container.open { left: 20px; }
 .vault-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.item-slot { width: 85px; height: 85px; border: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; cursor: grab; }
 
 /* --- SACCA --- */
 .bag-zone {
     width: 350px; height: 350px;
     background: radial-gradient(circle, #5d4037 0%, #2c1e12 100%);
-    border: 4px dashed var(--gold);
-    border-radius: 42% 58% 46% 54% / 55% 48% 52% 45%;
+    border: 4px dashed var(--gold); border-radius: 50%;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.5);
+    position: relative; box-shadow: inset 0 0 50px #000;
 }
-.satchel-item {
-    width: 60px !important; 
-    height: 60px !important;
-    object-fit: contain;
-    margin: 5px;
-    filter: drop-shadow(0 0 5px var(--gold));
-}
+.satchel-item { width: 60px; height: 60px; margin: 5px; filter: drop-shadow(0 0 5px var(--gold)); }
 
+/* --- PERGAMENA --- */
 .final-scroll {
     width: 400px; background: var(--parchment); color: #2c1e12;
     background-image: url('https://transparenttextures.com');
-    padding: 30px; border: 5px solid #8b4513; box-shadow: 10px 10px 0px #000;
+    padding: 25px; border: 5px solid #8b4513; box-shadow: 10px 10px 0px #000;
 }
+#scroll-notes { width: 100%; height: 80px; margin-top: 15px; background: rgba(0,0,0,0.03); border: 1px dashed #8b4513; padding: 10px; }
 
-/* --- ELEMENTI NASCOSTI A VIDEO --- */
-#legacy-print-only { display: none !important; }
+/* --- STAMPA (PRINT SETTINGS) --- */
+#legacy-print-only { display: none; }
 
-/* --- SIGILLO DI STAMPA (PDF) --- */
 @media print {
-    @page {
-        size: A4 portrait; /* Forza il formato A4 verticale */
-        margin: 0; /* Gestiamo i margini tramite il padding della pergamena */
-    }
+    @page { size: A4 portrait; margin: 10mm; } /* Margini stretti richiesti */
+    
     #vault-toggle-btn, #vault-container, .bag-zone, .save-btn, .corner-dec, 
-    #ritual-help-system, #failed-tribute-box, #qr-legacy-frame, #hero-scroll-container { 
-        display: none !important; 
-    }
-    body  body {
-        background-color: #fdf5e6 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        width: 210mm !important; /* Larghezza esatta A4 */
-        height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
-        overflow: visible !important;
-    }
+    #failed-tribute-box, #qr-legacy-frame, #hero-scroll-container { display: none !important; }
+    
+    body { background: white !important; padding: 0 !important; }
+    
     .final-scroll { 
-        position: relative !important;
-        width: 100% !important;
-        min-height: 297mm !important; /* Altezza minima A4 */
-        margin: 0 !important;
-        padding: 20mm !important; /* Margine interno per non tagliare i testi */
-        background-color: #fdf5e6 !important;
-        border: 15px double #8b4513 !important;
-        box-shadow: none !important;
-        box-sizing: border-box !important;
-        display: block !important;
+        width: 100% !important; border: 2px solid #8b4513 !important; 
+        box-shadow: none !important; position: static !important;
+        padding: 15px !important;
     }
-    #legacy-print-only { display: block !important; margin-top: 30px; }
-    .print-relics-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 15px; text-align: center; }
-    .print-relic-item img { width: 65px !important; height: 65px !important; object-fit: contain; }
+
+    #legacy-print-only { display: block !important; margin-top: 20px; }
+    .print-relics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+    .print-relic-item img { width: 70px; height: 70px; object-fit: contain; }
 }
