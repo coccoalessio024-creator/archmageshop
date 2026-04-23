@@ -1,71 +1,167 @@
-/* --- BASE --- */
-* { font-family: 'MedievalSharp', cursive !important; box-sizing: border-box; }
+@import url('https://googleapis.com');
 
 :root {
     --gold: #d4af37;
+    --amber: #ffbf00;
     --parchment: #fdf5e6;
     --bg-dark: #2c1e12;
+    --fire: #ff4d00;
+    --mana: #4fffe0;
 }
 
 body {
     background: radial-gradient(circle at center, #4a3520 0%, var(--bg-dark) 100%);
     color: var(--parchment);
-    margin: 0; padding: 20px;
-    display: flex; flex-direction: column; align-items: center;
+    font-family: 'MedievalSharp', serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* --- VAULT --- */
-#vault-toggle-btn {
-    position: fixed; top: 100px; left: 20px; z-index: 1000;
-    background: var(--bg-dark); border: 2px solid var(--gold);
-    color: var(--gold); padding: 10px; cursor: pointer;
+/* --- DECORAZIONI ANGOLI --- */
+.corner-dec {
+    position: fixed; width: 50px; height: 50px;
+    border: 2px solid var(--gold); opacity: 0.4;
+    z-index: 1; pointer-events: none;
 }
-#vault-container {
-    position: fixed; top: 155px; left: -300px; width: 220px;
-    background: rgba(0,0,0,0.9); border: 2px solid var(--gold);
-    padding: 15px; transition: 0.5s; z-index: 999;
-}
-#vault-container.open { left: 20px; }
-.vault-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.item-slot { width: 85px; height: 85px; border: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; cursor: grab; }
+.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.bottom-left-dec { bottom: 20px; left: 20px; border-right: none; border-top: none; width: 80px; height: 80px; opacity: 0.6; }
 
-/* --- SACCA --- */
+/* --- LAYOUT PRINCIPALE --- */
+.legacy-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 350px; /* Vault | Sacca | Pergamena */
+    gap: 30px;
+    width: 95%;
+    max-width: 1300px;
+    margin-top: 80px;
+    z-index: 5;
+    align-items: start;
+}
+
+/* --- VAULT (SINISTRA) --- */
+.vault-grid {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--gold);
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.item-slot {
+    width: 80px; height: 80px;
+    border: 1px solid var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    display: flex; justify-content: center; align-items: center;
+    cursor: grab;
+}
+
+/* --- SACCA ARCANICA (CENTRO) --- */
 .bag-zone {
-    width: 350px; height: 350px;
-    background: radial-gradient(circle, #5d4037 0%, #2c1e12 100%);
-    border: 4px dashed var(--gold); border-radius: 50%;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    position: relative; box-shadow: inset 0 0 50px #000;
+    position: relative;
+    width: 495px; height: 455px;
+    margin: 0 auto;
+    background: radial-gradient(circle, #3d2b1f 0%, #1a120b 100%);
+    border: 4px dashed var(--gold);(--gold);
+    border-radius: 42% 58% 46% 54%;
+    outline: 2px solid #5d2e0a;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    box-shadow: inset 0 0 50px #000, 0 0 30px var(--gold);
+    animation: glow-pulse 3s infinite alternate;
 }
-.satchel-item { width: 60px; height: 60px; margin: 5px; filter: drop-shadow(0 0 5px var(--gold)); }
 
-/* --- PERGAMENA --- */
+@keyframes glow-pulse {
+    from { box-shadow: inset 0 0 50px #000, 0 0 15px var(--gold); transform: scale(1); }
+    to { box-shadow: inset 0 0 60px #000, 0 0 35px var(--amber); transform: scale(1.02); }
+}
+
+.bag-zone.hover { border-color: var(--mana); box-shadow: 0 0 40px var(--mana); }
+
+#satchel-visual-content {
+    display: flex; flex-wrap: wrap; 
+    justify-content: center; gap: 10px;
+    width: 80%;
+}
+
+/* --- PERGAMENA (DESTRA) --- */
 .final-scroll {
-    width: 400px; background: var(--parchment); color: #2c1e12;
-    background-image: url('https://transparenttextures.com');
-    padding: 25px; border: 5px solid #8b4513; box-shadow: 10px 10px 0px #000;
+    background: var(--parchment);
+    color: #2c1e12;
+    padding: 25px;
+    border: 4px solid #8b4513;
+    box-shadow: 8px 8px 0px #000;
+    min-height: 550px;
+    display: flex; flex-direction: column;
 }
-#scroll-notes { width: 100%; height: 80px; margin-top: 15px; background: rgba(0,0,0,0.03); border: 1px dashed #8b4513; padding: 10px; }
 
-/* --- STAMPA (PRINT SETTINGS) --- */
-#legacy-print-only { display: none; }
+.scroll-header input {
+    background: transparent; border: none;
+    border-bottom: 2px solid #8b4513;
+    font-family: 'MedievalSharp'; font-size: 22px;
+    width: 100%; outline: none; color: #2c1e12;
+}
 
+/* --- NOTIFICHE E BOTTONI --- */
+.save-btn {
+    margin-bottom: 20px;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, #8b4513, #5d2e0a);
+    color: var(--amber);
+    border: 2px solid var(--gold);
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+.save-btn:hover { background: var(--gold); color: #2c1e12; box-shadow: 0 0 20px var(--amber); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .legacy-container { grid-template-columns: 1fr; justify-items: center; }
+    .vault-grid { grid-template-columns: repeat(5, 1fr); order: 2; }
+    .bag-zone { order: 1; }
+    .final-scroll { order: 3; width: 90%; }
+}
+
+/* --- IL SIGILLO DI OCCULTAMENTO (PRINT RULES) --- */
 @media print {
-    @page { size: A4 portrait; margin: 10mm; } /* Margini stretti richiesti */
-    
-    #vault-toggle-btn, #vault-container, .bag-zone, .save-btn, .corner-dec, 
-    #failed-tribute-box, #qr-legacy-frame, #hero-scroll-container { display: none !important; }
-    
-    body { background: white !important; padding: 0 !important; }
-    
-    .final-scroll { 
-        width: 100% !important; border: 2px solid #8b4513 !important; 
-        box-shadow: none !important; position: static !important;
-        padding: 15px !important;
+    .vault-grid, .bag-zone, .save-btn, .corner-dec { display: none !important; }
+    body { background: white; }
+    .final-scroll { box-shadow: none; border: none; width: 100%; position: absolute; top: 0; }
+    /* Nascondi tutto il superfluo */
+    .vault-grid, 
+    .bag-zone, 
+    .save-btn, 
+    .corner-dec, 
+    #hero-scroll-container, 
+    #ritual-help-system, 
+    #oracle-info { 
+        display: none !important; 
     }
 
-    #legacy-print-only { display: block !important; margin-top: 20px; }
-    .print-relics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
-    .print-relic-item img { width: 70px; height: 70px; object-fit: contain; }
+    /* Pulisci lo sfondo per il PDF/Stampa */
+    body { 
+        background: white !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Espandi la pergamena a tutta pagina */
+    .final-scroll { 
+        box-shadow: none !important; 
+        border: none !important; 
+        width: 100% !important; 
+        position: absolute !important; 
+        top: 0 !important; 
+        left: 0 !important;
+        background: #fdf5e6 !important; /* Forza il colore carta */
+        -webkit-print-color-adjust: exact; /* Assicura che i colori vengano stampati */
+    }
 }
