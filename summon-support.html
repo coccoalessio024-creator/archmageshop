@@ -117,21 +117,20 @@
       <span class="fairy-celebrant">🧚</span>
     </div>
 
-    html
-<div class="sposi-row">
+  <div class="sposi-row">
   <div class="entourage" id="maids-entourage"></div>
   
   <!-- Sposo -->
   <div class="groom-bride-unit" id="groom-box">
-    <img src="archives/crown.png" class="falling-crown" id="crown-groom">
+    <img src="archives/crown.png" class="celebrant-crown" id="crown-groom">
     <img src="archives/knight.png" alt="Groom">
     <small>Groom</small>
   </div>
 
   <!-- Sposa -->
   <div class="groom-bride-unit" id="bride-box">
-    <img src="archives/crown.png" class="falling-crown" id="crown-bride">
-    <img src="archives/knight.png" alt="Bride"> <!-- Qui puoi mettere una variante se l'hai -->
+    <img src="archives/crown.png" class="celebrant-crown" id="crown-bride">
+    <img src="archives/knight.png" alt="Bride"> 
     <small>Bride</small>
   </div>
 
@@ -167,7 +166,7 @@
     // 1. GENERAZIONE OSPITI FISSI (68)
     const aisleLeft = document.getElementById('aisle-left');
     const aisleRight = document.getElementById('aisle-right');
-    const guestAssets = ['axeman.png', 'actualmage.png', 'knight.png', '🧚', '🧙‍♂️', '🧝', '✨'];
+    const guestAssets = ['axeman.png', 'actualmage.png', 'knight.png', '🧚', '🧙‍♂️', '🧝', ''];
 
     function spawnGuests() {
       for (let i = 0; i < 68; i++) {
@@ -205,30 +204,65 @@
       }
     });
 
-    // 4. MUSIC ENGINE (ALL STAR - SHREK STYLE)
     const playAllStar = () => {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const notes = [
-        392, 587, 493, 493, 440, 392, 392, 349, // Some-body once told me
-        392, 587, 493, 493, 440, 392, 440, 349, // The world is gonna roll me
-        392, 587, 493, 493, 440, 392, 392, 349  // I ain't the sharpest tool...
-      ];
-      let now = ctx.currentTime;
-      notes.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        // Sawtooth per un suono più ricco tipo ottoni/Shrek
-        osc.type = i % 2 === 0 ? 'sawtooth' : 'triangle'; 
-        osc.frequency.setValueAtTime(freq, now);
-        gain.gain.setValueAtTime(0.05, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(now); osc.stop(now + 0.4);
-        now += 0.25;
-      });
-      document.body.removeEventListener('click', playAllStar);
-    };
-    document.body.addEventListener('click', playAllStar);
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const tempo = 104; // BPM di Smash Mouth
+    const beat = 60 / tempo;
+
+    // Frequenze: G4=392, D5=587, B4=493, A4=440, Gb4=370
+    const melody = [
+  
+        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 }, 
+        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.5 }, { f: 370, d: 0.4 },
+
+        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 },
+        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 440, d: 0.6 }, { f: 370, d: 0.4 },
+     
+        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 },
+        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.6 }
+    ];
+
+    let now = ctx.currentTime + 0.1;
+
+    melody.forEach((note, i) => {
+        // OSCILLATORE 1: Dente di sega per la grinta (Sawtooth)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sawtooth'; 
+        osc1.frequency.setValueAtTime(note.f, now);
+        
+        // OSCILLATORE 2: Onda quadra per il corpo 8-bit (Square)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'square';
+        osc2.frequency.setValueAtTime(note.f, now);
+        osc2.detune.setValueAtTime(4, now); // Leggero detune per "spessore"
+
+        // ENVELOPE (Attacco secco, decadimento naturale)
+        gain1.gain.setValueAtTime(0, now);
+        gain1.gain.linearRampToValueAtTime(0.08, now + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+
+        gain2.gain.setValueAtTime(0, now);
+        gain2.gain.linearRampToValueAtTime(0.04, now + 0.02);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+
+        // Connessione
+        osc1.connect(gain1); gain1.connect(ctx.destination);
+        osc2.connect(gain2); gain2.connect(ctx.destination);
+
+        osc1.start(now); osc1.stop(now + note.d * beat);
+        osc2.start(now); osc2.stop(now + note.d * beat);
+
+        // Calcolo tempo per la prossima nota (ritmo non uniforme)
+        now += note.d * beat * 0.85; 
+    });
+
+    // Rimuove l'evento dopo il primo click
+    document.body.removeEventListener('click', playAllStar);
+};
+
+document.body.addEventListener('click', playAllStar);
 
     // 5. CORIANDOLI
     function confettiRain() {
