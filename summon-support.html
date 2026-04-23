@@ -204,66 +204,64 @@
       }
     });
 
-    const playAllStar = () => {
+   const playImABeliever = () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const tempo = 104; // BPM di Smash Mouth
+    const tempo = 160; // Più veloce di All Star
     const beat = 60 / tempo;
 
-    // Frequenze: G4=392, D5=587, B4=493, A4=440, Gb4=370
+    // Frequenze chiave (Scala di Sol Maggiore): 
+    // G4=392, A4=440, B4=493, C5=523, D5=587, E5=659
     const melody = [
-  
-        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 }, 
-        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.5 }, { f: 370, d: 0.4 },
-
-        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 },
-        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 440, d: 0.6 }, { f: 370, d: 0.4 },
-     
-        { f: 392, d: 0.6 }, { f: 587, d: 0.4 }, { f: 493, d: 0.5 }, { f: 493, d: 0.3 },
-        { f: 440, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.6 }
+        { f: 587, d: 0.5 }, { f: 659, d: 0.5 }, { f: 587, d: 0.5 }, // I saw her
+        { f: 523, d: 0.5 }, { f: 493, d: 1.0 },                   // face...
+        { f: 0, d: 0.2 },                                         // (pausa)
+        { f: 392, d: 0.3 }, { f: 392, d: 0.3 }, { f: 392, d: 0.5 }, // Now I'm a
+        { f: 587, d: 1.5 },                                         // Believer!
+        { f: 0, d: 0.4 },
+        // Il fischio/Riff iconico:
+        { f: 587, d: 0.4 }, { f: 587, d: 0.2 }, { f: 523, d: 0.2 }, { f: 493, d: 0.4 }, { f: 392, d: 0.8 }
     ];
 
     let now = ctx.currentTime + 0.1;
 
-    melody.forEach((note, i) => {
-        // OSCILLATORE 1: Dente di sega per la grinta (Sawtooth)
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = 'sawtooth'; 
-        osc1.frequency.setValueAtTime(note.f, now);
+    melody.forEach((note) => {
+        if (note.f > 0) {
+            // OSCILLATORE 1: Onda sinusoidale per il "fischio" (Whistle)
+            const osc1 = ctx.createOscillator();
+            const gain1 = ctx.createGain();
+            osc1.type = 'sine'; 
+            osc1.frequency.setValueAtTime(note.f, now);
+            
+            // OSCILLATORE 2: Onda Triangolare per il corpo 8-bit (Chiptune)
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(note.f, now);
+
+            // ENVELOPE: Attacco morbido (fischio) e decadimento rapido
+            gain1.gain.setValueAtTime(0, now);
+            gain1.gain.linearRampToValueAtTime(0.15, now + 0.05);
+            gain1.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+
+            gain2.gain.setValueAtTime(0, now);
+            gain2.gain.linearRampToValueAtTime(0.05, now + 0.05);
+            gain2.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
+
+            osc1.connect(gain1); gain1.connect(ctx.destination);
+            osc2.connect(gain2); gain2.connect(ctx.destination);
+
+            osc1.start(now); osc1.stop(now + note.d * beat);
+            osc2.start(now); osc2.stop(now + note.d * beat);
+        }
         
-        // OSCILLATORE 2: Onda quadra per il corpo 8-bit (Square)
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = 'square';
-        osc2.frequency.setValueAtTime(note.f, now);
-        osc2.detune.setValueAtTime(4, now); // Leggero detune per "spessore"
-
-        // ENVELOPE (Attacco secco, decadimento naturale)
-        gain1.gain.setValueAtTime(0, now);
-        gain1.gain.linearRampToValueAtTime(0.08, now + 0.02);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
-
-        gain2.gain.setValueAtTime(0, now);
-        gain2.gain.linearRampToValueAtTime(0.04, now + 0.02);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + note.d * beat);
-
-        // Connessione
-        osc1.connect(gain1); gain1.connect(ctx.destination);
-        osc2.connect(gain2); gain2.connect(ctx.destination);
-
-        osc1.start(now); osc1.stop(now + note.d * beat);
-        osc2.start(now); osc2.stop(now + note.d * beat);
-
-        // Calcolo tempo per la prossima nota (ritmo non uniforme)
-        now += note.d * beat * 0.85; 
+        // Calcolo tempo per la prossima nota
+        now += note.d * beat; 
     });
 
-    // Rimuove l'evento dopo il primo click
-    document.body.removeEventListener('click', playAllStar);
+    document.body.removeEventListener('click', playImABeliever);
 };
 
-document.body.addEventListener('click', playAllStar);
-
+document.body.addEventListener('click', playImABeliever);
     // 5. CORIANDOLI
     function confettiRain() {
       for(let i=0; i<100; i++) {
