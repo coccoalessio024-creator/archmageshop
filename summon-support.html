@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summon Support - The Royal Wedding</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --parchment: #fdf5e6; }
+        body { 
+            background: #1a120b; color: var(--gold); font-family: 'MedievalSharp', serif;
+            margin: 0; overflow-x: hidden; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Ambientazione Emoji */
+        #world-frame { position: fixed; inset: 0; pointer-events: none; font-size: 2rem; z-index: -1; padding: 20px; }
+        .castle-wall { position: absolute; }
+
+        /* Scena Centrale Sposi */
+        .altar-scene { display: flex; align-items: flex-end; gap: 10px; margin-top: 50px; position: relative; }
+        .groom-bride { position: relative; width: 100px; height: 100px; }
+        .groom-bride img { width: 100%; image-rendering: pixelated; }
+        .crown-overlay { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 40px !important; }
+        
+        .mage-guard { width: 50px; image-rendering: pixelated; }
+        .axeman-officer { width: 60px; margin-bottom: 10px; }
+
+        /* Ospiti ai lati */
+        .guest-side { position: fixed; top: 100px; width: 150px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+        #guests-left { left: 50px; }
+        #guests-right { right: 50px; }
+        .mini-guest { width: 30px; height: 30px; image-rendering: pixelated; }
+
+        /* Box Indovinello */
+        .ritual-box {
+            background: rgba(0,0,0,0.8); border: 3px double var(--gold);
+            padding: 30px; text-align: center; max-width: 500px; margin-top: 40px;
+            box-shadow: 0 0 20px var(--gold);
+        }
+        input { 
+            background: #2c1e12; border: 1px solid var(--gold); color: #fff; 
+            padding: 10px; font-family: 'MedievalSharp'; text-align: center; font-size: 1.2rem;
+        }
+        
+        #iban-reveal { display: none; margin-top: 20px; color: #fff; border: 1px dashed var(--gold); padding: 15px; }
+
+        .credits { margin-top: 30px; font-size: 1.2rem; text-align: center; line-height: 1.6; }
+
+        /* Coriandoli */
+        .confetti { position: fixed; width: 8px; height: 8px; z-index: 1000; animation: fall 3s linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="world-frame">
+        <!-- Generato via JS: Mura e Alberi -->
+    </div>
+
+    <!-- CREDITI CENTRALI -->
+    <div class="credits">
+        <p>Heaven & Alessio vi ringraziano per aver partecipato a questa esperienza!</p>
+        <p><i>Heaven & Alessio thank you for being part of this experience!</i></p>
+    </div>
+
+    <!-- SCENA ALTARE -->
+    <div class="altar-scene">
+        <!-- 3 Mages Side Left -->
+        <img src="archives/actualmage.png" class="mage-guard">
+        <img src="archives/actualmage.png" class="mage-guard">
+        <img src="archives/actualmage.png" class="mage-guard">
+
+        <!-- Sposi -->
+        <div class="groom-bride">
+            <img src="archives/crown.png" class="crown-overlay">
+            <img src="archives/knight.png">
+        </div>
+        
+        <!-- Officer -->
+        <img src="archives/axeman.png" class="axeman-officer">
+
+        <div class="groom-bride">
+            <img src="archives/crown.png" class="crown-overlay">
+            <img src="archives/knight.png">
+        </div>
+
+        <!-- 3 Mages Side Right -->
+        <img src="archives/actualmage.png" class="mage-guard">
+        <img src="archives/actualmage.png" class="mage-guard">
+        <img src="archives/actualmage.png" class="mage-guard">
+    </div>
+
+    <!-- OSPITI DINAMICI -->
+    <div id="guests-left" class="guest-side"></div>
+    <div id="guests-right" class="guest-side"></div>
+
+    <!-- INDOVINELLO CASATA -->
+    <div class="ritual-box">
+        <img src="archives/casata.png" style="width: 80px; margin-bottom: 15px;" alt="Simbolo Casata">
+        <h3>Indovinello della Casata / House Riddle</h3>
+        <p>Chi illumina il cammino dei giusti? / Who lights the path of the righteous?</p>
+        <input type="text" id="riddle-input" placeholder="..." oninput="checkRiddle(this.value)">
+        
+        <div id="iban-reveal">
+            <p>Il tributo regale può essere versato qui:</p>
+            <strong style="font-size: 1.1rem; letter-spacing: 2px;">IT 99 XXX 0000 1111 2222 NNNN</strong>
+            <p><small>(Intestato ad Alessio & Heaven)</small></p>
+        </div>
+    </div>
+
+    <script>
+        // 1. CARICAMENTO OSPITI DAL CARRELLO
+        window.onload = () => {
+            const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
+            // Assumiamo che ogni item nel carrello rappresenti un ospite o usiamo una logica fissa
+            const guestCount = Math.max(10, cart.length * 2); 
+            const assets = ['axeman.png', 'knight.png', 'actualmage.png'];
+
+            for(let i=0; i < guestCount; i++) {
+                const img = document.createElement('img');
+                img.src = `archives/${assets[i % 3]}`;
+                img.className = 'mini-guest';
+                if(i % 2 === 0) document.getElementById('guests-left').appendChild(img);
+                else document.getElementById('guests-right').appendChild(img);
+            }
+
+            // AMBIENTE
+            const frame = document.getElementById('world-frame');
+            for(let i=0; i<20; i++) {
+                frame.innerHTML += `<span class="castle-wall" style="top:0; left:${i*5}%">🧱</span>`;
+                frame.innerHTML += `<span class="castle-wall" style="bottom:0; left:${i*5}%">🌳</span>`;
+            }
+
+            // CORIANDOLI + 10 LVL
+            spawnConfetti();
+            let lvl = parseInt(localStorage.getItem('hero_lvl')) || 1;
+            localStorage.setItem('hero_lvl', lvl + 10);
+            
+            // MUSICA 8-BIT
+            init8BitMusic();
+        };
+
+        function spawnConfetti() {
+            for(let i=0; i<50; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.backgroundColor = ['#d4af37', '#ff4500', '#00fbff'][Math.floor(Math.random()*3)];
+                c.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(c);
+            }
+        }
+
+        // 2. LOGICA INDOVINELLO
+        function checkRiddle(val) {
+            if(val.toLowerCase().trim() === 'sole' || val.toLowerCase().trim() === 'sun') {
+                document.getElementById('iban-reveal').style.display = 'block';
+                document.getElementById('riddle-input').style.borderColor = '#00fbff';
+            }
+        }
+
+        // 3. 8-BIT MUSIC ENGINE (All Star Shrek Style)
+        function init8BitMusic() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const melody = [
+                {f: 392, d: 0.2}, {f: 587, d: 0.2}, {f: 493, d: 0.2}, {f: 493, d: 0.2}, // Some-body once told me
+                {f: 440, d: 0.2}, {f: 392, d: 0.2}, {f: 392, d: 0.2}, {f: 349, d: 0.2}
+            ];
+            
+            document.body.onclick = () => { // Necessario per sbloccare l'audio nei browser
+                let time = ctx.currentTime;
+                melody.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square'; // Suono 8-bit
+                    osc.frequency.setValueAtTime(note.f, time);
+                    gain.gain.setValueAtTime(0.1, time);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, time + note.d);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(time); osc.stop(time + note.d);
+                    time += note.d;
+                });
+            };
+        }
+    </script>
+</body>
+</html>
