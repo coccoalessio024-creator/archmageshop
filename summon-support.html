@@ -1,187 +1,253 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summon Support - The Royal Wedding</title>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        :root { --gold: #d4af37; --parchment: #fdf5e6; }
-        body { 
-            background: #1a120b; color: var(--gold); font-family: 'MedievalSharp', serif;
-            margin: 0; overflow-x: hidden; display: flex; flex-direction: column; align-items: center;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Royal Union — Support</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <!-- Link al CSS Esterno -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    body {
+      background: #1a120b;
+      color: #fdf5e6;
+      font-family: 'MedievalSharp', serif;
+      margin: 0;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        /* Ambientazione Emoji */
-        #world-frame { position: fixed; inset: 0; pointer-events: none; font-size: 2rem; z-index: -1; padding: 20px; }
-        .castle-wall { position: absolute; }
+    /* --- AMBIENTE EMOJI (CASTELLO E ALBERI) --- */
+    .environment { position: fixed; inset: 0; pointer-events: none; z-index: 1; font-size: 2rem; }
+    .castle-top { position: absolute; top: 0; width: 100%; text-align: center; background: #000; padding: 10px 0; border-bottom: 4px double #d4af37; }
+    .forest-side { position: absolute; top: 60px; height: calc(100% - 60px); width: 60px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
+    .left-trees { left: 0; }
+    .right-trees { right: 0; }
+    .forest-bottom { position: absolute; bottom: 0; width: 100%; text-align: center; padding: 10px 0; }
 
-        /* Scena Centrale Sposi */
-        .altar-scene { display: flex; align-items: flex-end; gap: 10px; margin-top: 50px; position: relative; }
-        .groom-bride { position: relative; width: 100px; height: 100px; }
-        .groom-bride img { width: 100%; image-rendering: pixelated; }
-        .crown-overlay { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 40px !important; }
-        
-        .mage-guard { width: 50px; image-rendering: pixelated; }
-        .axeman-officer { width: 60px; margin-bottom: 10px; }
+    /* --- SCENA NUZIALE --- */
+    .wedding-stage {
+      position: relative; z-index: 10;
+      margin-top: 100px;
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%; max-width: 900px;
+    }
 
-        /* Ospiti ai lati */
-        .guest-side { position: fixed; top: 100px; width: 150px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
-        #guests-left { left: 50px; }
-        #guests-right { right: 50px; }
-        .mini-guest { width: 30px; height: 30px; image-rendering: pixelated; }
+    .celebrant-area { position: relative; margin-bottom: 20px; }
+    .fairy-celebrant { font-size: 3rem; position: relative; }
+    .celebrant-crown { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px !important; }
 
-        /* Box Indovinello */
-        .ritual-box {
-            background: rgba(0,0,0,0.8); border: 3px double var(--gold);
-            padding: 30px; text-align: center; max-width: 500px; margin-top: 40px;
-            box-shadow: 0 0 20px var(--gold);
-        }
-        input { 
-            background: #2c1e12; border: 1px solid var(--gold); color: #fff; 
-            padding: 10px; font-family: 'MedievalSharp'; text-align: center; font-size: 1.2rem;
-        }
-        
-        #iban-reveal { display: none; margin-top: 20px; color: #fff; border: 1px dashed var(--gold); padding: 15px; }
+    .sposi-row { display: flex; gap: 30px; align-items: center; margin-bottom: 30px; }
+    .groom-bride-unit { display: flex; flex-direction: column; align-items: center; }
+    .groom-bride-unit img { width: 80px; image-rendering: pixelated; filter: drop-shadow(0 0 10px var(--gold)); }
 
-        .credits { margin-top: 30px; font-size: 1.2rem; text-align: center; line-height: 1.6; }
+    /* Corteo (4 Knights, 4 Maids) */
+    .entourage { display: flex; gap: 10px; margin-bottom: 20px; }
+    .entourage img { width: 40px; image-rendering: pixelated; }
 
-        /* Coriandoli */
-        .confetti { position: fixed; width: 8px; height: 8px; z-index: 1000; animation: fall 3s linear forwards; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
-    </style>
+    /* --- NAVATE INVITATI (68 FISSI) --- */
+    .aisle-container { display: flex; justify-content: center; gap: 100px; width: 100%; margin-bottom: 40px; }
+    .aisle { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 180px; }
+    .guest { width: 30px; height: 30px; image-rendering: pixelated; }
+
+    /* --- CASSELLA INDOVINELLO (Stile Bollettino) --- */
+    .parchment-riddle {
+      background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
+      color: #3d2810; padding: 2rem; border-radius: 20px 5px 20px 5px;
+      border: 1px solid #b89060; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      max-width: 500px; text-align: center; position: relative; z-index: 20;
+    }
+
+    input#riddle-input {
+      background: rgba(0,0,0,0.1); border: none; border-bottom: 2px solid #7a1515;
+      font-family: 'MedievalSharp'; font-size: 1.5rem; text-align: center;
+      width: 80%; margin-top: 15px; color: #7a1515; outline: none;
+    }
+
+    #iban-reveal { display: none; margin-top: 20px; padding: 15px; border: 2px dashed #7a1515; animation: fadeIn 1s; }
+
+    /* --- CREDITI --- */
+    .credits { text-align: center; margin: 3rem 0; z-index: 10; }
+    .arch-title { font-size: 2.5rem; margin-bottom: 0; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Mobile Adaptivity */
+    @media (max-width: 768px) {
+      .aisle-container { gap: 20px; flex-direction: row; }
+      .aisle { grid-template-columns: repeat(3, 1fr); width: 120px; }
+      .sposi-row { gap: 10px; }
+      .environment { font-size: 1.2rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <div id="world-frame">
-        <!-- Generato via JS: Mura e Alberi -->
+  <!-- AMBIENTE -->
+  <div class="environment">
+    <div class="castle-top">🏰🧱🧱🧱🚪🧱🧱🧱🏰</div>
+    <div class="forest-side left-trees">🌲<br>🌳<br>🌲<br>🌳<br>🌲<br>🌳</div>
+    <div class="forest-side right-trees">🌲<br>🌳<br>🌲<br>🌳<br>🌲<br>🌳</div>
+    <div class="forest-bottom">🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳</div>
+  </div>
+
+  <div class="credits">
+    <h1 class="arch-title">Heaven & Alessio</h1>
+    <p style="color: var(--gold);">vi ringraziano per aver partecipato a questa esperienza!<br>
+    <i>thank you for being part of this experience!</i></p>
+  </div>
+
+  <!-- SCENA MATRIMONIO -->
+  <div class="wedding-stage">
+    
+    <!-- Immagine Alberi (come da screenshot) -->
+    <div style="display:flex; gap:300px; position:absolute; top:-50px; z-index:-1; opacity:0.5;">
+        <span style="font-size:100px;">🌳</span>
+        <span style="font-size:100px;">🌳</span>
     </div>
 
-    <!-- CREDITI CENTRALI -->
-    <div class="credits">
-        <p>Heaven & Alessio vi ringraziano per aver partecipato a questa esperienza!</p>
-        <p><i>Heaven & Alessio thank you for being part of this experience!</i></p>
+    <!-- Celebrante -->
+    <div class="celebrant-area">
+      <img src="archives/crown.png" class="celebrant-crown">
+      <span class="fairy-celebrant">🧚</span>
     </div>
 
-    <!-- SCENA ALTARE -->
-    <div class="altar-scene">
-        <!-- 3 Mages Side Left -->
-        <img src="archives/actualmage.png" class="mage-guard">
-        <img src="archives/actualmage.png" class="mage-guard">
-        <img src="archives/actualmage.png" class="mage-guard">
+    html
+<div class="sposi-row">
+  <div class="entourage" id="maids-entourage"></div>
+  
+  <!-- Sposo -->
+  <div class="groom-bride-unit" id="groom-box">
+    <img src="archives/crown.png" class="falling-crown" id="crown-groom">
+    <img src="archives/knight.png" alt="Groom">
+    <small>Groom</small>
+  </div>
 
-        <!-- Sposi -->
-        <div class="groom-bride">
-            <img src="archives/crown.png" class="crown-overlay">
-            <img src="archives/knight.png">
-        </div>
+  <!-- Sposa -->
+  <div class="groom-bride-unit" id="bride-box">
+    <img src="archives/crown.png" class="falling-crown" id="crown-bride">
+    <img src="archives/knight.png" alt="Bride"> <!-- Qui puoi mettere una variante se l'hai -->
+    <small>Bride</small>
+  </div>
+
+  <div class="entourage" id="grooms-entourage"></div>
+</div>
+      
+    <!-- Navate Ospiti -->
+    <div class="aisle-container">
+      <div class="aisle" id="aisle-left"></div>
+      <div class="aisle" id="aisle-right"></div>
+    </div>
+
+    <!-- INDOVINELLO -->
+    <div class="parchment-riddle">
+      <img src="archives/casata.png" style="width: 60px; margin-bottom: 10px;" onerror="this.style.display='none'">
+      <h3>Indovinello della Casata / House Riddle</h3>
+      <p>Chi illumina il cammino dei giusti? / Who lights the path of the righteous?</p>
+      <input type="text" id="riddle-input" placeholder="..." autocomplete="off">
+      
+      <div id="iban-reveal">
+          <p>Royal Tribute IBAN:</p>
+          <strong style="font-size: 1.2rem; color: #7a1515;">IT 99 XXX 0000 1111 2222 NNNN</strong>
+          <p><small>(Intestato ad Alessio & Heaven)</small></p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 4rem;">
+    <a href="index.html" class="arch-btn">← BACK TO SANCTUM</a>
+  </div>
+
+  <script>
+    // 1. GENERAZIONE OSPITI FISSI (68)
+    const aisleLeft = document.getElementById('aisle-left');
+    const aisleRight = document.getElementById('aisle-right');
+    const guestAssets = ['axeman.png', 'actualmage.png', 'knight.png', '🧚', '🧙‍♂️', '🧝', '✨'];
+
+    function spawnGuests() {
+      for (let i = 0; i < 68; i++) {
+        const target = (i < 34) ? aisleLeft : aisleRight;
+        const rand = guestAssets[Math.floor(Math.random() * guestAssets.length)];
         
-        <!-- Officer -->
-        <img src="archives/axeman.png" class="axeman-officer">
-
-        <div class="groom-bride">
-            <img src="archives/crown.png" class="crown-overlay">
-            <img src="archives/knight.png">
-        </div>
-
-        <!-- 3 Mages Side Right -->
-        <img src="archives/actualmage.png" class="mage-guard">
-        <img src="archives/actualmage.png" class="mage-guard">
-        <img src="archives/actualmage.png" class="mage-guard">
-    </div>
-
-    <!-- OSPITI DINAMICI -->
-    <div id="guests-left" class="guest-side"></div>
-    <div id="guests-right" class="guest-side"></div>
-
-    <!-- INDOVINELLO CASATA -->
-    <div class="ritual-box">
-        <img src="archives/casata.png" style="width: 80px; margin-bottom: 15px;" alt="Simbolo Casata">
-        <h3>Indovinello della Casata / House Riddle</h3>
-        <p>Chi illumina il cammino dei giusti? / Who lights the path of the righteous?</p>
-        <input type="text" id="riddle-input" placeholder="..." oninput="checkRiddle(this.value)">
-        
-        <div id="iban-reveal">
-            <p>Il tributo regale può essere versato qui:</p>
-            <strong style="font-size: 1.1rem; letter-spacing: 2px;">IT 99 XXX 0000 1111 2222 NNNN</strong>
-            <p><small>(Intestato ad Alessio & Heaven)</small></p>
-        </div>
-    </div>
-
-    <script>
-        // 1. CARICAMENTO OSPITI DAL CARRELLO
-        window.onload = () => {
-            const cart = JSON.parse(localStorage.getItem('magicCart')) || [];
-            // Assumiamo che ogni item nel carrello rappresenti un ospite o usiamo una logica fissa
-            const guestCount = Math.max(10, cart.length * 2); 
-            const assets = ['axeman.png', 'knight.png', 'actualmage.png'];
-
-            for(let i=0; i < guestCount; i++) {
-                const img = document.createElement('img');
-                img.src = `archives/${assets[i % 3]}`;
-                img.className = 'mini-guest';
-                if(i % 2 === 0) document.getElementById('guests-left').appendChild(img);
-                else document.getElementById('guests-right').appendChild(img);
-            }
-
-            // AMBIENTE
-            const frame = document.getElementById('world-frame');
-            for(let i=0; i<20; i++) {
-                frame.innerHTML += `<span class="castle-wall" style="top:0; left:${i*5}%">🧱</span>`;
-                frame.innerHTML += `<span class="castle-wall" style="bottom:0; left:${i*5}%">🌳</span>`;
-            }
-
-            // CORIANDOLI + 10 LVL
-            spawnConfetti();
-            let lvl = parseInt(localStorage.getItem('hero_lvl')) || 1;
-            localStorage.setItem('hero_lvl', lvl + 10);
-            
-            // MUSICA 8-BIT
-            init8BitMusic();
-        };
-
-        function spawnConfetti() {
-            for(let i=0; i<50; i++) {
-                const c = document.createElement('div');
-                c.className = 'confetti';
-                c.style.left = Math.random() * 100 + 'vw';
-                c.style.backgroundColor = ['#d4af37', '#ff4500', '#00fbff'][Math.floor(Math.random()*3)];
-                c.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(c);
-            }
+        if (rand.includes('.png')) {
+          const img = document.createElement('img');
+          img.src = `archives/${rand}`;
+          img.className = 'guest';
+          target.appendChild(img);
+        } else {
+          const span = document.createElement('span');
+          span.className = 'guest';
+          span.innerHTML = rand;
+          target.appendChild(span);
         }
+      }
+    }
 
-        // 2. LOGICA INDOVINELLO
-        function checkRiddle(val) {
-            if(val.toLowerCase().trim() === 'sole' || val.toLowerCase().trim() === 'sun') {
-                document.getElementById('iban-reveal').style.display = 'block';
-                document.getElementById('riddle-input').style.borderColor = '#00fbff';
-            }
-        }
+    // 2. CORTEO (4 Knights & 4 Maids)
+    const maidsDiv = document.getElementById('maids-entourage');
+    const groomsDiv = document.getElementById('grooms-entourage');
+    for(let i=0; i<4; i++) {
+        maidsDiv.innerHTML += '<span>👸</span>';
+        groomsDiv.innerHTML += '<img src="archives/knight.png" style="width:30px;">';
+    }
 
-        // 3. 8-BIT MUSIC ENGINE (All Star Shrek Style)
-        function init8BitMusic() {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const melody = [
-                {f: 392, d: 0.2}, {f: 587, d: 0.2}, {f: 493, d: 0.2}, {f: 493, d: 0.2}, // Some-body once told me
-                {f: 440, d: 0.2}, {f: 392, d: 0.2}, {f: 392, d: 0.2}, {f: 349, d: 0.2}
-            ];
-            
-            document.body.onclick = () => { // Necessario per sbloccare l'audio nei browser
-                let time = ctx.currentTime;
-                melody.forEach(note => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square'; // Suono 8-bit
-                    osc.frequency.setValueAtTime(note.f, time);
-                    gain.gain.setValueAtTime(0.1, time);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, time + note.d);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(time); osc.stop(time + note.d);
-                    time += note.d;
-                });
-            };
-        }
-    </script>
+    // 3. LOGICA INDOVINELLO
+    document.getElementById('riddle-input').addEventListener('input', function(e) {
+      const val = e.target.value.toLowerCase().trim();
+      if (val === 'sole' || val === 'sun') {
+        document.getElementById('iban-reveal').style.display = 'block';
+        confettiRain();
+      }
+    });
+
+    // 4. MUSIC ENGINE (ALL STAR - SHREK STYLE)
+    const playAllStar = () => {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const notes = [
+        392, 587, 493, 493, 440, 392, 392, 349, // Some-body once told me
+        392, 587, 493, 493, 440, 392, 440, 349, // The world is gonna roll me
+        392, 587, 493, 493, 440, 392, 392, 349  // I ain't the sharpest tool...
+      ];
+      let now = ctx.currentTime;
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        // Sawtooth per un suono più ricco tipo ottoni/Shrek
+        osc.type = i % 2 === 0 ? 'sawtooth' : 'triangle'; 
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.4);
+        now += 0.25;
+      });
+      document.body.removeEventListener('click', playAllStar);
+    };
+    document.body.addEventListener('click', playAllStar);
+
+    // 5. CORIANDOLI
+    function confettiRain() {
+      for(let i=0; i<100; i++) {
+        const c = document.createElement('div');
+        c.style.cssText = `position:fixed; width:8px; height:8px; background:${['#d4af37','#ff4500','#00fbff'][i%3]}; left:${Math.random()*100}vw; top:-10px; z-index:100; animation: fall ${Math.random()*3+2}s linear forwards;`;
+        document.body.appendChild(c);
+      }
+    }
+
+    // 6. INITIALIZE
+    window.onload = () => {
+      spawnGuests();
+      // Bonus +10 LVL
+      let lvl = parseInt(localStorage.getItem('hero_lvl')) || 0;
+      localStorage.setItem('hero_lvl', lvl + 10);
+    };
+  </script>
+  <!-- Iniezione HUD Finale -->
+  <script src="archmage-logic.js"></script>
 </body>
 </html>
