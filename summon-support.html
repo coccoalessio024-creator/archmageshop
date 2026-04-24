@@ -124,7 +124,7 @@
   <div class="groom-bride-unit" id="groom-box">
     <img src="archives/crown.png" class="celebrant-crown" id="crown-groom">
     <img src="archives/knight.png" alt="Groom">
-    <small>Groom</small>
+    <small>Alessio</small>
   </div>
 
   <!-- Sposa -->
@@ -203,70 +203,71 @@
         confettiRain();
       }
     });
+// --- IL BARDO 8-BIT: GENERAZIONE SINTETICA (I'M A BELIEVER - CHORUS) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-const playImABeliever = () => {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // RESUME OBBLIGATORIO
-    if (ctx.state === 'suspended') ctx.resume();
-
-    const tempo = 165; 
-    const beat = 60 / tempo;
-    const G4=392, A4=440, B4=493, C5=523, D5=587, E5=659, FS5=740, G5=784, A5=880, R=0;
-
-    const melody = [
-        // STROFA: "I thought love was only true in fairy tales..."
-        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:B4, d:0.5}, {f:G4, d:1}, {f:R, d:0.2},
-        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:B4, d:0.5}, {f:G4, d:1}, {f:R, d:0.2},
-        // "Meant for someone else but not for me..."
-        {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:D5, d:0.5}, {f:E5, d:0.5}, {f:D5, d:1}, 
-        {f:C5, d:0.5}, {f:B4, d:0.5}, {f:A4, d:1}, {f:R, d:0.5},
-
-        // PRE-CHORUS: "Love was out to get me..."
-        {f:G4, d:0.5}, {f:B4, d:0.5}, {f:D5, d:0.5}, {f:G5, d:1}, {f:FS5, d:0.5}, {f:G5, d:0.5}, {f:D5, d:1.5},
-        // "That's the way it seemed..."
-        {f:G4, d:0.5}, {f:B4, d:0.5}, {f:D5, d:0.5}, {f:G5, d:1}, {f:FS5, d:0.5}, {f:G5, d:0.5}, {f:A5, d:1.5},
-
-        // RITORNELLO: "Then I saw her face!"
-        {f:D5, d:0.3}, {f:E5, d:0.3}, {f:D5, d:0.3}, {f:C5, d:0.5}, {f:B4, d:1.2}, {f:R, d:0.3},
-        // "Now I'm a believer!"
-        {f:G4, d:0.3}, {f:G4, d:0.3}, {f:G4, d:0.3}, {f:A4, d:0.3}, {f:G4, d:0.3}, {f:D5, d:1.5}, {f:R, d:0.3},
-        // "Not a trace, of doubt in my mind..."
-        {f:D5, d:0.3}, {f:E5, d:0.3}, {f:D5, d:0.3}, {f:C5, d:0.5}, {f:B4, d:1.2}, {f:R, d:0.3},
-        {f:G4, d:0.3}, {f:G4, d:0.3}, {f:G4, d:0.3}, {f:A4, d:0.3}, {f:G4, d:0.3}, {f:D5, d:1.5},
-
-        // IL RIFF ICONICO (Il fischio finale)
-        {f:D5, d:0.4}, {f:D5, d:0.2}, {f:C5, d:0.2}, {f:B4, d:0.4}, {f:G4, d:0.8}, {f:R, d:0.2},
-        {f:D5, d:0.4}, {f:D5, d:0.2}, {f:C5, d:0.2}, {f:B4, d:0.4}, {f:G4, d:1.5}
-    ];
-
-    let now = ctx.currentTime + 0.1;
-
-    melody.forEach((note) => {
-        if (note.f > 0) {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            
-            osc.type = 'triangle'; 
-            osc.frequency.setValueAtTime(note.f, now);
-
-            // Valore iniziale leggermente sopra lo zero per evitare errori
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.1, now + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + (note.d * beat));
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start(now);
-            osc.stop(now + (note.d * beat));
-        }
-        now += (note.d * beat);
-    });
+const notes = {
+    'D4': 293.66, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25, 'D5': 587.33, 'REST': 0
 };
 
-// Aggiungi questo per farlo partire al click sulla pagina
-document.addEventListener('click', playImABeliever, { once: true });
+// La parte iconica: "Then I saw her face, now I'm a believer"
+const chorusPart = [
+    ['D4', 200], ['G4', 200], ['G4', 200], ['G4', 200], ['G4', 200], // Then I saw her face
+    ['B4', 300], ['A4', 300], ['G4', 400],                          // Now I'm a be-
+    ['G4', 200], ['A4', 200], ['B4', 200], ['A4', 400],              // -lie-ver!
+    ['REST', 400],                                                  // Pausa
+    ['G4', 200], ['G4', 200], ['G4', 200], ['G4', 200],             // Not a trace
+    ['B4', 300], ['A4', 300], ['G4', 400],                          // Of doubt in 
+    ['G4', 200], ['A4', 200], ['B4', 200], ['A4', 400],              // My mind!
+    ['REST', 800]                                                   // Pausa lunga tra ripetizioni
+];
 
+// Uniamo la strofa due volte
+const fullMelody = [...chorusPart, ...chorusPart];
+
+function play8BitNote(frequency, duration) {
+    if (frequency === 0) return; // Gestione pause
+
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'square'; 
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Volume leggermente più basso per non stancare
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration/1000);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + duration/1000);
+}
+
+function startMelodyLoop() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    let tempo = 0;
+    fullMelody.forEach(([note, duration]) => {
+        setTimeout(() => {
+            play8BitNote(notes[note], duration);
+        }, tempo);
+        tempo += duration + 20; // Piccolo gap tra le note per definizione
+    });
+
+    // Ricomincia il loop completo dopo che ha suonato le due strofe
+    setTimeout(startMelodyLoop, tempo + 1000);
+}
+
+// Attivazione al primo click o tocco (Obbligatorio per i browser)
+document.addEventListener('click', () => {
+    startMelodyLoop();
+    console.log("Il Bardo intona il ritornello due volte.");
+}, { once: true });
+
+document.addEventListener('touchstart', () => {
+    startMelodyLoop();
+}, { once: true });
 
     // 5. CORIANDOLI
     function confettiRain() {
