@@ -4,9 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Royal Union — Support</title>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-  <!-- Link al CSS Esterno -->
   <link rel="stylesheet" href="style.css">
   
   <style>
@@ -71,13 +69,11 @@
 
     #iban-reveal { display: none; margin-top: 20px; padding: 15px; border: 2px dashed #7a1515; animation: fadeIn 1s; }
 
-    /* --- CREDITI --- */
     .credits { text-align: center; margin: 3rem 0; z-index: 10; }
     .arch-title { font-size: 2.5rem; margin-bottom: 0; }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Mobile Adaptivity */
     @media (max-width: 768px) {
       .aisle-container { gap: 20px; flex-direction: row; }
       .aisle { grid-template-columns: repeat(3, 1fr); width: 120px; }
@@ -88,7 +84,6 @@
 </head>
 <body>
 
-  <!-- AMBIENTE -->
   <div class="environment">
     <div class="castle-top">🏰🧱🧱🧱🧱🏰🧱🧱🧱🧱🏰</div>
     <div class="forest-side left-trees">🌲<br>🌳<br>🌲<br>🌳<br>🌲<br>🌳<br>🌳<br>🌲<br>🌳<br>🌲<br>🌳</div>
@@ -98,20 +93,16 @@
 
   <div class="credits">
     <h1 class="arch-title">Heaven & Alessio</h1>
-    <p style="color: var(--gold);">vi ringraziano per aver partecipato a questa esperienza!<br>
+    <p style="color: var(--gold);">Vi ringraziano per aver partecipato a questa esperienza!<br>
     <i>thank you for being part of this experience!</i></p>
   </div>
 
-  <!-- SCENA MATRIMONIO -->
   <div class="wedding-stage">
-    
-    <!-- Immagine Alberi (come da screenshot) -->
     <div style="display:flex; gap:300px; position:absolute; top:-50px; z-index:-1; opacity:0.5;">
         <span style="font-size:100px;">🌳</span>
         <span style="font-size:100px;">🌳</span>
     </div>
 
-    <!-- Celebrante -->
     <div class="celebrant-area">
       <img src="archives/crown.png" class="celebrant-crown">
       <span class="fairy-celebrant">🧚</span>
@@ -120,18 +111,16 @@
   <div class="sposi-row">
   <div class="entourage" id="maids-entourage"></div>
   
-  <!-- Sposo -->
   <div class="groom-bride-unit" id="groom-box">
     <img src="archives/crown.png" class="celebrant-crown" id="crown-groom">
     <img src="archives/knight.png" alt="Groom">
-    <small>Alessio</small> <p style="color: var(--gold)
+    <small>Alessio</small> <p style="color: var(--gold);
   </div>
-
-  <!-- Sposa -->
+      
   <div class="groom-bride-unit" id="bride-box">
     <img src="archives/crown.png" class="celebrant-crown" id="crown-bride">
     <img src="archives/knight.png" alt="Bride"> 
-    <small>Heaven</small> <p style="color: var(--gold)
+    <small>Heaven</small> <p style="color: var(--gold);
   </div>
 
   <div class="entourage" id="grooms-entourage"></div>
@@ -140,7 +129,7 @@
     <!-- Navate Ospiti -->
     <div class="aisle-container">
       <div class="aisle" id="aisle-left"></div>
-      <div class="aisle" id="aisle-right"></div>
+      <div class="aisle" id="aisle-right"></div>;
     </div>
 
     <!-- INDOVINELLO -->
@@ -153,7 +142,7 @@
       <div id="iban-reveal">
           <p>Royal Tribute IBAN:</p>
           <strong style="font-size: 1.2rem; color: #7a1515;">IT 99 XXX 0000 1111 2222 NNNN</strong>
-          <p><small>(Intestato ad Alessio & Heaven)</small></p>
+          <p><small>(Intestato ad Alessio)</small></p>
       </div>
     </div>
   </div>
