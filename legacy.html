@@ -198,12 +198,47 @@
             const idx = localStorage.getItem('hero_avatar_idx') || 0;
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
             const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
+          // 1. Riferimenti ai contenitori
 const cartList = document.getElementById('cart-items-list');
-cartItems.forEach(item => {
-    cartList.innerHTML += `<li>${item.name} (${item.price} gold)</li>`;
+const printGrid = document.getElementById('print-relics-grid');
+const purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
+
+// 2. Pulizia iniziale (per evitare duplicati al refresh)
+cartList.innerHTML = '';
+if(printGrid) printGrid.innerHTML = '';
+
+// 3. Ciclo Arcano: Collega i Nomi del Carrello alle Immagini del Database
+Object.keys(legacyDatabase).forEach(file => {
+    const dbItem = legacyDatabase[file];
+    
+    // Controlla se l'oggetto del database è presente nel carrello (confronto per nome)
+    const isInCart = cartItems.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
+
+    if (isInCart) {
+        // --- A. AGGIUNGI IL TESTO (Quello che avevi tu) ---
+        cartList.innerHTML += `<li>${dbItem.name}</li>`;
+
+        // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
+        if(printGrid) {
+            const pDiv = document.createElement('div');
+            pDiv.className = 'print-relic-item';
+            pDiv.innerHTML = `<img src="archives/${file}"><br><span>${dbItem.name}</span>`;
+            printGrid.appendChild(pDiv);
+        }
+
+        // --- C. MOSTRA LE IMMAGINI A SCHERMO (Vault o Sacca) ---
+        if (purchased.includes(file)) {
+            renderInSatchel(file); // Se l'avevi già messo nella sacca, ricrealo lì
+        } else {
+            createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
+        }
+    }
 });
-            document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
-            document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
+
+// 4. Aggiorna Livello e Gemme (Come avevi tu)
+document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
+document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
+
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
             Object.keys(legacyDatabase).forEach(file => {
