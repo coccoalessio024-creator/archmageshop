@@ -113,34 +113,62 @@
             <p style="color: rgba(212, 175, 55, 0.4); pointer-events: none; text-align: center;">Drop Relics into the Bag</p>
         </div>
 
-        <div class="final-scroll" id="print-area">
-            <div class="scroll-header">
-                <div id="final-avatar-frame">
-                    <img id="legacy-avatar-img" src="" alt="Hero">
-                </div>
-                <input type="text" placeholder="Enter your Name, Hero..." id="hero-name">
-                <div class="stat-line">
-                    <span id="display-lvl">LEVEL: --</span>
-                    <span id="display-gems">GEMS: ---</span>
-                </div>
-                     <div id="legacy-print-only">
-                <p style="text-align: center; font-weight: bold; padding-top: 20px; border-top: 1px solid #8b4513;">RELICS ACQUIRED BY TRIBUTE:</p>
-                <div id="print-relics-grid" class="print-relics-grid"></div>
-                   <div id="satchel-visual-content" style="display: flex; flex-wrap: wrap; justify-content: center; padding: 20px;"></div>         
-            </div>
-                
-            <h3 style="border-bottom: 2px solid #8b4513; margin-top: 15px;">SCRIBED CHRONICLES</h3>
-            <ul id="recap-list" style="list-style: none; padding: 0; font-size: 14px;"></ul>
-
-            <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px;">
-                ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
-            </div>
-                <div style="margin-top: 20px;">
-                <textarea placeholder="Notes and Greetings / Note e Congratulazioni..." style="width: 100%; height: 60px; background: rgba(0,0,0,0.05); border: 1px dashed #8b4513; font-family: 'MedievalSharp'; padding: 5px;"></textarea>
-            </div>
+     <div class="final-scroll" id="print-area">
+    <!-- 1. HEADER: Avatar, Nome e Stat Line -->
+    <div class="scroll-header">
+        <div id="final-avatar-frame">
+            <img id="legacy-avatar-img" src="" alt="Hero">
+        </div>
+        <input type="text" placeholder="Enter your Name, Hero..." id="hero-name">
+        <div class="stat-line">
+            <span id="display-lvl">LEVEL: --</span>
+            <span id="display-gems">GEMS: 0/3</span>
+            <span id="display-gold">TRIBUTE: 0.00 Gold</span>
         </div>
     </div>
-             
+
+    <!-- 2. QUESTS STATUS (Visto nell'immagine) -->
+    <div style="margin-top: 15px; border-top: 1px solid rgba(139, 69, 19, 0.3); padding-top: 10px;">
+        <p style="font-weight: bold; font-size: 11px; margin-bottom: 5px; color: #8b4513;">QUESTS COMPLETED:</p>
+        <div id="quests-status-visual" style="display: flex; gap: 8px;">
+            <!-- Verrà popolato dinamicamente o lasciato come segnaposto -->
+        </div>
+    </div>
+
+    <!-- 3. DETTAGLIO CARRELLO (Visto nell'immagine) -->
+    <div style="margin-top: 15px; border-top: 1px solid rgba(139, 69, 19, 0.3); padding-top: 10px;">
+        <p style="font-weight: bold; font-size: 11px; margin-bottom: 5px; color: #8b4513;">MAGIC CART INVENTORY:</p>
+        <ul id="cart-items-list" style="list-style: none; padding: 0; font-size: 12px; font-style: italic; color: #2c1e12;">
+            <!-- Qui appariranno i nomi e i prezzi (es: Treasure Map - 15 gold) -->
+        </ul>
+    </div>
+
+    <!-- 4. CHRONICLES: Le descrizioni degli oggetti droppati -->
+    <h3 style="border-bottom: 2px solid #8b4513; margin-top: 20px; font-size: 16px;">SCRIBED CHRONICLES</h3>
+    <ul id="recap-list" style="list-style: none; padding: 0; font-size: 13px; color: #2c1e12; min-height: 40px;">
+        <!-- Qui appaiono i nomi e la lore degli oggetti messi nella borsa -->
+    </ul>
+
+    <!-- 5. STATS FINALI E NOTE -->
+    <div id="final-stats" style="margin-top: 20px; font-weight: bold; border-top: 2px solid #8b4513; padding-top: 10px; font-size: 14px;">
+        ✨ FUN: 0 | 🌟 JOY: 0 | 🟦 MANA: 0
+    </div>
+
+    <div style="margin-top: 20px;">
+        <textarea id="personal-notes" placeholder="Notes and Greetings / Note e Congratulazioni..." 
+                  style="width: 100%; height: 70px; background: rgba(0,0,0,0.05); border: 1px dashed #8b4513; font-family: 'MedievalSharp'; padding: 8px; resize: none; color: #2c1e12;"></textarea>
+    </div>
+
+    <!-- 6. SEZIONE SEGRETA PER IL PDF (Invisibile a schermo) -->
+    <div id="legacy-print-only">
+        <p style="text-align: center; font-weight: bold; padding-top: 20px; border-top: 2px solid #8b4513; font-size: 14px;">
+            RELICS ACQUIRED BY ROYAL TRIBUTE:
+        </p>
+        <div id="print-relics-grid" class="print-relics-grid">
+            <!-- Verrà popolato con i PNG solo per la stampa -->
+        </div>
+    </div>
+</div>
 
         <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;">
     </div>
@@ -170,7 +198,10 @@
             const idx = localStorage.getItem('hero_avatar_idx') || 0;
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
             const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
-
+const cartList = document.getElementById('cart-items-list');
+cartItems.forEach(item => {
+    cartList.innerHTML += `<li>${item.name} (${item.price} gold)</li>`;
+});
             document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
             document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
