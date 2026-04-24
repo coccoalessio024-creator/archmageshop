@@ -212,7 +212,7 @@ Object.keys(legacyDatabase).forEach(file => {
     const dbItem = legacyDatabase[file];
     
     // Controlla se l'oggetto del database è presente nel carrello (confronto per nome)
-    const isInCart = cartItems.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
+    const isInCart = cartList.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
 
     if (isInCart) {
         // --- A. AGGIUNGI IL TESTO (Quello che avevi tu) ---
