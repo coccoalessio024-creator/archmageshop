@@ -199,7 +199,9 @@
             const avatars = ['axeman.png', 'knight.png', 'actualmage.png'];
             const gems = ['trial_1', 'trial_2', 'trial_3'].filter(g => localStorage.getItem(g) === 'true').length;
           // 1. Riferimenti ai contenitori
-const cartList = document.getElementById('cart-items-list');
+            const cartList = document.getElementById('cart-items-list');
+            const cartItems = JSON.parse(localStorage.getItem('magicCart')) || [];
+            const goldSpent = cartItems.reduce((total, item) => total + parseFloat(item.price || 0), 0);
 const printGrid = document.getElementById('print-relics-grid');
 const purchased = JSON.parse(localStorage.getItem('purchased_items')) || [];
 
@@ -212,7 +214,7 @@ Object.keys(legacyDatabase).forEach(file => {
     const dbItem = legacyDatabase[file];
     
     // Controlla se l'oggetto del database è presente nel carrello (confronto per nome)
-    const isInCart = cartList.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
+    const isInCart = cartItems.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
 
     if (isInCart) {
         // --- A. AGGIUNGI IL TESTO (Quello che avevi tu) ---
