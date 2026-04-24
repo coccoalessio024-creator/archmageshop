@@ -240,7 +240,7 @@ Object.keys(legacyDatabase).forEach(file => {
 // 4. Aggiorna Livello e Gemme (Come avevi tu)
 document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
 document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
-
+document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.05).toFixed(2)} Gold`;
             document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
             Object.keys(legacyDatabase).forEach(file => {
