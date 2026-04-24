@@ -128,6 +128,8 @@ body {
     .vault-grid { grid-template-columns: repeat(5, 1fr); order: 2; }
     .bag-zone { order: 1; }
     .final-scroll { order: 3; width: 90%; }
+    .legacy-print-only { grid-template-columns: 1fr; justify-items: center; }
+    .print-relics-grid { grid-template-columns: 1fr; justify-items: center; }
 }
 
 /* --- IL SIGILLO DI OCCULTAMENTO (PRINT RULES) --- */
