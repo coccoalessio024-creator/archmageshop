@@ -235,7 +235,7 @@ Object.keys(legacyDatabase).forEach(file => {
         if(printGrid) {
             const pDiv = document.createElement('div');
             pDiv.className = 'print-relic-item';
-            pDiv.innerHTML = `<img src="archives/${file}"><br><span>${dbItem.name}</span>`;
+            pDiv.innerHTML = `<img src="archives/${file} style="width:50px;"><br><span>${dbItem.name}</span>`;
             printGrid.appendChild(pDiv);
         }
 
@@ -274,7 +274,7 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
 
         function createVaultItem(file) {
             const slot = document.createElement('div');
-            slot.className = 'item-slot'; slot.draggable = true; slot.id = file;
+            slot.className = 'item-slot'; slot.draggable = false; slot.id = file;
             slot.innerHTML = `<img src="archives/${file}">`;
             slot.innerHTML = `<img src="archives/${file}" style="width:50px;">`;
             slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); };
