@@ -215,10 +215,10 @@ Object.keys(legacyDatabase).forEach(file => {
     
     // Controlla se l'oggetto del database è presente nel carrello (confronto per nome)
     const isInCart = cartItems.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
-
+const numItem = countItemsByName(dbItem.name);
     if (isInCart) {
         // --- A. AGGIUNGI IL TESTO (Quello che avevi tu) ---
-        cartList.innerHTML += `<li>${dbItem.name}</li>`;
+        cartList.innerHTML += `<li>${numItem} x ${dbItem.name}</li>`;
 
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
         if(printGrid) {
@@ -278,6 +278,18 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
             const li = document.createElement('li');
             li.innerHTML = `• <strong>${item.name}</strong>`;
             document.getElementById('recap-list').appendChild(li);
+        }
+
+        function countItemsByName(nameToFind) {
+            // Recuperiamo gli oggetti dal localStorage (o usiamo la variabile cartItems se è globale)
+            const items = JSON.parse(localStorage.getItem('magicCart')) || [];
+        
+            // Filtriamo l'array cercando la corrispondenza del nome
+            const count = items.filter(item => 
+            item.name.trim().toLowerCase() === nameToFind.trim().toLowerCase()
+            ).length;
+    
+            return count;
         }
         
         const dropZone = document.getElementById('drop-zone');
