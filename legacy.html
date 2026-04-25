@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+è purchased_items'<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -240,12 +240,13 @@ Object.keys(legacyDatabase).forEach(file => {
         }
 
         // --- C. MOSTRA LE IMMAGINI A SCHERMO (Vault o Sacca) ---
-        if (purchased.includes(file)) {
+        // if (purchased.includes(file)) {
             renderInSatchel(file,numItem); // Se l'avevi già messo nella sacca, ricrealo lì
-        } else {
-            createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
-        }
-    }
+        // } else {
+        //    createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
+        // }
+    }  else
+        createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
 });
 
 // 4. Aggiorna Livello e Gemme (Come avevi tu)
