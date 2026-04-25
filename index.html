@@ -73,7 +73,13 @@
             <a href="emporium/index.html" class="arch-btn">💰 THE EMPORIUM</a>
             <a href="emporium/bulletins.html" class="arch-btn">📜 BULLETINS</a>
             <a href="trial.html" class="arch-btn" id="trialBtn">⚔️ THE TRIAL</a>
-            <a href="summon-support.html" class="arch-btn" id="trialBtn">credits and links</a>
+            <a href="summon-support.html" class="arch-btn" id="trialBtn">❤️ CREDITS</a>
+            <div id="legacy-portal">
+        <a href="https://thearchmagemagicshop.duckdns.org/legacy.html" style="text-decoration: none;">
+            <div class="legacy-crown-btn">
+                <img src="../archives/crown.png" alt="Crown">
+            </div>
+            <p style="color: #8b4513; font-family: 'MedievalSharp'; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
         </div>
     </div>
 
@@ -84,11 +90,12 @@
     <script>
         const unlockDate = new Date(2026, 4, 4);
         const today = new Date();
-        const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait for the 4th of may, stars aren't aligned yet. Try and find other clues";
-
+        const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait the 4th of May. Stars aren't aligned yet, try and find other clues";
+    --//nuovo lock su bottone legacy 
         function applyCelestialLock() {
             const tBtn = document.getElementById('trialBtn');
             const logo = document.getElementById('fixedLogo');
+            const legacyCr = document.getElementById('legacy-crown-btn');
             if (today < unlockDate) {
                 if(tBtn) {
                     tBtn.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
@@ -97,9 +104,17 @@
                 if(logo) {
                     logo.classList.add('locked');
                     logo.onclick = (e) => { e.preventDefault(); alert(msg); };
+                    
+                if(legacyCr) {
+                    legacyCr.classList.add('locked');
+                    legacyCr.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }
             } else {
-                if(logo) logo.classList.add('unlocked');
+                if(logo) logo.classList.add('unlocked');   
+                if(logo)  legacyCr.classList.add('unlocked');
+                if(logo) 
+                    tBtn.style.filter = "grayscale(1) brightness(1) sepia(1)";
+                    tBtn.classList.add('unlocked');
             }
         }
 
