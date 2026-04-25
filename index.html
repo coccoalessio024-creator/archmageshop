@@ -58,12 +58,12 @@
     </div>
 
     <div class="welcome-scroll scroll-left rolled" id="s-left" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; margin-bottom:1rem;">WELCOME Adept of Arts</h3>
-        <p>✧<br>The journey<br>begins<br>here<br>✧</p>
+        <h3 style="color:#7a1515; margin-bottom:1rem;">WELCOME MORTAL</h3>
+        <p>✧<br>THE KING <br>AND<br>QUEEN<br><br>DEEM<br>YOU<br>WORTHY<br>✧</p>
     </div>
     <div class="welcome-scroll scroll-right rolled" id="s-right" onclick="this.classList.toggle('rolled')">
-        <h3 style="color:#7a1515; margin-bottom:1rem;">REJOICE<br><br>Void Walker</h3>
-        <p>✧<br>The Lore<br>awaits<br>the worthy<br>✧</p>
+        <h3 style="color:#7a1515; margin-bottom:1rem;">REJOICE<br><br>HERO</h3>
+        <p>✧<br>YOU<br>MUST<br>PASS<br>THE TRIALS<br>✧</p>
     </div>
 
     <div class="sanctum-container">
@@ -75,7 +75,6 @@
             <a href="trial.html" class="arch-btn" id="trialBtn">⚔️ THE TRIAL</a>
             <a href="summon-support.html" class="arch-btn" id="trialBtn">❤️ CREDITS</a>
             <a href="legacy.html" class="arch-btn" id="legacy-crown-btn">🏹 LEGACY</a>
-            ;">
         </div>
     </div>
 
@@ -123,10 +122,10 @@
                     r.innerHTML = runes[Math.floor(Math.random()*runes.length)];
                     r.className = 'magic-rune';
                     r.style.color = "#fff"; 
-                    r.style.textShadow = `0 0 10px ${glows[Math.floor(Math.random()*glows.length)]}`;
+                    r.style.textShadow = `0 0 25px ${glows[Math.floor(Math.random()*glows.length)]}`;
                     r.style.left = (Math.random()*95)+'vw'; 
                     r.style.fontSize = (Math.random()*15+15)+'px';
-                    r.style.animation = `fall ${Math.random()*3+4}s linear forwards`;
+                    r.style.animation = `fall ${Math.random()*3+5}s ease-in forwards`;
                     document.body.appendChild(r);
                     setTimeout(() => r.remove(), 7000);
                 }, i * 400);
