@@ -94,22 +94,26 @@
             if (today < unlockDate) {
                 if(tBtn) {
                     tBtn.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
+                     tBtn.classList.add('locked');
                     tBtn.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }
                 if(logo) {
                     logo.classList.add('locked');
                     logo.onclick = (e) => { e.preventDefault(); alert(msg); };
-                    
+                }    
                 if(legacyCr) {
                     legacyCr.classList.add('locked');
                     legacyCr.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }
             } else {
-                if(logo) logo.classList.add('unlocked');   
-                if(logo)  legacyCr.classList.add('unlocked');
-                if(logo) 
+                if (logo)
+                    logo.classList.add('unlocked');   
+                if (legacyCr) 
+                    legacyCr.classList.add('unlocked');
+                if (tBtn) {
                     tBtn.style.filter = "grayscale(1) brightness(1) sepia(1)";
                     tBtn.classList.add('unlocked');
+                }
             }
         }
 
