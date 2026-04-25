@@ -276,7 +276,7 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
             const slot = document.createElement('div');
             slot.className = 'item-slot'; slot.draggable = false; slot.id = file;
             slot.innerHTML = `<img src="archives/${file}">`;
-            slot.innerHTML = `<img src="archives/${file}" style="width:50px;">`;
+            slot.innerHTML = `<img src="archives/${file}" style="width:80px;">`;
             slot.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); };
             document.getElementById('vault-items').appendChild(slot);
         }
