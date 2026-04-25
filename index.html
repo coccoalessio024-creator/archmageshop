@@ -93,8 +93,8 @@
             
             if (today < unlockDate) {
                 if(tBtn) {
-                    tBtn.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
-                     tBtn.classList.add('locked');
+                    tBtn.style.filter = "grayscale(1) brightness(0.5) sepia(0.5)";
+                    tBtn.classList.add('locked');
                     tBtn.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }
                 if(logo) {
