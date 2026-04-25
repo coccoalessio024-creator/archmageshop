@@ -86,11 +86,11 @@
         const unlockDate = new Date(2026, 4, 4);
         const today = new Date();
         const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait the 4th of May. Stars aren't aligned yet, try and find other clues";
-    --//nuovo lock su bottone legacy 
         function applyCelestialLock() {
             const tBtn = document.getElementById('trialBtn');
             const logo = document.getElementById('fixedLogo');
             const legacyCr = document.getElementById('legacy-crown-btn');
+            
             if (today < unlockDate) {
                 if(tBtn) {
                     tBtn.style.filter = "grayscale(1) brightness(0.3) sepia(0.5)";
