@@ -225,7 +225,8 @@ Object.keys(legacyDatabase).forEach(file => {
         totalStats.fun += dbItem.fun * numItem;
         totalStats.joy += dbItem.joy * numItem;
         totalStats.mana += dbItem.mana * numItem;
-
+        document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
+        
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
         if(printGrid) {
             const pDiv = document.createElement('div');
