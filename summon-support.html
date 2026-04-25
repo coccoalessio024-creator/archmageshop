@@ -7,7 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   
-  <style>
+<style>
+    :root {
+      --gold: #d4af37;
+    }
+
     body {
       background: #1a120b;
       color: #fdf5e6;
@@ -33,19 +37,43 @@
       position: relative; z-index: 10;
       margin-top: 100px;
       display: flex; flex-direction: column; align-items: center;
-      width: 100%; max-width: 900px;
+      width: 100%; max-width: 1100px; /* Allargato per far stare tutto */
     }
 
-    .celebrant-area { position: relative; margin-bottom: 20px; }
+    .celebrant-area { position: relative; margin-bottom: 20px; text-align: center; }
     .fairy-celebrant { font-size: 3rem; position: relative; }
-    .celebrant-crown { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px !important; }
+    .celebrant-crown { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px !important; z-index: 5; }
 
-    .sposi-row { display: flex; gap: 30px; align-items: center; margin-bottom: 30px; }
-    .groom-bride-unit { display: flex; flex-direction: column; align-items: center; }
-    .groom-bride-unit img { width: 80px; image-rendering: pixelated; filter: drop-shadow(0 0 10px var(--gold)); }
+    /* AFFIANCAMENTO SPOSI E CORTEO */
+    .sposi-row { 
+      display: flex; 
+      flex-direction: row; /* Forza l'affiancamento orizzontale */
+      justify-content: center; 
+      align-items: flex-end; 
+      gap: 40px; 
+      margin-bottom: 30px;
+      width: 100%;
+    }
+
+    .groom-bride-unit { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      position: relative; 
+    }
+
+    .groom-bride-unit img { 
+      width: 80px; 
+      image-rendering: pixelated; 
+      filter: drop-shadow(0 0 10px var(--gold)); 
+    }
 
     /* Corteo (4 Knights, 4 Maids) */
-    .entourage { display: flex; gap: 10px; margin-bottom: 20px; }
+    .entourage { 
+      display: flex; 
+      gap: 8px; 
+      align-items: flex-end;
+    }
     .entourage img { width: 40px; image-rendering: pixelated; }
 
     /* --- NAVATE INVITATI (68 FISSI) --- */
@@ -53,7 +81,7 @@
     .aisle { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 180px; }
     .guest { width: 30px; height: 30px; image-rendering: pixelated; }
 
-    /* --- CASSELLA INDOVINELLO (Stile Bollettino) --- */
+    /* --- CASSELLA INDOVINELLO --- */
     .parchment-riddle {
       background: linear-gradient(135deg, #e4d0a6 0%, #d4b38d 100%);
       color: #3d2810; padding: 2rem; border-radius: 20px 5px 20px 5px;
@@ -75,12 +103,16 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     @media (max-width: 768px) {
-      .aisle-container { gap: 20px; flex-direction: row; }
+      .sposi-row { 
+        flex-wrap: wrap; /* Su piccoli schermi il corteo va sotto gli sposi */
+        gap: 20px; 
+      }
+      .aisle-container { gap: 20px; }
       .aisle { grid-template-columns: repeat(3, 1fr); width: 120px; }
-      .sposi-row { gap: 10px; }
       .environment { font-size: 1.2rem; }
     }
-  </style>
+</style>
+
 </head>
 <body>
 
