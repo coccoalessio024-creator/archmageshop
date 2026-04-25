@@ -215,9 +215,10 @@ Object.keys(legacyDatabase).forEach(file => {
     
     // Controlla se l'oggetto del database è presente nel carrello (confronto per nome)
     const isInCart = cartItems.some(item => item.name.trim().toLowerCase() === dbItem.name.toLowerCase());
-const numItem = countItemsByName(dbItem.name);
+    // Numero di elementi nel carrello
+    const numItem = countItemsByName(dbItem.name);
     if (isInCart) {
-        // --- A. AGGIUNGI IL TESTO (Quello che avevi tu) ---
+        // --- A. AGGIUNGI IL TESTO in MAGIC CAART INVENTORY ---
         cartList.innerHTML += `<li>${numItem} x ${dbItem.name}</li>`;
 
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
@@ -230,7 +231,7 @@ const numItem = countItemsByName(dbItem.name);
 
         // --- C. MOSTRA LE IMMAGINI A SCHERMO (Vault o Sacca) ---
         if (purchased.includes(file)) {
-            renderInSatchel(file); // Se l'avevi già messo nella sacca, ricrealo lì
+            renderInSatchel(file,numItem); // Se l'avevi già messo nella sacca, ricrealo lì
         } else {
             createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
         }
@@ -270,13 +271,13 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
             document.getElementById('vault-items').appendChild(slot);
         }
         
-        function renderInSatchel(file) {
+        function renderInSatchel(file, numItem) {
             const item = legacyDatabase[file];
             const satImg = document.createElement('img');
             satImg.src = `archives/${file}`; satImg.className = 'satchel-item';
             document.getElementById('satchel-visual-content').appendChild(satImg);
             const li = document.createElement('li');
-            li.innerHTML = `• <strong>${item.name}</strong>`;
+            li.innerHTML = `• <strong>${numItem} x ${item.name}</strong>`;
             document.getElementById('recap-list').appendChild(li);
         }
 
