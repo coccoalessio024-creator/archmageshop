@@ -79,7 +79,7 @@
             <hr style="border: 0; border-top: 1px dashed #8b4513;">
             <p><strong>IT:</strong> Trascina le reliquie nella Sacca. Inserisci il nome e premi "Seal" per salvare. 
             <br><i style="color: #ff4d00;">Chiudi lo Status Eroe prima di salvare!</i></p>
-        </div>
+    </div>
         
         <button onclick="toggleQuest()" style="
             background: #8b4513; color: #fdf5e6; border: none; 
@@ -257,7 +257,7 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
             Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
                 slot.className = 'item-slot';
-                slot.draggable = true;
+                slot.draggable = false;
                 slot.id = file;
                 slot.innerHTML = `<img src="archives/${file}" style="width:50px; pointer-events:none;">`;
 
