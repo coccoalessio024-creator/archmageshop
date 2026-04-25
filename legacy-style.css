@@ -129,7 +129,17 @@ body {
     .bag-zone { order: 1; }
     .final-scroll { order: 3; width: 90%; }
     .legacy-print-only { grid-template-columns: 1fr; justify-items: center; }
-    .print-relics-grid { grid-template-columns: 1fr; justify-items: center; }
+    
+
+    #print-relics-grid { 
+        display: grid;
+        /* Crea quante più colonne da 100px possibile */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+        gap: 15px; 
+        width: 100%;
+        justify-items: center;
+        margin-top: 20px;
+    }
 }
 
 /* --- IL SIGILLO DI OCCULTAMENTO (PRINT RULES) --- */
