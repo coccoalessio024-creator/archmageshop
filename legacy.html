@@ -221,6 +221,11 @@ Object.keys(legacyDatabase).forEach(file => {
         // --- A. AGGIUNGI IL TESTO in MAGIC CART INVENTORY ---
         cartList.innerHTML += `<li><strong>${numItem} x ${dbItem.name}: ${dbItem.lore}</strong></li>`;
 
+        // --- A.1 AGGIORNA LE STAT TOTALI
+        totalStats.fun += dbItem.fun * numItem;
+        totalStats.joy += dbItem.joy * numItem;
+        totalStats.mana += dbItem.mana * numItem;
+
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
         if(printGrid) {
             const pDiv = document.createElement('div');
