@@ -253,9 +253,9 @@ Object.keys(legacyDatabase).forEach(file => {
 document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
 document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
 document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.05).toFixed(2)} Gold`;
-            document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
+document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
 
-            Object.keys(legacyDatabase).forEach(file => {
+/*            Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
                 slot.className = 'item-slot';
                 slot.draggable = false;
@@ -272,7 +272,7 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
              document.getElementById('vault-items').appendChild(slot);
             }); 
         });
-
+*/
         function createVaultItem(file) {
             const slot = document.createElement('div');
             slot.className = 'item-slot'; slot.draggable = false; slot.id = file;
