@@ -235,7 +235,7 @@ Object.keys(legacyDatabase).forEach(file => {
         if(printGrid) {
             const pDiv = document.createElement('div');
             pDiv.className = 'print-relic-item';
-            pDiv.innerHTML = `<img src="archives/${file} style="width:50px;"><br><span>${dbItem.name}</span>`;
+            pDiv.innerHTML = `<img src="archives/${file}" style="width:50px;"><br><span>${dbItem.name}</span>`;
             printGrid.appendChild(pDiv);
         }
 
