@@ -218,8 +218,8 @@ Object.keys(legacyDatabase).forEach(file => {
     // Numero di elementi nel carrello
     const numItem = countItemsByName(dbItem.name);
     if (isInCart) {
-        // --- A. AGGIUNGI IL TESTO in MAGIC CAART INVENTORY ---
-        cartList.innerHTML += `<li>${numItem} x ${dbItem.name}</li>`;
+        // --- A. AGGIUNGI IL TESTO in MAGIC CART INVENTORY ---
+        cartList.innerHTML += `<li><strong>${numItem} x ${dbItem.name}</strong>: ${dbItem.lore} (F:${dbItem.fun} J:${dbItem.joy} M:${dbItem.mana}) </li>`;
 
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
         if(printGrid) {
