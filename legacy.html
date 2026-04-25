@@ -177,22 +177,22 @@
         <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;">
     </div>
     
-       <div id="qr-legacy-frame" style="text-align: center; margin-top: 30px; border: 1px dashed var(--gold); padding: 10px;">
-                <img src="archives/legacy-qr.jpeg" style="width: 150px; border: 1px solid var(--gold);">
+       <div id="qr-legacy-frame" style="text-align: center; margin-top: 10px; border: 1px solid var(--gold); padding: 10px;">
+                <img src="archives/legacy-qr.jpeg" style="width: 200px; border: 1px solid var(--gold);">
                 <p style="font-size: 15px; color: var(--gold); margin-top: 5px;">VERIFY LEGACY</p>
             </div>
     
     <script src="archmage-logic.js"></script>
     <script>
         const legacyDatabase = {
-            "blessing.png": { name: "Archmage Blessing", lore: "Resonates with the first Archmage.", fun: 0, joy: 3, mana: 1 },
-            "buff.png": { name: "Archmage buff", lore: "Surge of adrenaline and light.", fun: 3, joy: 2, mana: 1 },
-            "coinhead.png": { name: "Toilet Token", lore: "An eternal flip between destiny and necessity.", fun: 3, joy: 2, mana: 1 },
+            "blessing.png": { name: "Archmage Blessing", lore: "Resonates with the first Archmage.", fun: 4, joy: 4, mana: 5 },
+            "buff.png": { name: "Archmage buff", lore: "Surge of adrenaline and light.", fun: 8, joy: 2, mana: 1 },
+            "coinhead.png": { name: "Toilet Token", lore: "An eternal flip between destiny and necessity.", fun: 0, joy: 10, mana: 0 },
             "hugtoken.png": { name: "Archmage Hug", lore: "Warmth in the winter rain.", fun: 2, joy: 3, mana: 0 },
-            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Shadow among the stars.", fun: 1, joy: 0, mana: 3 },
-            "magicmirror.png.png": { name: "Magic Mirror", lore: "Reflects your true destiny.", fun: 0, joy: 3, mana: 2 },
-            "silentring.png.png": { name: "Silence Ring", lore: "Moonlight forged into silence.", fun: 0, joy: 0, mana: 5 },
-            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks your path.", fun: 3, joy: 0, mana: 2 }
+            "invisibilitybrew.png.png": { name: "Invisibility Brew", lore: "Shadow among the stars.", fun: 6, joy: 6, mana: 6 },
+            "magicmirror.png.png": { name: "Magic Mirror", lore: "Reflects your true destiny.", fun: 0, joy: 8, mana: 5 },
+            "silentring.png.png": { name: "Silence Ring", lore: "Moonlight forged into silence.", fun: 0, joy: 0, mana: 10 },
+            "treasuremap.png.png": { name: "Treasure Map", lore: "The X marks your path.", fun: 7, joy: 1, mana: 4 }3
         };
 
         let totalStats = { fun: 0, joy: 0, mana: 0 };
@@ -267,8 +267,8 @@ document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.0
                     document.getElementById('oracle-info').innerHTML = `<strong>${item.name}</strong><br><small>${item.lore}</small>`;
                     document.getElementById('oracle-info').style.display = 'block';
                 };
-              //--  slot.ondragend = () => document.getElementById('oracle-info').style.display = 'none';
-              //-  document.getElementById('vault-items').appendChild(slot);
+             slot.ondragend = () => document.getElementById('oracle-info').style.display = 'none';
+             document.getElementById('vault-items').appendChild(slot);
             }); 
         });
 
