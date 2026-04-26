@@ -140,7 +140,7 @@
     </div>
 
     <!-- 2. QUESTS STATUS (Visto nell'immagine) -->
-    <div style="margin-top: 15px; border-top: 1px solid rgba(139, 69, 19, 0.3); padding-top: 10px;">
+    <div id="quest-status-line" style="margin-top: 15px; border-top: 1px solid rgba(139, 69, 19, 0.3); padding-top: 10px;">
         <p style="font-weight: bold; font-size: 11px; margin-bottom: 5px; color: #8b4513;">QUESTS COMPLETED:</p>
         <div id="quests-status-visual" style="display: flex; gap: 8px;">
             <!-- Verrà popolato dinamicamente o lasciato come segnaposto -->
@@ -262,6 +262,22 @@ document.getElementById('display-lvl').innerText = `LEVEL: ${lvl}`;
 document.getElementById('display-gems').innerText = `GEMS: ${gems}/3`;
 document.getElementById('display-gold').innerText = `TRIBUTE: ${(goldSpent * 1.05).toFixed(2)} Gold`;
 document.getElementById('legacy-avatar-img').src = `archives/${avatars[idx]}`;
+
+let textquest = "✧ QUEST LOG ✧<br>";
+
+function getQuestLine(key, label) {
+    if (localStorage.getItem(key) === 'true') {
+        return `<span style="color:#2e7d32;">💎 ${label} Completed</span><br>`;
+    } else {
+        return `<span style="color:#777;">🔒 ${label} Locked</span><br>`;
+    }
+}
+
+textquest += getQuestLine('trial_1', 'First Trial');
+textquest += getQuestLine('trial_2', 'Second Trial');
+textquest += getQuestLine('trial_3', 'Third Trial');
+
+document.getElementById('quest-status-line').innerHTML = textquest;            
 
 /*            Object.keys(legacyDatabase).forEach(file => {
                 const slot = document.createElement('div');
