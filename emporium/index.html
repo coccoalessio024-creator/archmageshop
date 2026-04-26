@@ -227,6 +227,23 @@
   </div>
 
   <script>
+
+    const unlockDate = new Date(2026, 4, 4);
+    const today = new Date();
+    const msg = "Gli astri non sono allineati. Attendi il 4 maggio prova a trovare altri indizi. Wait the 4th of May. Stars aren't aligned yet, try and find other clues";
+    function applyCelestialLock() {
+      const secret = document.getElementById('secret-warranty-card');
+        if (today < unlockDate) {
+          if(secret) {
+            secret.classList.add('locked');
+            secret.onclick = (e) => { e.preventDefault(); alert(msg); };
+          }   
+        } else {
+          if (secret)
+            secret.classList.add('unlocked');   
+        }
+    }
+    
     function addToCart(name, price) {
       let cart = JSON.parse(localStorage.getItem('magicCart')) || [];
       cart.push({ id: Date.now(), name: name, price: price });
@@ -259,6 +276,11 @@
       if(cart.length > 0) sidebar.classList.add('visible');
       else sidebar.classList.remove('visible');
     }
+
+    window.onload = () => {
+      applyCelestialLock();
+    };
+    
     updateUI();
   </script>
   <script src="../archmage-logic.js"></script>
