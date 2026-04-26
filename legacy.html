@@ -107,10 +107,15 @@
 
 <div class="corner-dec top-left"></div>
 <div class="corner-dec bottom-left-dec"></div>
+
     <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 40px;">
-        <a href="index.html" class="save-btn">← RETURN TO SANCTUM</a>
-        <button class="save-btn" onclick="window.print()">📜 SEAL YOUR LEGACY (SAVE)</button>
-    </div>
+    <a href="index.html" class="save-btn" style="margin: 0 auto; display: block; text-align: center;">
+        ← RETURN TO SANCTUM
+    </a>
+    <button class="save-btn" onclick="window.print()" style="margin: 0 auto; display: block; text-align: center;">
+        📜 SEAL YOUR LEGACY (SAVE)
+    </button>
+</div>
 
     <div class="legacy-container">
         <div class="vault-grid" id="vault-items">THE EMPORIUM</div>
@@ -180,10 +185,10 @@
         <div id="oracle-info" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#050505; border:2px solid #d4af37; padding:10px; color:#d4af37; font-family:'MedievalSharp'; z-index:10000;">
     </div>
     
-       <div id="qr-legacy-frame" style="text-align: center; margin-top: 10px; border: 1px solid var(--gold); padding: 10px;">
-                <img src="archives/legacy-qr.jpeg" style="width: 200px; border: 1px solid var(--gold);">
-                <p style="font-size: 15px; color: var(--gold); margin-top: 5px;">VERIFY LEGACY</p>
-            </div>
+<div id="qr-legacy-frame" style="text-align: center; margin: 10px auto 0 auto; border: 1px solid var(--gold); padding: 10px; order: 999; width: fit-content; grid-column: 1 / -1;">
+    <img src="archives/legacy-qr.jpeg" style="width: 200px; border: 1px solid var(--gold);">
+    <p style="font-size: 15px; color: var(--gold); margin-top: 5px;">VERIFY LEGACY</p>
+</div>
     
     <script src="archmage-logic.js"></script>
     <script>
