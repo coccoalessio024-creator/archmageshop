@@ -240,7 +240,7 @@ Object.keys(legacyDatabase).forEach(file => {
         document.getElementById('final-stats').innerHTML = `✨ FUN: ${totalStats.fun} | 🌟 JOY: ${totalStats.joy} | 🟦 MANA: ${totalStats.mana}`;
         
         // --- B. PREPARA LE IMMAGINI PER LA STAMPA (Invisibili a schermo) ---
-        if(printGrid) {
+        for (let i = 0; i < numItem; i++) {
             const pDiv = document.createElement('div');
             pDiv.className = 'print-relic-item';
             pDiv.innerHTML = `<img src="archives/${file}" style="width:50px;"><br><span>${dbItem.name}</span>`;
@@ -248,11 +248,7 @@ Object.keys(legacyDatabase).forEach(file => {
         }
 
         // --- C. MOSTRA LE IMMAGINI A SCHERMO (Vault o Sacca) ---
-        // if (purchased.includes(file)) {
-            renderInSatchel(file,numItem); // Se l'avevi già messo nella sacca, ricrealo lì
-        // } else {
-        //    createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
-        // }
+        renderInSatchel(file,numItem); // Se l'avevi già messo nella sacca, ricrealo lì
     }  else
         createVaultItem(file); // Altrimenti mettilo nel Vault per essere trascinato
 });
