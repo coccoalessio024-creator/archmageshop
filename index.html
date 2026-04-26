@@ -52,8 +52,8 @@
         <div class="help-btn" onclick="toggleHelp(event)">?</div>
         <div id="helpScroll" class="help-scroll">
             <b style="color:#7a1515">GUIDE / GUIDA</b><br><br>
-            [EN] COLLECT ALL 3 GEM TO UNLOCK LEGACY, CREDITS TO SKIP FUN.<br><br>
-            [IT] COLLEZIONA LE 3 GEMME PER SBLOCCARE LA LEGACY. SCHIACCIA SU CREDITS PER SALTARE IL DIVERTIMENTO.
+            [EN] COLLECT ALL 3 GEM FOR FUN, CREDITS TO SKIP FUN.<br><br>
+            [IT] COLLEZIONA LE 3 GEMME PER IL TUO DIVERTIMENTO. SCHIACCIA SU CREDITS PER SALTARE IL DIVERTIMENTO.
         </div>
     </div>
 
@@ -101,15 +101,9 @@
                     logo.classList.add('locked');
                     logo.onclick = (e) => { e.preventDefault(); alert(msg); };
                 }    
-                if(legacyCr) {
-                    legacyCr.classList.add('locked');
-                    legacyCr.onclick = (e) => { e.preventDefault(); alert(msg); };
-                }
             } else {
                 if (logo)
                     logo.classList.add('unlocked');   
-                if (legacyCr) 
-                    legacyCr.classList.add('unlocked');
                 if (tBtn) {
                     tBtn.style.filter = "grayscale(1) brightness(1) sepia(1)";
                     tBtn.classList.add('unlocked');
