@@ -33,7 +33,7 @@
         .brand-logo-fixed.locked { filter: grayscale(1) brightness(0.3); opacity: 0.5; }
         .brand-logo-fixed.unlocked { filter: drop-shadow(0 0 15px #00fbff); }
         .help-wrapper { position: fixed; bottom: 25px; left: 25px; z-index: 2500; }
-        .help-btn { width: 45px; height: 45px; background: #d4af37; color: #140f0a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; cursor: pointer; border: 2px solid #140f0a; box-shadow: 0 0 10px #d4af37; }
+        .help-btn { width: 45px; height: 45px; background: #d4af37; color: #140f0a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; cursor: pointer; border: 2px solid #140f0a; box-shadow: 0 0 10px #d4af37; white-space: nowrap; font-size: 1.2rem;}
         .help-scroll { position: absolute; bottom: 60px; left: 0; width: 370px; background: #fdf5e6; border: 2px solid #8b4513; padding: 15px; color: #3d2b1f; display: none; box-shadow: 0 10px 30px #000; border-radius: 5px; font-size: 0.85rem; }
         .help-scroll.active { display: block; animation: fadeIn 0.3s; }
 
@@ -49,8 +49,13 @@
 </head>
 <body>
 <div class="help-wrapper">
-    <div class="help-btn" id="HelpEn" onclick="toggleHelp(event)">?en</div>
-    <div class="help-btn" id="HelpIt" onclick="toggleHelp(event)">?it</div>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="display:flex; gap:10px;">
+            <div class="help-btn" id="HelpEn" onclick="toggleHelp(event)">EN</div>
+            <div class="help-btn" id="HelpIt" onclick="toggleHelp(event)">IT</div>
+        </div>
+        <div style="color:#d4af37; font-size:0.75rem; text-shadow:0 0 5px #000; margin-top:6px;">✧ HELP / AIUTO ✧</div>
+    </div>
     <div id="helpScrollEn" class="help-scroll">
         <b style="color:#7a1515">GUIDE</b><br><br>
         THE EMPORIUM: Acquire magical items for your spell pouch. The Archmage will offer the tributes to the newlyweds to gain the King’s favor.<br><br>
