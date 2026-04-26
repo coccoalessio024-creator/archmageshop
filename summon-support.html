@@ -102,43 +102,39 @@
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  @media (max-width: 768px) {
-  .sposi-row { 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; 
-  }
+@media (max-width: 768px) {
+    .welcome-scroll { 
+        width: 100%; 
+        z-index: 40; 
+    }
 
-  /* Sposi sopra, affiancati */
-  #groom-box,
-  #bride-box {
-    order: 1;
-    width: auto;
-  }
+    .welcome-scroll.rolled { 
+        transform: translateY(-95%); 
+    }
 
-  /* Forza una nuova riga dopo gli sposi */
-  .sposi-row::after {
-    content: "";
-    order: 1;
-    flex-basis: 100%;
-  }
+    .welcome-scroll:not(.rolled) { 
+        transform: translateY(0); 
+    }
 
-  /* Testimoni sotto */
-  #maids-entourage,
-  #grooms-entourage {
-    order: 2;
-    width: 45%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 12px;
-  }
+    #helpScroll {
+        width: 280px !important;
+        max-width: calc(100vw - 40px) !important;
+        max-height: 65vh !important;
+        overflow-y: auto !important;
+        padding: 8px !important;
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+    }
 
-  .environment { 
-    font-size: 1.2rem; 
-  }
+    #helpScroll,
+    #helpScroll * {
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+    }
+
+    #helpScroll b {
+        font-size: 12px !important;
+    }
 }
 
 </style>
