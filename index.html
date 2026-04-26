@@ -48,25 +48,26 @@
     </style>
 </head>
 <body>
-    <div class="help-wrapper">
-        <div class="help-btn" onclick="toggleHelp(event)">?</div>
-        <div id="helpScroll" class="help-scroll">
-            <b style="color:#7a1515">GUIDE / GUIDA</b><br><br>
-            [EN]<br>
-            THE EMPORIUM: Acquire magical items for your spell pouch. The Archmage will offer the tributes to the newlyweds to gain the King’s favor.<br><br>
-            BULLETINS: The Archmage’s tomes. A collection of edicts and proclamations, wherein the Archmage shares thoughts and visions worthy of the court.<br><br>
-            THE TRIAL: Three hidden trials shall reveal themselves on the path to the wedding, offering clues of great importance.<br><br>
-            CREDITS: Paths and rituals to send tributes directly to the newlyweds.<br><br>
-            LEGACY: Shape your legend: display your level, completed trials (gems), and leave a kind message. You may save your hero sheet and the magical items in your possession. Bring it with you on the wedding day, or send it in advance by messenger pigeon, should your tribute arrive in physical gold.<br><br>
-    
-            [IT]<br>
-            THE EMPORIUM: Acquista oggetti magici per la tua borsa degli incantesimi. L'arcimago donerà i tributi agli sposi per ingraziarsi il Re.<br><br> 
-            BULLETINS: I tomi dell'Arcimago. Una raccolta di editti e proclami, in cui l’Arcimago dispensa pensieri e visioni degne della corte.<br><br>
-            THE TRIAL: Tre prove celate si sveleranno lungo il cammino verso le nozze, offrendo indizi di grande importanza.<br><br>
-            CREDITS: Vie e rituali per inviare tributi diretti agli sposi.<br><br>
-            LEGACY: Plasma la tua leggenda: mostra il tuo livello, le prove superate (gemme) e lascia un messaggio gentile. Potrai salvare la tua scheda eroe e gli oggetti magici in tuo possesso. Portala con te il giorno delle nozze o inviala con un piccione messaggero in anticipo, qualora il tuo tributo giunga in oro reale.
-        </div>
+<div class="help-wrapper">
+    <div class="help-btn" id="HelpEn" onclick="toggleHelp(event)">?en</div>
+    <div class="help-btn" id="HelpIt" onclick="toggleHelp(event)">?it</div>
+    <div id="helpScrollEn" class="help-scroll">
+        <b style="color:#7a1515">GUIDE</b><br><br>
+        THE EMPORIUM: Acquire magical items for your spell pouch. The Archmage will offer the tributes to the newlyweds to gain the King’s favor.<br><br>
+        BULLETINS: The Archmage’s tomes. A collection of edicts and proclamations, wherein the Archmage shares thoughts and visions worthy of the court.<br><br>
+        THE TRIAL: Three hidden trials shall reveal themselves on the path to the wedding, offering clues of great importance.<br><br>
+        CREDITS: Paths and rituals to send tributes directly to the newlyweds.<br><br>
+        LEGACY: Shape your legend: display your level, completed trials (gems), and leave a kind message. You may save your hero sheet and the magical items in your possession. Bring it with you on the wedding day, or send it in advance by messenger pigeon, should your tribute arrive in physical gold.<br><br>
     </div>
+     <div id="helpScrollIt" class="help-scroll">
+        <b style="color:#7a1515">GUIDA</b><br><br>
+        THE EMPORIUM: Acquista oggetti magici per la tua borsa degli incantesimi. L'arcimago donerà i tributi agli sposi per ingraziarsi il Re.<br><br> 
+        BULLETINS: I tomi dell'Arcimago. Una raccolta di editti e proclami, in cui l’Arcimago dispensa pensieri e visioni degne della corte.<br><br>
+        THE TRIAL: Tre prove celate si sveleranno lungo il cammino verso le nozze, offrendo indizi di grande importanza.<br><br>
+        CREDITS: Vie e rituali per inviare tributi diretti agli sposi.<br><br>
+        LEGACY: Plasma la tua leggenda: mostra il tuo livello, le prove superate (gemme) e lascia un messaggio gentile. Potrai salvare la tua scheda eroe e gli oggetti magici in tuo possesso. Portala con te il giorno delle nozze o inviala con un piccione messaggero in anticipo, qualora il tuo tributo giunga in oro reale.
+    </div>
+</div>
 
     <div class="welcome-scroll scroll-left rolled" id="s-left" onclick="this.classList.toggle('rolled')">
         <h3 style="color:#7a1515; margin-bottom:1rem;">WELCOME MORTAL</h3>
@@ -146,9 +147,25 @@ Benvenuti, viandanti, in questo emporio incantato di nozze. Qui l’Arcimago off
             }
         }
 
-        function toggleHelp(e) { e.stopPropagation(); document.getElementById('helpScroll').classList.toggle('active'); }
-        document.onclick = () => document.getElementById('helpScroll').classList.remove('active');
+    function toggleHelp(e) {
+        e.stopPropagation();
+    
+        const en = document.getElementById('helpScrollEn');
+        const it = document.getElementById('helpScrollIt');
+    
+        if (e.currentTarget.id === 'HelpEn') {
+            en.classList.toggle('active');
+            it.classList.remove('active');
+        } else {
+            it.classList.toggle('active');
+            en.classList.remove('active');
+        }
+    }
 
+    document.onclick = () => {
+        document.getElementById('helpScrollEn').classList.remove('active');
+        document.getElementById('helpScrollIt').classList.remove('active');
+    };        
         window.onload = () => {
             applyCelestialLock();
             spawnRunes();
