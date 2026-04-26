@@ -102,15 +102,45 @@
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    @media (max-width: 768px) {
-      .sposi-row { 
-        flex-wrap: wrap; /* Su piccoli schermi il corteo va sotto gli sposi */
-        gap: 20px; 
-      }
-      .aisle-container { gap: 20px; }
-      .aisle { grid-template-columns: repeat(3, 1fr); width: 120px; }
-      .environment { font-size: 1.2rem; }
-    }
+  @media (max-width: 768px) {
+  .sposi-row { 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; 
+  }
+
+  /* Sposi sopra, affiancati */
+  #groom-box,
+  #bride-box {
+    order: 1;
+    width: auto;
+  }
+
+  /* Forza una nuova riga dopo gli sposi */
+  .sposi-row::after {
+    content: "";
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  /* Testimoni sotto */
+  #maids-entourage,
+  #grooms-entourage {
+    order: 2;
+    width: 45%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .environment { 
+    font-size: 1.2rem; 
+  }
+}
+
 </style>
 
 </head>
