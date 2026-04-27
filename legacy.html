@@ -310,8 +310,7 @@ document.getElementById('quest-status-line').innerHTML = textquest;
             satImg.src = `archives/${file}`; satImg.className = 'satchel-item';
             document.getElementById('satchel-visual-content').appendChild(satImg);
             const li = document.createElement('li');
-            
-            li.innerHTML = `• <strong>${numItem} x ${item.name} : F:${item.fun*numItem} J:${item.joy*numItem} M:${item.mana*numItem}</strong>`;
+            li.innerHTML = `• <strong>${numItem} x ${item.name} : ✨:${item.fun*numItem} 🌟:${item.joy*numItem} 🟦:${item.mana*numItem}</strong>`;
             document.getElementById('recap-list').appendChild(li);
         }
 
